@@ -105,4 +105,149 @@ The latency created by the number of network devices encountered between the sou
 
 Even on an 8-lane highway, traffic jams can reduce the number of cars passing.
 
-This is similar to computer networks, where the actual data transferred (throughput) is often less than the maximum capacity (bandwidth).
+# chapter 2
+
+---
+
+# 1. Client and Server Systems
+
+A **client** is a host that requests information or services from a **server**, and the **server** provides the requested information.
+
+### Examples
+
+#### Servers
+- File Server
+- Web Server
+
+#### Clients
+- Web Browser
+- Email Agent
+
+---
+
+## Peer-to-Peer (P2P) Model
+
+In a Peer-to-Peer (P2P) network:
+
+- Two computers are interconnected.
+- One computer can act as a server while the other acts as a client.
+- Many computers can also be interconnected in a P2P network.
+
+Some P2P applications use a **hybrid system**, where each peer accesses an **index server** to find the location of a resource stored on another peer.
+
+---
+
+## Client-Server Communication
+
+- One server can provide services to multiple clients.
+- One client can access multiple servers.
+- A single computer can run multiple types of server software at the same time.
+
+---
+
+# 2. Network Components
+
+There are three main categories of hardware components in a network.
+
+## a. End Devices
+
+Examples:
+- Computer
+- Laptop
+- Printer
+
+An **end device** is either the **source** or the **destination** of a message transmitted over the network.
+
+---
+
+## b. Intermediate Devices
+
+Examples:
+- Switch
+- Router
+
+Intermediate devices connect end devices and help forward data through the network.
+
+---
+
+## c. Network Media
+
+Types of network media:
+
+- LAN Media
+- Wireless Media
+- WAN Media
+
+Network media provides the path through which data travels between devices.
+
+---
+
+# 3. Internet Service Provider (ISP)
+
+An **Internet Service Provider (ISP)** provides the connection between a home or office network and the Internet.
+
+---
+
+## Common ISP Connection Methods
+
+### 1. Cable
+
+- Usually provided by cable television service providers.
+- Internet data is transmitted through the same coaxial cable used for cable television.
+
+---
+
+### 2. DSL (Digital Subscriber Line)
+
+- Provides a high-bandwidth, always-on Internet connection.
+- Requires a special high-speed modem.
+- Separates the DSL signal from the telephone signal.
+- Provides an Ethernet connection to a host computer or LAN.
+- DSL runs over a telephone line with the line split into three channels.
+
+---
+
+## Other ISP Connection Options
+
+### Cellular
+
+Cellular Internet access uses a mobile phone network.
+
+### Advantages
+
+- Available wherever a cellular signal is present.
+- Useful in areas without cable or DSL.
+- Good for users who travel frequently.
+
+### Disadvantages
+
+- Performance depends on the phone and nearby cell tower.
+- Internet usage is usually limited by the data plan.
+- Additional charges may apply if the data limit is exceeded.
+
+---
+
+### Satellite
+
+Satellite Internet is a good option for homes or offices without access to DSL or cable.
+
+### Advantages
+
+- Suitable for remote areas.
+- Provides Internet connectivity where other options are unavailable.
+
+### Disadvantages
+
+- Requires a clear line of sight to the satellite.
+- Trees or buildings may block the signal.
+- Equipment and installation costs are high.
+- Monthly service charges apply.
+- Speed depends on the selected service plan.
+
+---
+
+### Dial-up Telephone
+
+- Uses a traditional telephone line to connect to the Internet.
+- Much slower than modern broadband technologies.
+- Rarely used today due to the availability of faster Internet connections.
