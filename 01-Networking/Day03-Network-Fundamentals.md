@@ -116,3 +116,124 @@ This helped me understand how:
 - Basic home network configuration works.
 
 ---
+## Communication Protocol
+
+Protocols are the rules that govern communication between devices on a
+network. They define how data is formatted, transmitted, received, and
+processed.
+
+Protocols include: - HTTP - TCP - IP - Ethernet
+
+Protocols define: - Message format - Message size - Timing - Encoding -
+Encapsulation - Message patterns
+
+### Message Format
+
+Every message must follow a specific structure or format.
+
+### Message Size
+
+The size of the transmitted data depends on the network and protocol
+being used. Large data is divided into smaller pieces before
+transmission.
+
+### Timing
+
+Timing controls how fast data is transmitted, when devices can send
+data, and how much data can be sent.
+
+### Encoding
+
+Before transmission, data is converted into bits (0s and 1s). These bits
+are then transmitted as electrical signals, light pulses, or radio waves
+depending on the medium.
+
+### Encapsulation
+
+As data moves through the network layers, each layer adds its own header
+containing important information such as source and destination
+addresses.
+
+### Message Pattern
+
+Some protocols use a request-response communication pattern, while
+others continuously stream data without waiting for acknowledgements.
+
+------------------------------------------------------------------------
+
+# Communication Standards
+
+Communication standards ensure that different networking devices can
+communicate using the same set of rules.
+
+A standard: - Defines how networking devices should communicate. -
+Allows devices from different manufacturers to work together. - Ensures
+compatibility and reliable communication.
+
+Internet standards are documented in RFC (Request for Comments)
+documents and are maintained by organizations like the IETF.
+
+------------------------------------------------------------------------
+
+# Network Communication Models
+
+Network communication is divided into layers so that each layer performs
+a specific function independently.
+
+Two common models are:
+
+-   OSI Model
+-   TCP/IP Model
+
+## TCP/IP Model (4 Layers)
+
+1.  Application
+    -   Represents data to the user.
+    -   Handles application services.
+2.  Transport
+    -   Provides end-to-end communication.
+    -   Segments and reassembles data.
+3.  Internet
+    -   Determines the best path through the network.
+    -   Handles logical addressing and routing.
+4.  Network Access
+    -   Includes the hardware and media used for network communication.
+
+------------------------------------------------------------------------
+
+# OSI Model (7 Layers)
+
+The OSI (Open Systems Interconnection) Model is a reference model used
+to understand network communication.
+
+## Layer 7 -- Application
+
+Provides network services directly to user applications.
+
+## Layer 6 -- Presentation
+
+Responsible for data formatting, encryption, compression, and
+translation.
+
+## Layer 5 -- Session
+
+Establishes, manages, and terminates communication sessions.
+
+## Layer 4 -- Transport
+
+Segments, transfers, and reassembles data between devices.
+
+## Layer 3 -- Network
+
+Provides logical addressing and determines the best route for data.
+
+## Layer 2 -- Data Link
+
+Transfers data frames between devices on the same network.
+
+## Layer 1 -- Physical
+
+Handles the transmission of raw bits over physical media such as cables
+or wireless signals.
+
+---
