@@ -4,7 +4,7 @@
  
 **Date Completed:** 03 July 2026  
 **Platform:** TryHackMe  
-**Room:** Introduction to Cyber Security  
+**Room:** THE CIA TRIAD 
 **Difficulty:** Easy  
 **Status:** ✅ Completed
 
