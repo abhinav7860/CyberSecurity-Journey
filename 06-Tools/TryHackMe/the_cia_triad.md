@@ -3,9 +3,9 @@
 ## My Third TryHackMe Room
  
 **Date Completed:** 03 July 2026  
-**Platform:** TryHackMe 
-**Room:** THE CIA TRIAD
-**Difficulty:** Easy 
+**Platform:** TryHackMe                              
+**Room:** THE CIA TRIAD                          
+**Difficulty:** Easy               
 **Status:** ✅ Completed
 
 ---
