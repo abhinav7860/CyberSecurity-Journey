@@ -1,5 +1,7 @@
 # CyberSecurity Journey
 
+**Start Date:** 04 July 2026
+
 Welcome to my cybersecurity learning repository.
 
 This repository documents my journey through a 6-month Advanced Cybersecurity & Ethical Hacking program.
