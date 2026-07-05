@@ -1,6 +1,6 @@
 # CyberSecurity Journey
 
-**Start Date:** 04 July 2026
+**Start Date:** 28 June 2026
 
 Welcome to my cybersecurity learning repository.
 
