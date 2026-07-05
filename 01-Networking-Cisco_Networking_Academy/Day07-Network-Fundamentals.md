@@ -119,13 +119,65 @@ It receives a public IP from the ISP and assigns private IP addresses to devices
 
 ---
 
-# What I Understood Today
+# 6. Router as a Gateway
 
-- Static IP addresses are configured manually.
-- Dynamic IP addresses are assigned automatically using DHCP.
-- DHCP follows the DORA process:
-  - Discover
-  - Offer
-  - Request
-  - Acknowledge
-- Home routers usually act as DHCP servers.
+A router connects two or more different networks.
+
+If a device wants to communicate with another network (like the Internet), it sends the data to the router.
+
+The router then forwards the data to the correct destination.
+
+### Example
+
+If my laptop wants to open Google, it first sends the request to the router.
+
+The router forwards it to the Internet.
+
+---
+
+# 7. Default Gateway
+
+A Default Gateway is the IP address of the router inside my local network.
+
+Every device uses the default gateway to communicate with other networks.
+
+### Example
+
+```
+Laptop IP          : 192.168.1.101
+Subnet Mask        : 255.255.255.0
+Default Gateway    : 192.168.1.1
+```
+
+Here, **192.168.1.1** is the router's IP address.
+
+---
+
+# 8. Router as a Network Boundary
+
+A router separates the **internal network** from the **external network (Internet).**
+
+### Internal Network
+
+- Uses private IP addresses.
+- Example: `192.168.1.x`
+
+### External Network
+
+- Uses public IP addresses provided by the ISP.
+
+The router acts as the boundary between these two networks.
+
+---
+
+# 9. NAT (Network Address Translation)
+
+Private IP addresses cannot directly communicate over the Internet.
+
+The router converts the private IP address into its public IP address before sending the packet to the Internet.
+
+This process is called **NAT**.
+
+When the reply comes back, the router translates the public IP back to the correct private IP.
+
+---
