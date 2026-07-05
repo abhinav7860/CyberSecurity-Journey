@@ -1,4 +1,4 @@
-# Day 8 - Introduction to IPv6
+# Day 6 - Introduction to IPv6
 
 # 1. Why do we need IPv6?
 
