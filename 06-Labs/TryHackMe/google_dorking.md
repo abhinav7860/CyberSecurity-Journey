@@ -1,5 +1,4 @@
-# TryHackMe — Google Dorking
-**Room:** Google Dorking  
+# TryHackMe — Google Dorking   
 **Platform:** TryHackMe  
 **Date:** July 17, 2026
 
