@@ -57,11 +57,6 @@ ML improves automatically as it sees more data.
 
 ---
 
-# ML Lifecycle
-
-(Your complete ML Lifecycle section)
-
----
 
 # Overfitting
 
