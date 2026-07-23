@@ -11,28 +11,6 @@ Artificial Intelligence has existed since the 1950s, but major advancements occu
 
 ---
 
-# AI Agent Platform
-
-In this TryHackMe room, some tasks use an AI Agent instead of a Linux machine or terminal.
-
-Unlike a normal chatbot, each AI agent has:
-
-- A specific role
-- Defined behaviours
-- Goals
-- Information it protects
-
-Depending on the challenge, you may cooperate with the AI or attempt to bypass its restrictions.
-
-### Important Notes
-
-- Interact naturally.
-- Prompt wording matters.
-- Some agents intentionally resist your requests.
-- Practice using the sandbox before beginning challenges.
-
----
-
 # Artificial Intelligence (AI)
 
 Artificial Intelligence refers to computer systems capable of performing tasks that usually require human intelligence.
