@@ -1,8 +1,4 @@
 # OverTheWire Bandit: Level 21 → Level 22
-
-**Platform:** OverTheWire  
-**Room:** Bandit  
-**Level:** 21 → 22  
 **Date:** 24 July 2026
 
 ---
