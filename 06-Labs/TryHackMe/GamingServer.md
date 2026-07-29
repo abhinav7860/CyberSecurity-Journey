@@ -2,6 +2,7 @@
 **Platform:** TryHackMe
 **Room:** GamingServer
 **Date:** 29 July 2026
+
 ---
 
 # Objective
