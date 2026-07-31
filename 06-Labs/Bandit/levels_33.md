@@ -3,7 +3,6 @@
 **Platform:** OverTheWire  
 **Room:** Bandit  
 **Level:** 33 (Final Level)  
-**Difficulty:** Completion  
 **Date:** 31 July 2026
 
 ---
