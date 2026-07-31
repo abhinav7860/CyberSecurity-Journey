@@ -198,7 +198,7 @@ Bandit Level 33 marks the successful completion of the OverTheWire Bandit wargam
 
 # Next Steps
 
-With Bandit completed, my next learning goals are:
+With Bandit completed , my next learning goals are:
 
 - OverTheWire Natas (Web Security)
 - TryHackMe Rooms
