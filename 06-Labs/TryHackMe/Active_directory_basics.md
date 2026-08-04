@@ -530,3 +530,501 @@ After completing this section, I can:
 
 ---
 
+---
+
+# Authentication Methods
+
+Active Directory stores user credentials on the Domain Controller. Whenever a user attempts to access a resource within the domain, the service contacts the Domain Controller to verify the user's identity.
+
+Windows domains support two authentication protocols:
+
+- **Kerberos** (Default)
+- **NetNTLM** (Legacy)
+
+Although Kerberos is the modern authentication protocol, NetNTLM still exists in many environments to maintain compatibility with older systems.
+
+---
+
+# Kerberos Authentication
+
+Kerberos is the default authentication protocol used in modern Windows domains.
+
+Instead of sending passwords every time a user accesses a resource, Kerberos uses **tickets** to prove the user's identity.
+
+These tickets allow users to authenticate securely without repeatedly transmitting their credentials across the network.
+
+---
+
+## Components of Kerberos
+
+### Key Distribution Center (KDC)
+
+The **Key Distribution Center (KDC)** is a service running on the **Domain Controller**.
+
+It is responsible for:
+
+- Authenticating users
+- Issuing Kerberos tickets
+- Generating session keys
+- Verifying ticket requests
+
+---
+
+### Ticket Granting Ticket (TGT)
+
+The first ticket a user receives after successfully authenticating.
+
+Purpose:
+
+- Proves the user has already authenticated
+- Allows requesting additional service tickets without re-entering credentials
+
+The TGT is encrypted using the **krbtgt account password hash**, meaning only the Domain Controller can decrypt it.
+
+---
+
+### Ticket Granting Service (TGS)
+
+A **Ticket Granting Service (TGS)** ticket allows access to a specific network service.
+
+Examples:
+
+- Shared folders
+- Databases
+- Web servers
+- File servers
+- Network printers
+
+Unlike a TGT, a TGS only grants access to one particular service.
+
+---
+
+### Session Keys
+
+Kerberos also generates temporary **Session Keys**.
+
+These keys are used to:
+
+- Encrypt communication
+- Request additional tickets
+- Authenticate to network services securely
+
+---
+
+# Kerberos Authentication Process
+
+## Step 1 – Initial Authentication
+
+The user sends:
+
+- Username
+- Current timestamp
+
+The timestamp is encrypted using a key derived from the user's password and sent to the **KDC**.
+
+If the credentials are correct, the KDC returns:
+
+- Ticket Granting Ticket (TGT)
+- Session Key
+
+---
+
+## Step 2 – Requesting a Service Ticket
+
+When accessing a network resource, the user presents:
+
+- Username
+- TGT
+- Service Principal Name (SPN)
+- Timestamp encrypted using the Session Key
+
+The KDC verifies the TGT and issues:
+
+- Ticket Granting Service (TGS)
+- Service Session Key
+
+The TGS is encrypted using the password hash of the account running the requested service.
+
+---
+
+## Step 3 – Accessing the Service
+
+The client presents the TGS to the target service.
+
+The service decrypts the ticket using its own password hash.
+
+If everything is valid:
+
+- The user is authenticated.
+- Access to the requested resource is granted.
+
+---
+
+# Kerberos Workflow
+
+```
+User
+   │
+   ▼
+KDC (Domain Controller)
+   │
+   ├── Issues TGT
+   │
+   ▼
+User Requests TGS
+   │
+   ▼
+KDC Issues TGS
+   │
+   ▼
+Target Service
+   │
+   ▼
+Access Granted
+```
+
+---
+
+# Important Kerberos Concepts
+
+- Default authentication protocol in Windows domains.
+- Uses tickets instead of repeatedly sending passwords.
+- Authentication occurs through the KDC.
+- Supports Single Sign-On (SSO).
+- Passwords are never repeatedly transmitted across the network.
+
+---
+
+# NetNTLM Authentication
+
+NetNTLM is the older Windows authentication protocol.
+
+Unlike Kerberos, NetNTLM uses a **Challenge-Response** authentication mechanism.
+
+It is primarily retained for backward compatibility with legacy applications and systems.
+
+---
+
+# NetNTLM Authentication Process
+
+## Step 1
+
+The client requests authentication from the server.
+
+---
+
+## Step 2
+
+The server generates a random challenge.
+
+---
+
+## Step 3
+
+The client combines:
+
+- NTLM Password Hash
+- Challenge
+- Additional authentication data
+
+to calculate a response.
+
+The password itself is **never sent**.
+
+---
+
+## Step 4
+
+The server forwards:
+
+- Challenge
+- Client Response
+
+to the Domain Controller.
+
+---
+
+## Step 5
+
+The Domain Controller performs the same calculation.
+
+If the generated response matches the client's response:
+
+Authentication succeeds.
+
+Otherwise:
+
+Authentication fails.
+
+---
+
+## Step 6
+
+The Domain Controller informs the server.
+
+The server then grants or denies access.
+
+---
+
+# NetNTLM Workflow
+
+```
+Client
+   │
+Authentication Request
+   ▼
+Server
+   │
+Random Challenge
+   ▼
+Client
+   │
+Challenge Response
+   ▼
+Server
+   │
+Forward Response
+   ▼
+Domain Controller
+   │
+Verification
+   ▼
+Server
+   │
+Authentication Result
+   ▼
+Client
+```
+
+---
+
+# Important NetNTLM Concepts
+
+- Legacy authentication protocol.
+- Uses Challenge-Response authentication.
+- Passwords are never transmitted over the network.
+- Still enabled in many environments for compatibility.
+
+---
+
+## TryHackMe Questions
+
+### Question
+
+When referring to Kerberos, what ticket allows users to request additional TGS tickets?
+
+**Answer**
+
+```
+Ticket Granting Ticket (TGT)
+```
+
+---
+
+### Question
+
+During NetNTLM authentication, is the user's password transmitted over the network?
+
+**Answer**
+
+```
+No (nay)
+```
+
+---
+
+# Trees, Forests and Trusts
+
+As organizations grow, a single Active Directory domain often becomes difficult to manage.
+
+Active Directory allows multiple domains to be organized into larger logical structures.
+
+The main structures are:
+
+- Trees
+- Forests
+- Trust Relationships
+
+---
+
+# Trees
+
+A **Tree** is a collection of Windows domains that share the same namespace.
+
+Example:
+
+```
+thm.loc
+│
+├── tbm.thm.loc
+│
+├── us.tbm.thm.loc
+│
+└── uk.tbm.thm.loc
+```
+
+Each domain has:
+
+- Its own users
+- Computers
+- Domain Controller
+- Domain Admins
+
+This separation allows departments or business units to be managed independently.
+
+---
+
+## Enterprise Admins
+
+When multiple domains exist within a tree, Active Directory introduces another administrative group.
+
+### Enterprise Admins
+
+Members of this group have administrative privileges across every domain in the tree.
+
+Comparison:
+
+**Domain Admins**
+
+- Manage one domain
+
+**Enterprise Admins**
+
+- Manage every domain within the enterprise
+
+---
+
+# Forests
+
+A **Forest** connects multiple Active Directory Trees that use different namespaces.
+
+Example:
+
+```
+thm.loc
+
+tvm.loc
+```
+
+Although the namespaces differ, they can still share resources by becoming part of the same forest.
+
+Forests allow organizations resulting from mergers, acquisitions, or partnerships to maintain separate domains while sharing resources securely.
+
+---
+
+# Trust Relationships
+
+Trust Relationships allow users from one domain to access resources located in another domain.
+
+Without a trust relationship:
+
+```
+Domain A
+      ❌
+Domain B
+```
+
+Users cannot access resources across domains.
+
+After establishing trust:
+
+```
+Domain A
+      ⇄
+Domain B
+```
+
+Users can be granted access across domains.
+
+---
+
+## One-Way Trust
+
+Example:
+
+```
+AAA trusts BBB
+```
+
+Meaning:
+
+Users from **BBB** may access resources in **AAA** if authorized.
+
+Remember:
+
+The **trust direction** is opposite to the **access direction**.
+
+---
+
+## Two-Way Trust
+
+Both domains trust each other.
+
+```
+AAA  ⇄  BBB
+```
+
+Users from both domains may be authorized to access resources in the other domain.
+
+By default:
+
+Domains joined within the same tree or forest automatically establish two-way trust relationships.
+
+---
+
+# Important Note
+
+Trust relationships **do not automatically grant access**.
+
+They only make cross-domain authentication possible.
+
+Administrators must still assign permissions manually to determine which users can access which resources.
+
+---
+
+## TryHackMe Question
+
+### Question
+
+What is a group of Windows domains that share the same namespace called?
+
+**Answer**
+
+```
+Tree
+```
+
+---
+
+# Key Concepts Learned
+
+- Kerberos Authentication
+- NetNTLM Authentication
+- Key Distribution Center (KDC)
+- Ticket Granting Ticket (TGT)
+- Ticket Granting Service (TGS)
+- Session Keys
+- Challenge-Response Authentication
+- Service Principal Name (SPN)
+- Trees
+- Forests
+- Trust Relationships
+- Enterprise Admins
+- Domain Admins
+
+---
+
+# Skills Gained
+
+After completing this section, I can:
+
+- Explain how Kerberos authentication works.
+- Understand the purpose of TGT and TGS tickets.
+- Describe how NetNTLM Challenge-Response authentication functions.
+- Differentiate between Kerberos and NetNTLM.
+- Explain Active Directory Trees and Forests.
+- Understand one-way and two-way trust relationships.
+- Identify Enterprise Admin and Domain Admin responsibilities.
+
+---
+
