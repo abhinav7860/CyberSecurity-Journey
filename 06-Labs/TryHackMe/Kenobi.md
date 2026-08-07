@@ -1,8 +1,5 @@
 # Kenobi - TryHackMe Walkthrough
-
-> **Difficulty:** Easy
-> **Platform:** TryHackMe
-> **Category:** Linux, Enumeration, Exploitation, Privilege Escalation
+**Date:** 07 August 2026
 
 ---
 
