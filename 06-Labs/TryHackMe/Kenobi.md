@@ -479,3 +479,332 @@ instead of immediately searching for exploits.
 
 ---
 
+
+
+# Part 2 - Initial Access and Privilege Escalation
+
+---
+
+# Exploitation Overview
+
+After completing enumeration, I had gathered enough information to understand how the different services were related.
+
+Instead of attacking a single service directly, the compromise relied on combining information obtained from multiple sources.
+
+The attack chain looked like this:
+
+```text
+SMB
+│
+├── Username (kenobi)
+├── ProFTPD Information
+└── SSH Key Information
+        │
+        ▼
+FTP (ProFTPD)
+        │
+        ▼
+Known Vulnerability Research
+        │
+        ▼
+NFS Export (/var)
+        │
+        ▼
+SSH Authentication
+        │
+        ▼
+User Shell
+```
+
+This room demonstrated that successful penetration tests are often the result of combining several small findings rather than discovering one critical vulnerability.
+
+---
+
+# Initial User Access
+
+After leveraging the identified weakness and retrieving the SSH private key from the exported directory, I authenticated to the target using SSH.
+
+Once connected, I verified the current user.
+
+```bash
+whoami
+```
+
+Output:
+
+```text
+kenobi
+```
+
+At this stage I had obtained a normal user shell.
+
+The first objective was complete.
+
+---
+
+# Capturing the User Flag
+
+The user flag was stored inside the user's home directory.
+
+Reading the file confirmed that initial access had been achieved successfully.
+
+This marks the transition from **Initial Access** to **Privilege Escalation**.
+
+---
+
+# Beginning Privilege Escalation
+
+The first thing I learned was:
+
+> Never attempt privilege escalation immediately.
+
+Instead, perform another round of enumeration.
+
+Even though I already had shell access, I still knew very little about the operating system.
+
+The enumeration phase starts again.
+
+---
+
+# Enumerating the System
+
+Some of the first commands I used included:
+
+```bash
+whoami
+hostname
+id
+pwd
+```
+
+These commands provide basic information about:
+
+* Current user
+* Groups
+* Hostname
+* Working directory
+
+Although simple, they help build a picture of the environment before searching for privilege escalation vectors.
+
+---
+
+# Enumerating SUID Files
+
+One of the most important Linux privilege escalation techniques involves SUID binaries.
+
+I searched for them using:
+
+```bash
+find / -perm -u=s -type f 2>/dev/null
+```
+
+---
+
+## What is SUID?
+
+Normally, programs execute with the permissions of the current user.
+
+Example:
+
+```text
+User
+    │
+    ▼
+Program
+    │
+    ▼
+Runs as User
+```
+
+A SUID binary behaves differently.
+
+```text
+User
+    │
+    ▼
+SUID Program
+    │
+    ▼
+Runs as File Owner
+```
+
+If the owner is **root**, then the program executes with root privileges.
+
+This mechanism is required for legitimate programs such as:
+
+* passwd
+* su
+* sudo
+
+However, custom SUID binaries may introduce security vulnerabilities if they are poorly written.
+
+---
+
+# Identifying an Unusual Binary
+
+Among the standard Linux binaries, one file immediately stood out:
+
+```text
+/usr/bin/menu
+```
+
+Unlike common utilities such as `passwd` or `su`, this binary was not part of a standard Linux installation.
+
+Whenever I encounter an unfamiliar SUID executable, I treat it as suspicious and investigate further.
+
+---
+
+# Investigating the Binary
+
+I first executed the program to understand its behaviour.
+
+It displayed a simple menu containing three options.
+
+Running the program alone did not reveal how it worked internally.
+
+To gather more information, I inspected it using:
+
+```bash
+strings /usr/bin/menu
+```
+
+---
+
+# Why Use strings?
+
+`strings` extracts human-readable text from compiled binaries.
+
+Although a compiled executable consists mostly of machine code, it still contains readable text such as:
+
+* Error messages
+* Menu options
+* File paths
+* Library names
+* External commands
+
+This makes `strings` one of the quickest and safest methods for investigating an unknown binary.
+
+---
+
+# Important Discovery
+
+The output revealed several external commands referenced by the program.
+
+This indicated that the binary relied on other system utilities instead of implementing all functionality internally.
+
+This observation became the key to understanding the privilege escalation path.
+
+---
+
+# Understanding PATH
+
+Linux uses the PATH environment variable to locate executables.
+
+Viewing the current PATH:
+
+```bash
+echo $PATH
+```
+
+Example:
+
+```text
+/home/kenobi/bin
+/usr/local/bin
+/usr/bin
+/bin
+...
+```
+
+When a user types a command without specifying its full location, Linux searches each directory in PATH until it finds a matching executable.
+
+This behaviour is convenient, but it can become dangerous when a privileged program relies on PATH.
+
+---
+
+# PATH Hijacking
+
+The custom SUID binary executed external commands without using absolute paths.
+
+Instead of calling a specific executable directly, it relied on the PATH search order.
+
+This created an opportunity for PATH hijacking.
+
+PATH hijacking occurs when an attacker places a malicious executable earlier in the search path than the legitimate one.
+
+When the vulnerable application attempts to launch a program, Linux executes the attacker's version first.
+
+Because the vulnerable binary was running with elevated privileges, the replacement executable inherited those privileges.
+
+---
+
+# Mistake I Made
+
+Initially, I assumed the original privilege escalation method described in older write-ups would work immediately.
+
+However, the deployed machine behaved differently.
+
+Instead of obtaining a root shell, I encountered unexpected behaviour.
+
+Rather than assuming the exploit was incorrect, I began troubleshooting.
+
+---
+
+# Troubleshooting Process
+
+I verified:
+
+* The current PATH
+* Which executable Linux was locating
+* File permissions
+* Symbolic links
+* Behaviour of the replacement executable
+
+This process taught me an important lesson.
+
+Penetration testing is not simply following commands.
+
+It involves understanding how the operating system behaves and adjusting when the environment differs from documentation.
+
+---
+
+# Root Access
+
+After correcting the issue, the custom SUID binary executed the replacement program with root privileges.
+
+The shell prompt changed from:
+
+```text
+kenobi@kenobi:~$
+```
+
+to
+
+```text
+root@kenobi:~#
+```
+
+At this point I verified the current user:
+
+```bash
+whoami
+```
+
+Output:
+
+```text
+root
+```
+
+This confirmed successful privilege escalation.
+
+---
+
+# Capturing the Root Flag
+
+With administrative access obtained, I accessed the root directory and retrieved the final flag.
+
+This completed the room.
+
+---
+
