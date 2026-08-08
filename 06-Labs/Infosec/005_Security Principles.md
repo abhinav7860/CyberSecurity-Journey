@@ -99,6 +99,7 @@ Iris scan
 Retina scan
 Facial recognition
 Voice recognition
+
 3. Multi-Factor Authentication (MFA)
 
 MFA requires two or more different authentication factors.
@@ -336,6 +337,7 @@ Main purpose	Confidentiality	Integrity
 Uses keys	Yes	Typically no
 Output	Variable length	Fixed length
 Examples	AES, RSA, Blowfish	SHA-256, bcrypt, MD5, SHA-1
+
 12. Encryption
 
 Encryption transforms readable information into protected ciphertext.
@@ -364,6 +366,7 @@ Examples from the lesson:
 AES
 RSA
 Blowfish
+
 13. Hashing
 
 Hashing converts input data into a fixed-length value called a hash or message digest.
@@ -387,6 +390,7 @@ Hashing is designed to be a one-way operation.
 The lesson emphasizes that even a small change to the original input can produce a significantly different hash. This is known as the avalanche effect.
 
 14. Uses of Hashing
+
 Password Storage
 
 Instead of storing passwords directly, systems can store password-derived hashes.
