@@ -1,24 +1,7 @@
-Security Principles
+# Security Principles
+## infoseclab
+**Date:** 08 August 2026
 
-infoseclab
-
-Overview
-
-This section covers the basic security principles that form the foundation of cybersecurity.
-
-Topics covered:
-
-CIA Triad
-Authentication
-Multi-Factor Authentication
-Authorization
-Access Control Models
-Least Privilege
-AAA Framework
-Accounting
-Non-Repudiation
-Security Logs and Forensics
-Hashing vs. Encryption
 1. CIA Triad
 
 The CIA Triad is a fundamental model used to guide information security policies and security controls.
