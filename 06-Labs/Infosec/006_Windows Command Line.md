@@ -1,5 +1,5 @@
 # Windows Command Line
-
+**Date:** 09 August 2026
 ## InfosecLab – Windows Fundamentals
 
 The Windows Command Line provides a set of built-in tools that can be used for file management, system administration, network troubleshooting, process management, and cybersecurity investigations.
