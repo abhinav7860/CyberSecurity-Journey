@@ -1,11 +1,6 @@
 # TryHackMe — Sakura Room CTF Write-Up
-
+**Date Completed:** 10 August 2026
 ## Room Overview
-
-**Platform:** TryHackMe  
-**Room:** Sakura  
-**Category:** OSINT / CTF  
-**Focus:** Open-Source Intelligence, GitHub Investigation, PGP, Cryptocurrency OSINT, Social Media OSINT, Wi-Fi Intelligence, and Geolocation
 
 ---
 
