@@ -1,7 +1,6 @@
 # TryHackMe — Cryptography Basics
-
+**Date Completed:** 10 August 2026
 ## Room: Cryptography Basics
-
 
 ---
 
