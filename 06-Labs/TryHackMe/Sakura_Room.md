@@ -1,6 +1,5 @@
 # TryHackMe — Sakura Room CTF Write-Up
 **Date Completed:** 10 August 2026
-## Room Overview
 
 ---
 
