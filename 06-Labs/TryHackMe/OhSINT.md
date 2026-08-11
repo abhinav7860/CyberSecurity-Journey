@@ -1,11 +1,6 @@
 # TryHackMe — OhSINT Walkthrough
-
+**Date Completed:** 11 August 2026
 ## Room Overview
-
-**Platform:** TryHackMe  
-**Room:** OhSINT  
-**Category:** Open-Source Intelligence (OSINT)  
-**Focus:** Metadata Extraction, Passive Reconnaissance, Search Engines, Social Media, GitHub, WiGLE, and Website Source Inspection
 
 ---
 
