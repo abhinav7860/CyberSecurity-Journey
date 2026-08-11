@@ -1,5 +1,4 @@
 # Digital Footprint Challenge | TryHackMe
-
 **Date Added:** 11 August 2026
 
 ---
