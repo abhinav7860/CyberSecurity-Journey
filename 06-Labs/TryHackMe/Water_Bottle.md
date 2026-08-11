@@ -1,10 +1,7 @@
 # Water Bottle | TryHackMe CTF Writeup
-
 **Date Added:** 11 August 2026
 
 ## Locate a missing water station using only fragments of memory and OSINT.
-
-**Access Room:** https://tryhackme.com/room/waterbottle
 
 ---
 
@@ -175,18 +172,6 @@ Find contact number starting with 63922
 Aquabest
       ↓
 THM{aquabest_639228721288}
-```
-
----
-
-# Tools Used
-
-```text
-- Google Search
-- Google Maps
-- Google Maps historical imagery
-- OSINT
-- Website/contact page searching
 ```
 
 ---
