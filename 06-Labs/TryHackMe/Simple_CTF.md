@@ -1,10 +1,5 @@
 # TryHackMe — Simple CTF Walkthrough
-
-> **Room:** Simple CTF  
-> **Platform:** TryHackMe  
-> **Focus:** Enumeration, web exploitation, credential recovery, SSH, and Linux privilege escalation  
-> **Purpose:** Personal study notes / future reference
-
+**Date:** August 18, 2026
 ---
 
 ## 1. Target Information
@@ -14,9 +9,6 @@ Target IP used during the room:
 ```text
 10.48.142.28
 ```
-
-> Note: the target IP changed during the session. Earlier enumeration used `10.48.131.189`, while SSH was later performed against `10.48.142.28`. Always use the IP currently shown by TryHackMe.
-
 ---
 
 # 2. Initial Enumeration
