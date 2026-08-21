@@ -1,11 +1,5 @@
 # TryHackMe - Search Skills
-
-## Room
-
-**Room:** Search Skills  
-**Platform:** TryHackMe  
 **Date Added:** 21 August 2026  
-**Status:** Completed
 
 ---
 
