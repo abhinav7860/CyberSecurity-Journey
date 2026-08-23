@@ -1,11 +1,8 @@
 # OWASP Top 10
-
 ## Web Application Security
-
 **Topic:** OWASP Top 10  
 **Version Studied:** OWASP Top 10 - 2021  
 **Date Added:** 23 August 2026  
-**Status:** Completed
 
 ---
 
