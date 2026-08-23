@@ -192,31 +192,6 @@ Missing logs      -> Logging and Monitoring Failures
 
 ---
 
-# My Main Takeaways
-
-```text
-1. Authentication and authorization are different.
-
-2. Never blindly trust user input.
-
-3. Sensitive data needs proper protection.
-
-4. Security needs to be considered during design.
-
-5. Default and unnecessary configurations can create risk.
-
-6. Keep software and dependencies updated.
-
-7. Authentication and session handling need to be done properly.
-
-8. Software and data should be trusted only after proper verification.
-
-9. Logging is important for detecting and investigating attacks.
-
-10. Server-side requests need to be controlled carefully.
-```
-
----
 
 
 
