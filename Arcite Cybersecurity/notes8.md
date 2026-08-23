@@ -218,13 +218,5 @@ Missing logs      -> Logging and Monitoring Failures
 
 ---
 
-# Final Note
 
-The main purpose of studying the OWASP Top 10 for me was to build a foundation for web application security.
-
-I don't need to memorise every detail of every vulnerability.
-
-What matters more is being able to recognise the type of weakness, understand why it is dangerous, and know what I should investigate when testing a web application.
-
----
 
