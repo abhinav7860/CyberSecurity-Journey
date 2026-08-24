@@ -1,10 +1,6 @@
 # Hydra
-
-## Basic Notes
-
 **Topic:** Hydra  
 **Date Added:** 24 August 2026  
-**Status:** Studied - Basic Level
 
 ---
 
