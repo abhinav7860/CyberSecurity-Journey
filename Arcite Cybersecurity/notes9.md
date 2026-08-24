@@ -210,15 +210,4 @@ I will practise it only in TryHackMe, CTFs, my own machines, or other environmen
 
 ---
 
-## Progress
 
-```text
-[✓] What Hydra is
-[✓] Basic syntax
-[✓] Basic options
-[✓] Wordlists
-[✓] Basic SSH example
-[✓] Defensive understanding
-```
-
-**Status: Completed - Basic Level**
