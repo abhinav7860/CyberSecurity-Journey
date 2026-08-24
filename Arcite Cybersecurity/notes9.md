@@ -200,14 +200,3 @@ Useful protections include:
 
 ---
 
-## My Takeaway
-
-Hydra is basically an automated login/password testing tool.
-
-For now, I only studied the basic stuff: what Hydra does, its basic command structure, common options like `-l`, `-L`, `-p`, and `-P`, wordlists, and a basic SSH example.
-
-I will practise it only in TryHackMe, CTFs, my own machines, or other environments where I have permission to test.
-
----
-
-
