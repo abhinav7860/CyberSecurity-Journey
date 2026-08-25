@@ -200,5 +200,3 @@ Find hidden web resources
 ```
 
 ---
-
-hello
