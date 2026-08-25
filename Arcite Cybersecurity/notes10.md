@@ -1,10 +1,6 @@
 # Gobuster
-
-## Basic Notes
-
 **Topic:** Gobuster  
 **Date Added:** 25 August 2026  
-**Status:** Studied - Basic Level
 
 ---
 
