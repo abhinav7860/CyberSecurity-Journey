@@ -285,17 +285,3 @@ Finding information about a public system does not automatically give me permiss
 
 ---
 
-## Progress
-
-```text
-[✓] DNSDumpster basics
-[✓] DNS/subdomain reconnaissance
-[✓] crt.sh basics
-[✓] Certificate Transparency
-[✓] Shodan basics
-[✓] Shodan filters
-[✓] Comparing the tools
-[✓] Basic reconnaissance workflow
-```
-
-**Status: Completed - Basic Level**
