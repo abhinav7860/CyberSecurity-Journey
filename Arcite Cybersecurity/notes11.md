@@ -238,21 +238,7 @@ The important part is that these tools help me gather information before deeper 
 
 ---
 
-# What I Learned
 
-The biggest thing I understood is that reconnaissance doesn't always mean immediately scanning a target.
-
-A lot of useful information is already publicly available.
-
-```text
-DNSDumpster -> Helps understand DNS infrastructure
-crt.sh      -> Helps discover domains through certificates
-Shodan      -> Helps see publicly exposed services/devices
-```
-
-Using different sources together can give a much better picture of a target's external attack surface.
-
----
 
 
 
