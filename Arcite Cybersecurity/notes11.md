@@ -1,10 +1,6 @@
 # DNSDumpster, crt.sh & Shodan
-
-## Basic Reconnaissance Notes
-
 **Topic:** DNSDumpster, crt.sh and Shodan.io  
-**Date Added:** 26 August 2026  
-**Status:** Studied - Basic Level
+**Date Added:** 26 August 2026 
 
 ---
 
