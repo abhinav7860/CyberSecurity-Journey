@@ -254,22 +254,5 @@ Using different sources together can give a much better picture of a target's ex
 
 ---
 
-# My Takeaway
-
-For now, I only studied the basics of these three tools.
-
-I don't need to know every advanced filter or feature yet.
-
-What matters to me at this stage is knowing:
-
-- What DNSDumpster is used for
-- How crt.sh can help find subdomains through certificates
-- What Shodan searches for
-- How these tools fit into reconnaissance
-- Why publicly available information can be useful during a security assessment
-
-These are mainly reconnaissance tools, so the information collected from them can be used as a starting point for further authorised testing.
-
----
 
 
