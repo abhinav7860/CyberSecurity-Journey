@@ -272,16 +272,4 @@ These are mainly reconnaissance tools, so the information collected from them ca
 
 ---
 
-## Important Note
-
-I should only use these tools for:
-
-- My own systems
-- TryHackMe/CTF labs
-- Training environments
-- Security assessments where I have permission
-
-Finding information about a public system does not automatically give me permission to test or attack it.
-
----
 
