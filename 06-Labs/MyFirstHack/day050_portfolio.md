@@ -261,39 +261,5 @@ So I was able to return home in one command.
 
 ---
 
-## Reflection
 
-### How navigation feels now
-
-Compared to Day 46, when I first started using the Linux terminal:
-
-```text
-[Write honestly how it feels now. Example:
-The terminal feels less unfamiliar now. I still need to think sometimes
-about paths, but pwd, ls and cd are becoming more natural.]
-```
-
-### One thing I can do now that I couldn't a week ago
-
-```text
-[Write your answer here]
-```
-
----
-
-## Commands Practised
-
-```bash
-pwd
-ls
-ls -la
-ls /
-cd /etc
-cd /var/log
-cd ..
-cd ~
-cd -
-cd /tmp
-cd /usr/share
-```
 
