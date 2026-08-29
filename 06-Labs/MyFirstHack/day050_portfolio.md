@@ -28,7 +28,7 @@ The idea was to explore the filesystem, move between different locations, use sh
 ### Starting location
 
 ```text
-[Paste your pwd output here]
+/home/kali
 ```
 
 ### Home directory
@@ -42,7 +42,7 @@ ls -la
 Number of items shown:
 
 ```text
-[Enter your number here]
+16
 ```
 
 ### Top-level directories
@@ -76,13 +76,13 @@ ls
 Confirmation:
 
 ```text
-[Paste your pwd output here]
+/etc
 ```
 
 Approximate number of items shown by `ls`:
 
 ```text
-[Enter your number here]
+350
 ```
 
 ### `/var/log`
@@ -98,14 +98,14 @@ ls -la
 Two log files/directories I noticed:
 
 ```text
-1. [Name]
-2. [Name]
+1. apt
+2. gvm
 ```
 
 Something I noticed in the detailed listing:
 
 ```text
-[Write what you noticed about timestamps, permissions, owners, etc.]
+some of them was modified today itself.
 ```
 
 ---
@@ -129,7 +129,7 @@ I then used `ls` to see what was there besides `log`.
 What I found:
 
 ```text
-[Write what you saw here]
+saw some random files.
 ```
 
 After another:
@@ -169,13 +169,13 @@ This took me back to the previous location.
 The shortcut I think I will use most:
 
 ```text
-[cd ~ / cd - / cd .. / Tab – choose one]
+cd ~
 ```
 
 Reason:
 
 ```text
-[Write your reason in your own words]
+Helps to comeback to to point i started - the home.
 ```
 
 ---
@@ -200,13 +200,13 @@ The temporary-files directory is:
 What I found there:
 
 ```text
-[Write whether it was empty or what you noticed]
+A few temporary files
 ```
 
 ### Route I used
 
 ```text
-[Example: I used the absolute path /tmp because I already knew the exact location.]
+cd /tmp
 ```
 
 ### Tab completion
@@ -216,13 +216,13 @@ I also practised Tab completion while navigating.
 Directory I entered using Tab:
 
 ```text
-[Directory name]
+Downloads
 ```
 
 This helped because:
 
 ```text
-[Write a short reason – faster / avoids typing mistakes / easier]
+It avoids typing mistakes .
 ```
 
 ---
@@ -241,7 +241,7 @@ Then I went a few levels deeper into one of the directories.
 My deepest path was:
 
 ```text
-[Paste your pwd output here]
+cd /usr/share/dbd/binaries
 ```
 
 After that, I used:
@@ -254,7 +254,7 @@ pwd
 My home directory was:
 
 ```text
-[Paste your pwd output here]
+/home/kali
 ```
 
 So I was able to return home in one command.
