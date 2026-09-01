@@ -5,7 +5,6 @@
 **Date Completed:** 01-09-2026  
 **Tool Used:** Burp Suite Community Edition  
 **Database:** Oracle  
-**Status:** ✅ Solved
 
 ---
 
