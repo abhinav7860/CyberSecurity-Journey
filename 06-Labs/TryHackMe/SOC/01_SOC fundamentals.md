@@ -197,3 +197,99 @@ The main things I want to remember:
 
 ---
 
+
+# Part 2 – Practical Exercise of SOC
+
+## Scenario
+
+This practical exercise uses **People, Processes, and Technology** and gives a practical walkthrough of the role of a **Level 1 SOC Analyst**.
+
+In the scenario, an alert is received that **port scanning activity** has been observed on a host in the network.
+
+The vulnerability assessment team reported that they were running a port scan from the host:
+
+`10.0.0.8`
+
+As a Level 1 SOC Analyst, the task was to investigate the alert using the available **SIEM** solution and answer the **5 Ws**.
+
+---
+
+## Alert Investigation – 5 Ws
+
+### What? – Activity that triggered the alert
+
+**Port Scan**
+
+The alert was triggered because port scanning activity was detected.
+
+### When? – Time of the activity
+
+**June 12, 2024 17:24**
+
+### Where? – Destination host IP
+
+**10.0.0.3**
+
+### Who? – Source host name
+
+**Nessus**
+
+### Why? – Reason for the activity
+
+**Intended**
+
+The activity was part of an intended vulnerability assessment rather than a malicious attack.
+
+---
+
+## Additional Investigation
+
+### Has any response been sent back to the port scanner IP?
+
+**Yes**
+
+---
+
+## Alert Closure
+
+After investigating the alert and confirming that the port scan was intentional, the alert could be closed.
+
+### Flag
+
+`THM{000_INTRO_TO_SOC}`
+
+---
+
+## What I Learned
+
+This practical exercise helped me understand how a **Level 1 SOC Analyst** handles an alert in practice.
+
+The main process was:
+
+1. Receive the alert.
+2. Identify the activity that triggered it.
+3. Investigate the **5 Ws**.
+4. Check the source and destination information.
+5. Determine whether the activity was **intended or malicious**.
+6. Check for any response to the activity.
+7. Close the alert after completing the investigation.
+
+The important part for me was understanding that **not every alert is malicious**. A port scan can look suspicious, but in this scenario it was caused by the vulnerability assessment team using **Nessus**, so the activity was intended.
+
+This is why **alert triage** is important in a SOC — the analyst needs to investigate the available information before deciding how an alert should be handled.
+
+---
+
+## Quick Notes
+
+| Question | Answer |
+|---|---|
+| What? | Port Scan |
+| When? | June 12, 2024 17:24 |
+| Where? | 10.0.0.3 |
+| Who? | Nessus |
+| Why? | Intended |
+| Response sent back? | Yes |
+| Flag | `THM{000_INTRO_TO_SOC}` |
+
+---
