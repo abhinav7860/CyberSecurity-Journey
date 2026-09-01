@@ -56,7 +56,7 @@ Retrieve credentials
        ↓
 Login as administrator
        ↓
-✅ Lab solved
+Lab solved
 ```
 
 ---
@@ -689,7 +689,7 @@ This is a good example of why understanding the database structure is more usefu
            ↓
 12. Login
            ↓
-13. LAB SOLVED ✅
+13. LAB SOLVED 
 ```
 
 ---
