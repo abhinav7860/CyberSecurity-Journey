@@ -1,0 +1,899 @@
+# SOC L1 Alert Reporting — TryHackMe
+
+**Date:** September 3, 2026  
+**Platform:** TryHackMe  
+**Room:** SOC L1 Alert Reporting  
+**Focus:** Alert Reporting, Alert Escalation, L2 Support, and SOC Communication
+
+---
+
+# Task 1 — Introduction
+
+During or after alert triage, an L1 analyst may be uncertain about how to classify an alert or may need additional information from the system owner.
+
+L1 analysts may also encounter real cyberattacks and breaches that require immediate attention and remediation.
+
+This room introduces three important concepts that come after basic alert triage:
+
+- **Alert Reporting**
+- **Alert Escalation**
+- **Communication**
+
+These concepts are important because an L1 analyst does not work alone. Some alerts can be handled at L1, while more complex or threatening alerts need to be passed to L2 or other teams.
+
+---
+
+# Task 2 — Alert Funnel
+
+In the previous room, I learned how to classify and triage alerts. This room helped me understand what happens after that triage and how the work of an L1 analyst contributes to preventing threats and stopping breaches.
+
+The general path of alerts is:
+
+```text
+SIEM / EDR / Ticket Management Platform
+                ↓
+            SOC L1
+                ↓
+       Filter and investigate
+                ↓
+   Most alerts are handled at L1
+                ↓
+ Complex / threatening alerts
+                ↓
+            SOC L2
+                ↓
+ Deep investigation + remediation
+                ↓
+       Incident Response if needed
+                ↓
+             DFIR
+```
+
+The alert funnel shown in the room gives an example:
+
+```text
+100 SIEM Alerts
+      ↓
+   SOC L1
+      ↓
+10 True Positives
+      ↓
+   SOC L2
+      ↓
+ 1 Incident
+      ↓
+   DFIR
+```
+
+This shows that a SOC can start with a very large number of alerts, but only a small number may turn into confirmed incidents requiring deeper investigation and incident response.
+
+## Alert Reporting
+
+Before closing an alert or passing it to L2, I may need to create an alert report.
+
+Depending on the team's standards and the severity of the alert, a short analyst comment may not be enough.
+
+For important alerts, especially **True Positives**, I may need to document the investigation in detail and include all relevant evidence.
+
+A good report gives the next analyst enough context to understand what happened without having to repeat the entire investigation from the beginning.
+
+## Alert Escalation
+
+If a True Positive alert requires additional actions or deeper investigation, it should be escalated to an L2 analyst according to the team's procedures.
+
+The alert report becomes very useful here.
+
+L2 can read the report and understand:
+
+- What happened
+- What was investigated
+- What evidence was found
+- Why the L1 analyst reached the verdict
+- What still needs to be investigated or remediated
+
+This saves L2 time because they do not have to start the investigation completely from scratch.
+
+## Communication
+
+SOC analysts may also need to communicate with other departments during or after an investigation.
+
+For example:
+
+- Ask the IT team whether they really granted administrative privileges to a user.
+- Contact HR to obtain information about a newly hired employee.
+- Communicate with other teams when an incident affects their systems or users.
+
+Good communication is therefore another important part of SOC work.
+
+## Task 2 — Questions and Answers
+
+### Question 1
+**What is the process of passing suspicious alerts to an L2 analyst for review?**
+
+**Answer: Alert Escalation**
+
+### Question 2
+**What is the process of formally describing alert details and findings?**
+
+**Answer: Alert Reporting**
+
+---
+
+# Task 3 — Reporting Guide
+
+The room explains why L1 analysts should write alert reports instead of only marking alerts as True Positive or False Positive.
+
+There are several important reasons.
+
+## 1. Provide Context for Escalation
+
+A well-written alert report saves a lot of time for L2 analysts.
+
+It allows L2 to quickly understand:
+
+- What happened
+- What the L1 analyst checked
+- What evidence was found
+- What the analyst believes the verdict should be
+
+Without a report, L2 may have to repeat much of the initial analysis.
+
+## 2. Save Findings for the Records
+
+Raw SIEM logs may only be stored for a limited period.
+
+The room states that raw SIEM logs are commonly stored for around **3–12 months**, while alerts may be kept indefinitely.
+
+Because of this, it is useful to keep important investigation context inside the alert itself.
+
+The report becomes a historical record of what was observed and what was decided.
+
+## 3. Improve Investigation Skills
+
+Writing reports also improves my own investigation skills.
+
+One important idea from the room is:
+
+> If I cannot explain something simply, I probably do not understand it well enough.
+
+Writing a report forces me to summarise the alert, evidence, investigation and conclusion clearly.
+
+This makes report writing useful not only for the next analyst but also for improving my own SOC skills.
+
+---
+
+# Alert Report — Five Ws
+
+The room recommends using the **Five Ws** approach when writing an alert report.
+
+The main idea is to imagine that an L2 analyst, DFIR analyst, or IT professional will need to understand the alert later.
+
+The report should answer:
+
+```text
+WHO
+WHAT
+WHEN
+WHERE
+WHY
+```
+
+## Who
+
+**Who** was involved?
+
+This could be:
+
+- User
+- Account
+- Employee
+- Process owner
+
+Examples:
+
+```text
+Which user logged in?
+Which user ran the command?
+Which user downloaded the file?
+```
+
+## What
+
+**What** exactly happened?
+
+I should describe the action or event sequence.
+
+Examples:
+
+- A suspicious login occurred.
+- A file was downloaded.
+- A malicious attachment was opened.
+- A command was executed.
+- Credentials were entered into a phishing page.
+
+The report should be as specific as possible.
+
+## When
+
+**When** did the suspicious activity occur?
+
+I should record the relevant timestamps.
+
+Where possible, I should identify when the suspicious activity:
+
+- Started
+- Ended
+
+This gives L2 a timeline for the investigation.
+
+## Where
+
+**Where** did the activity happen?
+
+This can include:
+
+- Device
+- Hostname
+- IP address
+- Website
+- Network
+- Cloud environment
+
+## Why
+
+**Why** did I reach my final verdict?
+
+This is one of the most important parts.
+
+I should explain the reasoning behind my conclusion.
+
+For example:
+
+```text
+The activity was classified as a True Positive because
+the user received a phishing email, the attachment was
+suspicious, and the observed behaviour matched the phishing
+detection.
+```
+
+The exact reasoning depends on the evidence found during the investigation.
+
+---
+
+# Task 3 — Practical Investigation
+
+### Question
+**According to the SOC dashboard, which user email leaked the sensitive document?**
+
+**Answer:**
+
+```text
+m.boslan@tryhackme.thm
+```
+
+### Question
+**Looking at the new alerts, who is the sender of the suspicious, likely phishing email?**
+
+**Answer:**
+
+```text
+support@microsoft.com
+```
+
+The sender appeared to be Microsoft support, but the alert was suspicious and needed investigation.
+
+## Phishing Alert Investigation
+
+I opened the phishing alert and reviewed its details.
+
+The alert was:
+
+**Email Marked as Phishing after Delivery**
+
+I had to understand the activity and then write an alert report using the Five Ws approach.
+
+The room required me to:
+
+1. Assign myself to the alert.
+2. Move the alert to **In Progress**.
+3. Investigate the alert details.
+4. Write the findings in the **Analyst Comment** field.
+5. Set the appropriate verdict.
+6. Save the alert.
+
+## My Analyst Comment
+
+The comment I entered during the lab was:
+
+```text
+A mail from support@microsoft.com was sent saying urgent and 600 % off on march 27 2025 at 7.25 pm to e.huffman@tryhackme.thm. it was a phishing email to attain the data of the user.there was a report.rar attachment and both security test was failed.
+```
+
+The dashboard showed:
+
+```text
+Authenticity: 100%
+Characters: 249/50
+```
+
+The comment was accepted by the lab.
+
+## Phishing Alert — Final Result
+
+After correctly writing the report, I received:
+
+```text
+THM{nice_attempt_faking_microsoft_support}
+```
+
+This was the flag for the reporting task.
+
+---
+
+# Task 4 — Escalation Guide
+
+After making a verdict and writing an alert report, I need to decide whether the alert should be escalated to L2.
+
+The exact rules can differ between SOC teams, but the room provides several general situations where escalation is appropriate.
+
+## When Should an L1 Analyst Escalate?
+
+### 1. Major Cyberattack
+
+The alert is an indicator of a major cyberattack that requires deeper investigation or DFIR.
+
+### 2. Remediation Is Required
+
+Escalation is appropriate when remediation actions are needed.
+
+Examples include:
+
+- Malware removal
+- Host isolation
+- Password reset
+- Credential rotation
+
+### 3. Communication With Other Parties Is Required
+
+Escalation may be needed when the incident requires communication with:
+
+- Customers
+- Partners
+- Management
+- Law enforcement agencies
+
+### 4. I Do Not Fully Understand the Alert
+
+It is completely acceptable for an L1 analyst to ask for help.
+
+If I do not understand an alert properly, I should not blindly close it as a False Positive.
+
+Especially during the first months of working in a SOC, asking for help is better than making an incorrect decision that could cause a real attack to be missed.
+
+---
+
+# Escalation Steps
+
+In many SOC teams, escalating an alert can be relatively simple.
+
+```text
+L1 completes initial investigation
+        ↓
+L1 writes the alert report
+        ↓
+L1 decides escalation is required
+        ↓
+Reassign alert to L2 on shift
+        ↓
+Ping / notify L2
+        ↓
+L2 continues investigation
+```
+
+Some teams may instead require a formal written escalation request containing many required fields.
+
+The exact process depends on the organisation's procedures.
+
+## Example of Escalation
+
+The room provides an example involving a phishing alert.
+
+The L1 analyst reports:
+
+```text
+Hey, M.Clark from HR got phished again and entered
+her password into a fake login page. Might need to
+contact her and rotate the credentials.
+
+Alert Details: https://siem.thm/THM-569
+```
+
+The L2 analyst receives the alert and can then:
+
+1. Review the L1 report.
+2. Investigate the alert further.
+3. Validate whether it is actually a True Positive.
+4. Contact other departments if required.
+5. Perform or coordinate remediation.
+
+In the example, L2 may:
+
+- Rotate the user's credentials.
+- Remind the user about phishing risks.
+
+## What Happens After L2 Receives the Alert?
+
+L2 will eventually receive the ticket, read the report, and may contact the L1 analyst if something is unclear.
+
+After the details are understood, the L2 analyst can:
+
+- Research the alert further.
+- Validate whether the alert is a True Positive.
+- Communicate with other departments.
+- Perform deeper investigation.
+- Start a formal Incident Response process for major incidents.
+
+---
+
+# Requesting L2 Support
+
+L1 analysts should not be afraid to request senior support when something is unclear.
+
+The general workflow is:
+
+```text
+L1 encounters an alert they do not understand
+        ↓
+L1 asks L2 for support
+        ↓
+L2 accepts the request
+        ↓
+L2 helps investigate
+        ↓
+Knowledge is shared with L1
+```
+
+The room gives an example involving:
+
+**Reflective DLL Injection**
+
+The L1 analyst says they are stuck and are not sure how to triage the alert correctly.
+
+L2 helps them and may organise a knowledge-sharing session for all L1 analysts.
+
+This shows that escalation is not only about passing confirmed attacks to L2. It can also be about **learning and getting clarification when an alert is beyond the L1 analyst's current knowledge**.
+
+---
+
+# SOC Dashboard Escalation Workflow
+
+The room gives a practical four-step process.
+
+### Step 1
+Move the alert to **In Progress** and perform the analysis.
+
+### Step 2
+Write an alert report and set the verdict, such as **True Positive**.
+
+### Step 3
+If escalation is required, assign the alert **to your L2 on shift**.
+
+### Step 4
+L2 receives a notification and starts from the alert report.
+
+## Current L2
+
+**Question:** Who is your current L2 in the SOC dashboard that you can assign/escalate the alerts to?
+
+**Answer:**
+
+```text
+E.Fleming
+```
+
+---
+
+# First Escalation
+
+After correctly escalating the alert from the previous task, I received:
+
+```text
+THM{good_job_escalating_your_first_alert}
+```
+
+The room noted that I needed to:
+
+- Set the correct assignee.
+- Add an intermediate verdict.
+- Use either TP or FP as appropriate.
+
+# Second Escalation
+
+I then investigated the second new alert and provided a detailed alert comment.
+
+After escalating the alert according to the workflow, I received:
+
+```text
+THM{looks_like_webshell_via_old_exchange}
+```
+
+---
+
+# Example Alert Used During Escalation
+
+One of the alerts shown during the room was:
+
+**Spike of Domain Discovery Commands**
+
+The dashboard showed:
+
+```text
+Assignee:
+E.Fleming (L2)
+
+Status:
+In Progress
+
+Severity:
+Medium
+
+Verdict:
+True Positive
+```
+
+The analyst comment I entered was:
+
+```text
+NT AUTHORITY\SYSTEM with the host name DMZ-MSEXCHANGE-2013 used commands such as whoami ,netuser, Get-ADUser on march 27 2025 at 7.56 pm. the parent process was C:\Windows\System32\cmd.exe which tried to use this host. and host os was the old Windows Server 2012 R2
+```
+
+The dashboard showed:
+
+```text
+Authenticity: 100%
+Characters: 261/50
+```
+
+This was part of the practical alert reporting/escalation exercise.
+
+---
+
+# Task 5 — SOC Communication
+
+Reporting and escalation may seem straightforward, but real SOC environments can produce unexpected situations.
+
+A SOC may have its own **Crisis Communication** procedures.
+
+These are guides and processes that help analysts and other team members respond effectively during critical situations.
+
+If there are no formal procedures, I should still understand the general communication principles.
+
+---
+
+# Communication Cases
+
+## Case 1 — Critical Alert and L2 Is Unavailable
+
+### Situation
+
+I need to escalate an urgent, critical alert, but L2 is unavailable and does not respond for 30 minutes.
+
+### Correct approach
+
+I should know where the emergency contacts are.
+
+The escalation path is:
+
+```text
+L2
+ ↓
+L3
+ ↓
+Manager
+```
+
+First, try to call L2.
+
+If L2 does not respond, contact L3.
+
+If necessary, contact the manager.
+
+### Important lesson
+
+I should **not immediately contact my manager first** when there is a critical threat if the SOC escalation process says to go through L2 and then L3 first.
+
+---
+
+# Case 2 — Compromised Slack / Teams Account
+
+### Situation
+
+An alert indicates that a Slack or Teams account may have been compromised, and I need to validate the login with the affected user.
+
+### Correct approach
+
+I should **not contact the user through the potentially compromised chat account**.
+
+Instead, I should use an alternative communication method, such as:
+
+- Phone call
+- Another trusted communication channel
+
+The reason is that the attacker may have access to the compromised account and could see or manipulate the conversation.
+
+---
+
+# Case 3 — Large Number of Alerts
+
+### Situation
+
+I receive an overwhelming number of alerts within a short period, including some critical alerts.
+
+### Correct approach
+
+I should:
+
+1. Prioritise the alerts according to the normal workflow.
+2. Handle the highest-priority alerts first.
+3. Inform the L2 analyst on shift about the situation.
+
+A sudden spike in alerts could itself be significant and may indicate a larger security event.
+
+---
+
+# Case 4 — I Realise I Missed an Attack
+
+### Situation
+
+Several days after the investigation, I realise that I misclassified an alert and may have missed a malicious action.
+
+### Correct approach
+
+I should immediately contact L2 and explain my concerns.
+
+I should not hide the mistake or assume that it is too late.
+
+Threat actors can remain silent for weeks before causing impact, so discovering a possible missed attack should be treated seriously.
+
+---
+
+# Case 5 — SIEM Logs Are Not Parsed Correctly
+
+### Situation
+
+I cannot complete the alert triage because the SIEM logs are not being parsed correctly or are not searchable.
+
+### Correct approach
+
+I should **not skip the alert**.
+
+Instead:
+
+1. Investigate whatever information is available.
+2. Document the limitation.
+3. Report the issue to the L2 analyst on shift or the SOC engineer.
+
+The problem with the SIEM should not cause the alert itself to be ignored.
+
+---
+
+# Communication by L2
+
+Communication can extend beyond the SOC.
+
+For example, consider a serious data leak.
+
+```text
+L1
+ ↓
+Escalates data leak alert
+ ↓
+L2
+ ↓
+Initiates Incident Response / DFIR
+ ↓
+Communicates with other departments
+ ↓
+Legal / PR / Management
+```
+
+For major incidents, L2 may start a formal Incident Response process.
+
+Other departments may need to become involved depending on the impact.
+
+Examples include:
+
+- Legal
+- PR
+- Team managers
+- IT
+- Other relevant departments
+
+---
+
+# Task 5 — Questions and Answers
+
+### Question 1
+
+**Should you first try to contact your manager in case of a critical threat?**
+
+**Answer: Nay**
+
+The recommended escalation path is to first try L2, then L3, and then the manager if the appropriate escalation contacts are unavailable.
+
+### Question 2
+
+**Should you immediately contact your L2 if you think you missed the attack?**
+
+**Answer: Yea**
+
+If I realise that I may have missed malicious activity, I should immediately tell L2 and explain my concerns.
+
+---
+
+# Flags From This Room
+
+## Reporting Flag
+
+```text
+THM{nice_attempt_faking_microsoft_support}
+```
+
+## First Escalation Flag
+
+```text
+THM{good_job_escalating_your_first_alert}
+```
+
+## Second Escalation Flag
+
+```text
+THM{looks_like_webshell_via_old_exchange}
+```
+
+---
+
+# Important Concepts I Learned
+
+## Alert Reporting
+
+Alert reporting is the process of formally documenting:
+
+- Alert details
+- Investigation steps
+- Evidence
+- Findings
+- Final verdict
+
+A good report gives another analyst enough context to continue the investigation.
+
+## Alert Escalation
+
+Alert escalation is the process of passing a suspicious or complex alert to a more senior analyst, normally L2, for deeper investigation or remediation.
+
+```text
+L1
+ ↓
+Initial investigation
+ ↓
+Report
+ ↓
+Escalation required
+ ↓
+L2
+```
+
+## Communication
+
+Communication means sharing the right information with the right people at the right time.
+
+This can involve:
+
+- L1
+- L2
+- L3
+- SOC manager
+- IT
+- HR
+- Legal
+- PR
+- Management
+- Users
+- Other departments
+
+Communication should also take security into account. For example, I should not use a potentially compromised chat account to contact a compromised user.
+
+---
+
+# Reporting vs Escalation vs Communication
+
+| Concept | Meaning |
+|---|---|
+| **Alert Reporting** | Formally documenting the alert, investigation, evidence and findings |
+| **Alert Escalation** | Passing the alert to L2 or another appropriate team for deeper investigation/remediation |
+| **Communication** | Sharing relevant information with L2, L3, managers, users, IT, HR, legal, PR or other teams |
+
+---
+
+# L1 → L2 Mental Model
+
+A simple way I can remember the workflow is:
+
+```text
+I receive the alert
+        ↓
+I investigate it
+        ↓
+I document what I find
+        ↓
+Can I handle it at L1?
+       /      YES  NO
+      ↓    ↓
+   Close  Escalate
+            ↓
+           L2
+            ↓
+    Deeper investigation
+            ↓
+     Remediation / IR
+            ↓
+     DFIR if necessary
+            ↓
+     Communicate with relevant teams
+```
+
+---
+
+# Five Ws — Quick Revision
+
+Whenever I write an alert report, I can ask myself:
+
+```text
+WHO?
+Who was involved?
+
+WHAT?
+What exactly happened?
+
+WHEN?
+When did the activity occur?
+
+WHERE?
+Where did it happen?
+
+WHY?
+Why did I reach this verdict?
+```
+
+If I can answer all five clearly, my report should give the next analyst useful context.
+
+---
+
+# My Takeaway
+
+Today I learned that an L1 SOC analyst is not expected to solve every security problem alone.
+
+My job at L1 is to properly investigate alerts, document what I find, make a reasonable verdict, and know when something needs to be escalated.
+
+**Reporting** is important because it preserves the investigation and gives L2 the context they need.
+
+**Escalation** is important because complex threats, remediation actions, major incidents, and situations I do not understand may require more experienced analysts.
+
+**Communication** is important because security incidents can involve many people and departments outside the SOC.
+
+One of the biggest lessons for me is that **asking L2 for help is better than blindly closing an alert I do not understand**.
+
+I also learned that if I realise later that I may have missed an attack, I should immediately tell L2 rather than ignoring the mistake. A missed malicious action can still become a serious incident later.
+
+The overall idea is:
+
+```text
+Good L1 work
+    =
+Good Investigation
++ Good Reporting
++ Correct Escalation
++ Good Communication
+```
+
+---
