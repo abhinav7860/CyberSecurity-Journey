@@ -1,5 +1,5 @@
 # TryHackMe - Introduction to SIEM
-
+**Date:** September 4, 2026  
 **Platform:** TryHackMe  
 **Room:** Introduction to SIEM  
 
