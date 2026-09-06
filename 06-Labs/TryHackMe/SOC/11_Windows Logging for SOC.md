@@ -585,12 +585,3 @@ Each log gives a different piece of information. By correlating them, I
 can build an attack timeline and understand what happened on the
 endpoint.
 
-## Final takeaway
-
-For SOC work, I need to get comfortable with:
-
-**Event Viewer → Event IDs → Important fields → Filtering → Correlation
-→ Attack timeline**
-
-That is the main skill I want to carry forward into the next Windows/SOC
-rooms.
