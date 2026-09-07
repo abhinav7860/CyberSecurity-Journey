@@ -1,6 +1,7 @@
 # Metasploitable 2 — Samba Enumeration & Exploitation
 
 ## Lab Overview
+**Date:** 7 September 2026
 
 In this part of my Metasploitable 2 lab, I investigated the Samba/SMB service and successfully exploited a Samba vulnerability to obtain a root shell.
 
