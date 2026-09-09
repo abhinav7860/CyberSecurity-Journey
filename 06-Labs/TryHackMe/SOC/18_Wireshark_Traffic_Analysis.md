@@ -671,24 +671,626 @@ The biggest lesson for me is that **traffic analysis is about recognising patter
 [To be added]
 ```
 
-## Part 2 Questions & Answers
+# TryHackMe - Wireshark: Traffic Analysis — Part 2
+
+**Date:** 2026-09-09  
+**Platform:** TryHackMe  
+**Room:** Wireshark: Traffic Analysis  
+**Tool:** Wireshark  
+**Status:** Part 2 completed
+
+---
+
+## Introduction
+
+This is Part 2 of my notes for the **Wireshark: Traffic Analysis** room.
+
+In Part 1, I worked on Nmap scans, ARP poisoning, host identification and DNS/ICMP tunnelling. In this part, I moved into cleartext protocol analysis, HTTP attack investigation, HTTPS decryption, credential hunting and creating firewall rules from packet information.
+
+The main topics I covered were:
+
+- FTP cleartext analysis
+- HTTP analysis
+- Log4j traffic analysis
+- HTTPS/TLS decryption
+- Cleartext credential hunting
+- Firewall ACL rules
+
+I focused on understanding where the useful information appears in Wireshark and which filters/features make the investigation faster.
+
+---
+
+# Task 6 - Cleartext Protocol Analysis: FTP
+
+## What I learned
+
+FTP (File Transfer Protocol) is designed to transfer files, but traditional FTP does not encrypt the communication. This means usernames, passwords, commands and file information can appear directly inside a packet capture.
+
+The basic filter is:
 
 ```text
-[To be added]
+ftp
 ```
 
-## Part 2 Important Filters
+Some useful FTP response codes are:
 
 ```text
-[To be added]
+211
+```
+
+System status
+
+```text
+213
+```
+
+File status
+
+```text
+220
+```
+
+Service ready
+
+```text
+227
+```
+
+Entering passive mode
+
+```text
+230
+```
+
+User logged in
+
+```text
+331
+```
+
+Valid username, password required
+
+```text
+430
+```
+
+Invalid username or password
+
+```text
+530
+```
+
+Not logged in / invalid authentication
+
+Useful filters include:
+
+```text
+ftp.response.code == 530
+```
+
+```text
+ftp.response.code == 213
+```
+
+```text
+ftp.request.command == "USER"
+```
+
+```text
+ftp.request.command == "PASS"
+```
+
+```text
+ftp.request.command == "STOR"
+```
+
+The capture I used was:
+
+```text
+~/Desktop/exercise-pcaps/ftp/ftp.pcap
+```
+
+For the file-size investigation I used:
+
+```text
+ftp.response.code == 213
+```
+
+The response showed:
+
+```text
+213 39424
+```
+
+So the accessed file was **39,424 bytes**.
+
+I also investigated the file-transfer activity and the permission-changing command. The capture contained:
+
+```text
+SITE CHMOD 777 resume.doc
+```
+
+`CHMOD 777` gives read, write and execute permissions to the owner, group and others.
+
+### Task 6 Answers
+
+**Incorrect login attempts:**
+
+```text
+737
+```
+
+**Size of the file accessed by the `ftp` account:**
+
+```text
+39424
+```
+
+**Filename expected by TryHackMe:**
+
+```text
+resume.doc
+```
+
+**Command used to change permissions:**
+
+```text
+CHMOD 777
+```
+
+Useful filter:
+
+```text
+ftp contains "CHMOD"
+```
+
+> Note: The capture contains `STOR README` as a literal upload command while `resume.doc` appears in retrieval activity. The expected TryHackMe answer is `resume.doc`, so that is the answer I recorded.
+
+---
+
+# Task 7 - Cleartext Protocol Analysis: HTTP
+
+## What I learned
+
+HTTP is a cleartext request-response protocol. Since normal HTTP traffic is not encrypted, a packet capture can expose URLs, hosts, user agents, methods, response codes and application data.
+
+Basic filter:
+
+```text
+http
+```
+
+HTTP/2:
+
+```text
+http2
+```
+
+Useful request filters:
+
+```text
+http.request.method == "GET"
+```
+
+```text
+http.request.method == "POST"
+```
+
+```text
+http.request
+```
+
+Useful response filters:
+
+```text
+http.response.code == 200
+```
+
+```text
+http.response.code == 401
+```
+
+```text
+http.response.code == 403
+```
+
+```text
+http.response.code == 404
+```
+
+I also learned that the User-Agent field can provide clues about tools or unusual clients.
+
+```text
+http.user_agent
+```
+
+A useful hunting filter is:
+
+```text
+(http.user_agent contains "sqlmap") or (http.user_agent contains "Nmap") or (http.user_agent contains "Wfuzz") or (http.user_agent contains "Nikto")
+```
+
+The important lesson is not to automatically trust a normal-looking User-Agent because attackers can modify it.
+
+## Log4j Analysis
+
+The room also covered identifying the beginning of a Log4j attack.
+
+Useful indicators include:
+
+```text
+jndi:ldap
+```
+
+and:
+
+```text
+Exploit.class
+```
+
+The attack starts with a POST request, so I can begin with:
+
+```text
+http.request.method == "POST"
+```
+
+I can also search packet contents:
+
+```text
+(frame contains "jndi") or (frame contains "Exploit")
+```
+
+The capture files were:
+
+```text
+~/Desktop/exercise-pcaps/http/user-agent.pcap
+```
+
+and:
+
+```text
+~/Desktop/exercise-pcaps/http/http.pcapng
+```
+
+### Task 7 Answers
+
+**Number of anomalous User-Agent types:**
+
+```text
+6
+```
+
+**Packet with the subtle User-Agent spelling difference:**
+
+```text
+52
+```
+
+**Packet where the Log4j attack starts:**
+
+```text
+444
+```
+
+**IP contacted by the adversary, defanged:**
+
+```text
+62[.]210[.]130[.]250
 ```
 
 ---
 
-# Room Progress
+# Task 8 - Encrypted Protocol Analysis: Decrypting HTTPS
 
-**Part 1:** Completed — `2026-09-08`
+## What I learned
 
-**Part 2:** Pending
+HTTPS uses TLS encryption to protect web traffic. Normally, the application data is hidden inside the encrypted TLS session.
 
-**Overall status:** In Progress
+If I have the correct TLS key log file, Wireshark can use it to decrypt the traffic.
+
+Useful filters include:
+
+```text
+tls
+```
+
+Client Hello:
+
+```text
+tls.handshake.type == 1
+```
+
+Server Hello:
+
+```text
+tls.handshake.type == 2
+```
+
+HTTP/2:
+
+```text
+http2
+```
+
+The capture used was:
+
+```text
+Desktop/exercise-pcaps/https/Exercise.pcap
+```
+
+The key file was:
+
+```text
+Desktop/exercise-pcaps/https/KeysLogFile.txt
+```
+
+## How I decrypted the traffic
+
+In Wireshark I went to:
+
+```text
+Edit → Preferences → Protocols → TLS
+```
+
+Then I found:
+
+```text
+(Pre)-Master-Secret log filename
+```
+
+and selected:
+
+```text
+KeysLogFile.txt
+```
+
+After applying the key log file, Wireshark could decrypt the relevant TLS sessions.
+
+### Task 8 Answers
+
+**Client Hello sent to `accounts.google.com`:**
+
+```text
+16
+```
+
+**Number of HTTP/2 packets after decryption:**
+
+```text
+115
+```
+
+To verify this I used:
+
+```text
+http2
+```
+
+**Authority header in Frame 322:**
+
+```text
+safebrowsing[.]googleapis[.]com
+```
+
+I located Frame 322 using:
+
+```text
+frame.number == 322
+```
+
+Then I inspected:
+
+```text
+HyperText Transfer Protocol 2
+→ Stream
+→ Header: :authority
+```
+
+**Flag:**
+
+```text
+FLAG{THM-PACKETMASTER}
+```
+
+The flag was found after decrypting the traffic and investigating the HTTP/2/application data.
+
+---
+
+# Task 9 - Bonus: Hunt Cleartext Credentials
+
+## What I learned
+
+Cleartext credentials can be difficult to find manually in a large capture because there may be many username and password submissions.
+
+Wireshark provides a useful built-in feature:
+
+```text
+Tools → Credentials
+```
+
+It can extract credentials from supported cleartext protocols such as:
+
+- FTP
+- HTTP
+- IMAP
+- POP
+- SMTP
+
+The credentials window can show the packet number, protocol, username and related information. Clicking the packet number takes me to the relevant packet.
+
+I also learned that this feature should not be the only method I use. Manual investigation is still important because the feature only supports certain protocols and situations.
+
+The capture used was:
+
+```text
+Desktop/exercise-pcaps/bonus/Bonus-exercise.pcap
+```
+
+### Task 9 Answers
+
+**Packet containing HTTP Basic Auth credentials:**
+
+```text
+237
+```
+
+**Packet where an empty password was submitted:**
+
+```text
+170
+```
+
+---
+
+# Task 10 - Bonus: Actionable Results
+
+## What I learned
+
+After detecting suspicious traffic, the next step can be taking action.
+
+Wireshark can generate firewall ACL rules using:
+
+```text
+Tools → Firewall ACL Rules
+```
+
+It supports several firewall formats, including:
+
+- Netfilter / iptables
+- Cisco IOS
+- IP Filter
+- IPFirewall / ipfw
+- Packet Filter
+- Windows Firewall
+
+For this task I used **IPFirewall (ipfw)**.
+
+## Packet 99 - Deny Source IPv4
+
+I went to packet 99 using:
+
+```text
+Ctrl + G
+```
+
+Then:
+
+```text
+Tools → Firewall ACL Rules
+```
+
+I selected:
+
+```text
+IPFirewall (ipfw)
+```
+
+The generated rule for denying the source IPv4 address was:
+
+```text
+add deny ip from 10.121.70.151 to any in
+```
+
+### Answer
+
+```text
+add deny ip from 10.121.70.151 to any in
+```
+
+## Packet 231 - Allow Destination MAC
+
+I then went to packet 231 and opened:
+
+```text
+Tools → Firewall ACL Rules
+```
+
+After selecting **IPFirewall (ipfw)** and changing the rule to allow, I checked the destination MAC rule.
+
+The generated rule was:
+
+```text
+add allow MAC 00:d0:59:aa:af:80 any in
+```
+
+### Answer
+
+```text
+add allow MAC 00:d0:59:aa:af:80 any in
+```
+
+---
+
+# Important Filters From Part 2
+
+## FTP
+
+```text
+ftp
+ftp.response.code == 530
+ftp.response.code == 213
+ftp.request.command == "USER"
+ftp.request.command == "PASS"
+ftp.request.command == "STOR"
+ftp contains "CHMOD"
+```
+
+## HTTP
+
+```text
+http
+http.request
+http.request.method == "GET"
+http.request.method == "POST"
+http.response.code == 200
+http.response.code == 401
+http.response.code == 403
+http.response.code == 404
+http.user_agent
+```
+
+## Log4j
+
+```text
+(frame contains "jndi") or (frame contains "Exploit")
+```
+
+## TLS / HTTPS
+
+```text
+tls
+tls.handshake.type == 1
+tls.handshake.type == 2
+http2
+```
+
+## Frame Investigation
+
+```text
+frame.number == 322
+```
+
+---
+
+# What I Learned From Part 2
+
+This part helped me understand that Wireshark is not only useful for finding IP addresses and ports.
+
+With **FTP**, I saw how dangerous cleartext protocols can be because usernames, passwords, file operations and commands may be visible directly in network traffic.
+
+With **HTTP**, I learned to investigate User-Agent values, request methods, response codes and suspicious payloads. The Log4j section showed me how knowledge of a vulnerability can be turned into useful packet filters.
+
+The **HTTPS decryption** section was especially useful. Encrypted traffic normally hides the application data, but when the correct TLS key log file is available, Wireshark can decrypt the session and expose useful HTTP/2 information.
+
+The **credential hunting** section showed me how Wireshark can speed up investigations using the Credentials feature, while still requiring manual verification.
+
+Finally, the **Firewall ACL** section showed me how packet analysis can lead to an actionable security response. Instead of only identifying a suspicious host, I can use the packet information to create a rule that can be implemented on a firewall.
+
+My main takeaway from Part 2 is:
+
+> **A SOC investigation should move from detection to investigation, evidence and finally action.**
+
+---
+
+
+
