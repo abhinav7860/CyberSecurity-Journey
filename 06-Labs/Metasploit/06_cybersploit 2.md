@@ -623,14 +623,4 @@ cat /root/flag.txt
 
 ---
 
-## Result
 
-**Target:** `192.168.29.104`
-
-**Initial user:** `shailendra`
-
-**Privilege escalation:** Docker group → host filesystem mounted through Docker → `chroot`
-
-**Final privilege:** `root`
-
-**Flag:** `Pwned CyberSploit2 POC`
