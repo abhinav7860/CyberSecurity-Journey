@@ -500,3 +500,800 @@ Look for:
 
 ------------------------------------------------------------------------
 
+# Network Security Essentials --- Part 2
+
+**Platform:** TryHackMe\
+**Room:** Network Security Essentials\
+**Part:** 2\
+**Date:** 10 September 2026\
+**Focus:** Monitoring network perimeters, investigating perimeter logs,
+breach analysis, lateral movement, C2 and data exfiltration
+
+------------------------------------------------------------------------
+
+## My Notes
+
+In Part 2, I moved from the basic network concepts into actual
+**perimeter log investigation**.
+
+I worked with firewall, IDS and VPN logs and followed the attacker step
+by step:
+
+``` text
+Reconnaissance
+      ↓
+VPN brute-force
+      ↓
+Successful access
+      ↓
+Lateral movement
+      ↓
+C2 communication
+      ↓
+Data exfiltration
+```
+
+The main thing I learned is that a SOC analyst should not look at one
+log in isolation. I need to **pivot between different log sources and
+correlate the evidence** to understand the complete attack.
+
+------------------------------------------------------------------------
+
+# Task 6 --- Network Perimeters: Monitoring and Protecting
+
+## Monitoring the Perimeter
+
+Monitoring the perimeter involves security controls such as:
+
+-   Firewalls
+-   IDS/IPS
+-   Access control
+-   VPN gateways
+-   WAFs
+
+The goal is to identify:
+
+-   Port scans
+-   Brute-force attacks
+-   Misconfigured/exposed services
+-   Suspicious outbound traffic
+-   Malware communication
+-   Data exfiltration
+
+The perimeter logs for this task were located in:
+
+``` bash
+~/Desktop/Perimeter_logs/task6/
+```
+
+------------------------------------------------------------------------
+
+# Scenario 1 --- Port Scanning
+
+A port scan happens when an attacker probes multiple ports to find
+available services.
+
+Example:
+
+``` text
+203.0.113.10 → 10.0.0.20:21
+203.0.113.10 → 10.0.0.20:22
+203.0.113.10 → 10.0.0.20:23
+203.0.113.10 → 10.0.0.20:25
+203.0.113.10 → 10.0.0.20:53
+```
+
+The important pattern is:
+
+> **One source IP repeatedly contacting different ports on a target.**
+
+This is a strong indicator of reconnaissance/port scanning.
+
+### Analyst verdict
+
+The attacker is trying to discover an exposed service that can
+potentially be targeted.
+
+------------------------------------------------------------------------
+
+# Scenario 2 --- Web Attacks
+
+WAF logs can provide more context than a simple firewall block.
+
+Examples of attacks shown in the logs included:
+
+-   XSS
+-   SQL Injection
+-   Directory Traversal
+
+Useful filtering idea:
+
+``` text
+action=BLOCK
+```
+
+This lets me quickly focus on requests that the WAF identified and
+blocked.
+
+### Analyst verdict
+
+Multiple blocked web attack types from the same suspicious source
+indicate that the attacker is actively targeting the web application.
+
+------------------------------------------------------------------------
+
+# Scenario 3 --- VPN Brute Force
+
+VPN authentication logs can become noisy when an attacker repeatedly
+guesses usernames and passwords.
+
+The important pattern is:
+
+``` text
+FAILED_AUTH
+FAILED_AUTH
+FAILED_AUTH
+FAILED_AUTH
+...
+SUCCESS_AUTH
+```
+
+A large number of failures from one source IP is suspicious.
+
+### Analyst verdict
+
+The attacker is attempting to discover valid credentials and gain remote
+access to the internal network.
+
+------------------------------------------------------------------------
+
+# Key Detection Patterns
+
+I noted these patterns from the task:
+
+  Pattern                              Possible Activity
+  ------------------------------------ -----------------------------
+  One source → many ports              Port scanning
+  Many failed logins from one source   Brute force
+  Regular repeated connections         Malware beaconing
+  Large outbound transfers             Data exfiltration
+  IDS alert with attack type           Higher-confidence detection
+
+The important point is that **context matters**. A firewall may only
+tell me that traffic was blocked, while an IDS/WAF can provide
+additional information about why the traffic is suspicious.
+
+------------------------------------------------------------------------
+
+# Task 7 --- Perimeter Logs: Investigating the Breach
+
+## Incident Scenario
+
+The scenario involved **Initech Corp**, a mid-sized financial services
+company.
+
+The company had deployed:
+
+-   A firewall
+-   An IDS
+
+The SOC had noticed abnormal traffic but had not completed a deeper
+investigation.
+
+My task was to investigate one month of perimeter logs and determine:
+
+1.  What techniques the attacker used
+2.  Whether the attacker successfully breached the perimeter
+3.  What happened after the initial compromise
+
+The challenge logs were located in:
+
+``` text
+~/Desktop/Perimeter_logs/challenge/
+```
+
+The main files were:
+
+``` text
+firewall.log
+ids_alerts.log
+vpn_auth.log
+```
+
+------------------------------------------------------------------------
+
+# Network Assets
+
+The important internal assets were:
+
+  IP            Host              Role                        Criticality
+  ------------- ----------------- --------------------------- -------------
+  `10.0.0.20`   FINANCE-SRV1      File/Finance Server (SMB)   High
+  `10.0.0.50`   VPN-GW            VPN Gateway                 Critical
+  `10.0.0.51`   APP-WEB-01        Internal Web/App            High
+  `10.0.0.60`   WORKSTATION-60    Employee Workstation        Medium
+  `10.8.0.23`   VPN-CLIENT-ATTK   VPN Assigned Client         Critical
+  `10.0.1.10`   DMZ-WEB           DMZ Web Server              Medium
+
+------------------------------------------------------------------------
+
+# Method 1 --- Manual Log Analysis
+
+I first inspected the logs from the command line.
+
+## Checking Firewall Logs
+
+``` bash
+head firewall.log
+```
+
+This gives a quick look at the structure of the firewall logs.
+
+I then focused on blocked traffic:
+
+``` bash
+cat firewall.log | grep "BLOCK" | head
+```
+
+The blocked connections showed external systems probing internal hosts
+using ports such as:
+
+``` text
+21
+22
+23
+445
+3389
+```
+
+These ports correspond to services such as FTP, SSH, Telnet, SMB and
+RDP.
+
+------------------------------------------------------------------------
+
+# Finding the IP Performing the Most Reconnaissance
+
+To identify the source IP with the highest number of blocked requests, I
+used:
+
+``` bash
+cat firewall.log | grep "BLOCK" | cut -d' ' -f5 | cut -d: -f1 | sort -nr | uniq -c
+```
+
+The result showed one IP with the highest number of blocked requests.
+
+### Answer
+
+``` text
+203.0.113.45
+```
+
+This was the external IP I used as the main pivot for the rest of the
+investigation.
+
+------------------------------------------------------------------------
+
+# Checking Whether the Attacker Got Through
+
+After identifying the suspicious IP, I checked whether any traffic from
+it was allowed:
+
+``` bash
+cat firewall.log | grep 203.0.113.45 | grep "ALLOW"
+```
+
+The output showed allowed connections to internal services including:
+
+``` text
+445
+22
+3389
+4444
+23
+```
+
+This was important because it suggested that the attacker was not only
+scanning the perimeter --- some traffic was actually getting through.
+
+### My conclusion
+
+The investigation moved from **reconnaissance** to possible **initial
+access/compromise**.
+
+------------------------------------------------------------------------
+
+# VPN Brute Force / Credential Access
+
+Next, I checked the VPN authentication logs.
+
+To count failed attempts by source:
+
+``` bash
+cat vpn_auth.log | grep FAIL | cut -d' ' -f3 | sort -nr | uniq -c
+```
+
+One suspicious source generated a large number of failed login attempts.
+
+I then filtered the VPN log for the suspicious IP:
+
+``` bash
+cat vpn_auth.log | grep 203.0.113.45
+```
+
+The results showed repeated failed attempts against the same service
+account followed by successful authentication.
+
+### Targeted username
+
+``` text
+svc_backup
+```
+
+### Important observation
+
+The attacker did not stop at failed authentication. A successful login
+appeared afterwards, meaning the brute-force/credential attack
+eventually resulted in access.
+
+------------------------------------------------------------------------
+
+# Successful VPN Access
+
+After the successful authentication, the VPN assigned an internal
+address to the attacker.
+
+### Assigned internal IP
+
+``` text
+10.8.0.23
+```
+
+This became an important indicator because the attacker now had an
+internal foothold.
+
+The attack chain at this point was:
+
+``` text
+External attacker
+      ↓
+VPN brute force
+      ↓
+svc_backup
+      ↓
+Successful VPN login
+      ↓
+10.8.0.23
+```
+
+------------------------------------------------------------------------
+
+# Lateral Movement
+
+Once the attacker had an internal IP, I checked firewall logs for
+connections originating from the compromised host.
+
+``` bash
+cat firewall.log | grep 10.8.0.23 | grep "ALLOW" | head
+```
+
+The traffic showed connections toward internal machines:
+
+``` text
+10.0.0.20
+10.0.0.51
+10.0.0.60
+```
+
+The main ports being targeted were:
+
+``` text
+22    → SSH
+445   → SMB
+3389  → RDP
+```
+
+This is important because the attacker was no longer only interacting
+with the perimeter. They were attempting to move **inside the network**.
+
+------------------------------------------------------------------------
+
+# SMB Lateral Movement
+
+I pivoted into the IDS logs to look for evidence of SMB exploitation:
+
+``` bash
+cat ids_alerts.log | grep 10.8.0.23 | grep 'SMB' | cut -d' ' -f6,7,8,9,10,19,21 | head
+```
+
+The IDS alerts contained:
+
+``` text
+EXPLOIT Possible MS-SMB Lateral Movement
+```
+
+and traffic involving:
+
+``` text
+:445
+```
+
+### Answer
+
+``` text
+445
+```
+
+Port **445** is the standard SMB port.
+
+### My conclusion
+
+The IDS evidence confirmed that the compromised host was attempting
+SMB-based lateral movement.
+
+------------------------------------------------------------------------
+
+# C2 Beaconing
+
+After finding evidence of lateral movement, I searched the IDS logs for
+C2 activity:
+
+``` bash
+cat ids_alerts.log | grep C2 | head
+```
+
+The logs contained alerts such as:
+
+``` text
+ET TROJAN Possible C2 Beaconing
+```
+
+The communication repeatedly used:
+
+``` text
+:4444
+```
+
+The regular timing of the connections was also suspicious.
+
+This pattern is consistent with **beaconing**, where a compromised host
+repeatedly communicates with an attacker-controlled server.
+
+------------------------------------------------------------------------
+
+# Finding the C2-Compromised Host
+
+The investigation identified the internal host responsible for the C2
+beaconing.
+
+### Answer
+
+``` text
+10.0.0.60
+```
+
+This means the workstation was communicating with an external C2
+infrastructure.
+
+------------------------------------------------------------------------
+
+# Finding the C2 IP
+
+I then pivoted on the compromised host to identify the external IP
+associated with the C2 activity.
+
+The investigation identified:
+
+### C2 IP
+
+``` text
+198.51.100.77
+```
+
+This was an important IOC because it represented the external system
+receiving the beaconing traffic.
+
+------------------------------------------------------------------------
+
+# C2 Alert Statistics
+
+I used a command to summarize the alerts associated with the infected
+host:
+
+``` bash
+cat ids_alerts.log | grep -n 10.0.0.60 | cut -d' ' -f6,7,8,9,10,19,22,23 | uniq -c | sort -nr | head
+```
+
+The results showed repeated:
+
+``` text
+TROJAN Possible C2 Beaconing
+```
+
+This gave stronger evidence that the activity was not a one-time
+connection.
+
+------------------------------------------------------------------------
+
+# Data Exfiltration Attempt
+
+After identifying C2 communication, I checked whether data was being
+sent outside the network.
+
+I filtered the firewall logs for the suspicious external IP:
+
+``` bash
+cat firewall.log | grep 198.51.100.77 | cut -d' ' -f5,6,7 | uniq | sort
+```
+
+The results showed repeated outbound connections to ports:
+
+``` text
+80
+8080
+```
+
+I also checked IDS alerts for large HTTP POST uploads:
+
+``` bash
+cat ids_alerts.log | grep 10.0.0.51 | tail
+```
+
+The alerts included:
+
+``` text
+ET INFO Possible HTTP POST Large Upload
+```
+
+with the classification:
+
+``` text
+Potential Data Exfiltration
+```
+
+### Host involved in exfiltration
+
+``` text
+10.0.0.51
+```
+
+This indicated that an internal host was sending significant amounts of
+data toward an external destination.
+
+------------------------------------------------------------------------
+
+# Final Answers --- Task 6
+
+  Question                                            Answer
+  --------------------------------------------------- -----------------
+  IP performing the port scan                         `203.0.113.10`
+  Source IP responsible for all blocked web attacks   `198.51.100.12`
+  Failed VPN brute-force attempts                     `90`
+  Suspicious VPN brute-force IP                       `45.137.22.13`
+
+------------------------------------------------------------------------
+
+# Final Answers --- Task 7
+
+  Question                                             Answer
+  ---------------------------------------------------- -----------------
+  External IP that performed the most reconnaissance   `203.0.113.45`
+  Internal host targeted by scans                      `10.0.0.20`
+  Username targeted in VPN logs                        `svc_backup`
+  Internal IP assigned after successful VPN login      `10.8.0.23`
+  Port used for lateral SMB attempts                   `445`
+  Host that beaconed to C2                             `10.0.0.60`
+  IP associated with C2                                `198.51.100.77`
+  Host showing exfiltration attempts                   `10.0.0.51`
+
+------------------------------------------------------------------------
+
+# Complete Attack Timeline
+
+This is the most important part for me to remember:
+
+``` text
+1. External reconnaissance
+        ↓
+2. Port scanning
+        ↓
+3. Attacker finds exposed services
+        ↓
+4. VPN brute-force
+        ↓
+5. svc_backup credentials compromised
+        ↓
+6. Successful VPN login
+        ↓
+7. Attacker receives 10.8.0.23
+        ↓
+8. Internal reconnaissance
+        ↓
+9. SSH / SMB / RDP targeting
+        ↓
+10. SMB lateral movement
+        ↓
+11. Compromised host communicates with C2
+        ↓
+12. C2 IP identified as 198.51.100.77
+        ↓
+13. Large HTTP POST traffic observed
+        ↓
+14. Data exfiltration attempt
+```
+
+------------------------------------------------------------------------
+
+# What I Learned
+
+## 1. Logs should be correlated
+
+One log source alone did not tell the complete story.
+
+I had to move between:
+
+``` text
+Firewall
+   ↓
+VPN
+   ↓
+Firewall
+   ↓
+IDS
+   ↓
+Firewall / IDS
+```
+
+This allowed me to build the attack timeline.
+
+## 2. Reconnaissance can be identified through patterns
+
+Repeated connections to many ports from the same source are a strong
+indicator of scanning.
+
+## 3. Brute force creates a recognizable pattern
+
+A large number of authentication failures from one source, especially
+against the same account, is suspicious.
+
+## 4. Successful authentication changes the investigation
+
+Once the attacker received an internal IP, I had to stop thinking only
+about perimeter attacks and start looking for **lateral movement**.
+
+## 5. C2 beaconing can have a pattern
+
+Repeated connections at regular intervals to the same external
+destination can indicate malware beaconing.
+
+## 6. Exfiltration can be detected from outbound traffic
+
+Large HTTP POST requests and unusual outbound traffic can indicate that
+data is being sent outside the organization.
+
+------------------------------------------------------------------------
+
+# Useful Commands From This Lab
+
+### View firewall logs
+
+``` bash
+head firewall.log
+```
+
+### Find blocked traffic
+
+``` bash
+cat firewall.log | grep "BLOCK" | head
+```
+
+### Count blocked requests by source
+
+``` bash
+cat firewall.log | grep "BLOCK" | cut -d' ' -f5 | cut -d: -f1 | sort -nr | uniq -c
+```
+
+### Find allowed traffic from an IP
+
+``` bash
+cat firewall.log | grep 203.0.113.45 | grep "ALLOW"
+```
+
+### Count VPN failures by source
+
+``` bash
+cat vpn_auth.log | grep FAIL | cut -d' ' -f3 | sort -nr | uniq -c
+```
+
+### Filter VPN activity for an IP
+
+``` bash
+cat vpn_auth.log | grep 203.0.113.45
+```
+
+### Check lateral movement
+
+``` bash
+cat firewall.log | grep 10.8.0.23 | grep "ALLOW" | head
+```
+
+### Search IDS for SMB
+
+``` bash
+cat ids_alerts.log | grep 10.8.0.23 | grep 'SMB'
+```
+
+### Search for C2 alerts
+
+``` bash
+cat ids_alerts.log | grep C2 | head
+```
+
+### Check alerts for a compromised host
+
+``` bash
+cat ids_alerts.log | grep -n 10.0.0.60
+```
+
+------------------------------------------------------------------------
+
+# Splunk Method
+
+The room also provides Splunk for larger-scale log analysis.
+
+Splunk is available at:
+
+``` text
+http://localhost:8000
+```
+
+The logs are already ingested into:
+
+``` text
+index="network_logs"
+```
+
+The basic workflow I would use is:
+
+``` text
+Search
+  ↓
+Filter by source/destination IP
+  ↓
+Group/count events
+  ↓
+Identify suspicious patterns
+  ↓
+Pivot to another log source
+  ↓
+Build the attack timeline
+```
+
+For small log files, command-line tools like `grep`, `cut`, `sort` and
+`uniq` are quick and useful.
+
+For larger datasets, Splunk makes searching, filtering, counting and
+correlating events much easier.
+
+------------------------------------------------------------------------
+
+# Final Takeaways
+
+-   Perimeter monitoring is important for early attack detection.
+-   Firewall logs are useful for identifying scanning and suspicious
+    connections.
+-   VPN logs can reveal brute-force and successful authentication.
+-   IDS logs provide additional context about attack techniques.
+-   Port `445` is important when investigating SMB activity.
+-   A successful VPN login can provide an attacker with an internal
+    foothold.
+-   Lateral movement can then be detected through internal traffic
+    patterns.
+-   C2 beaconing can reveal that an internal host has been compromised.
+-   Large outbound HTTP POST traffic can indicate possible data
+    exfiltration.
+-   The most important SOC skill here was **pivoting and correlating
+    multiple log sources** instead of investigating each event
+    separately.
+
+------------------------------------------------------------------------
+
