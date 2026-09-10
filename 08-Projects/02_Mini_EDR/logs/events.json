@@ -1,0 +1,690 @@
+[
+    {
+        "pid": 7812,
+        "name": "msedgewebview2.exe",
+        "parent_pid": 21968,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+        "cmdline": [
+            "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+            "--type=renderer",
+            "--noerrdialogs",
+            "--user-data-dir=C:\\Users\\abhin\\AppData\\Local\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\EBWebView",
+            "--webview-exe-name=WhatsApp.Root.exe",
+            "--webview-exe-version=1.0.0",
+            "--embedded-browser-webview=1",
+            "--video-capture-use-gpu-memory-buffer",
+            "--lang=en-US",
+            "--js-flags",
+            "--device-scale-factor=1.25",
+            "--num-raster-threads=4",
+            "--enable-main-frame-before-activation",
+            "--renderer-client-id=89",
+            "--js-flags=--ms-user-locale=en_IN",
+            "--launch-time-ticks=38906002476",
+            "--skip-read-main-dll",
+            "--metrics-shmem-handle=5888,i,9372665502120622251,14550013703408217198,2097152",
+            "--field-trial-handle=1932,i,7715108374639249349,15102886463876211626,262144",
+            "--variations-seed-version",
+            "--pseudonymization-salt-handle=1952,i,15330894086889714362,11520592527453800423,4",
+            "--trace-process-track-uuid=3190709069708596055",
+            "--mojo-platform-channel-handle=5364",
+            "/pfhostedapp:ffb280d8619fac8a834c42cfd288352e121b46e9",
+            "/prefetch:1"
+        ],
+        "timestamp": "2026-09-10 20:26:02"
+    },
+    {
+        "pid": 26820,
+        "name": "RuntimeBroker.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 20:26:02"
+    },
+    {
+        "pid": 26940,
+        "name": "msedgewebview2.exe",
+        "parent_pid": 21968,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+        "cmdline": [
+            "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+            "--type=renderer",
+            "--noerrdialogs",
+            "--user-data-dir=C:\\Users\\abhin\\AppData\\Local\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\EBWebView",
+            "--webview-exe-name=WhatsApp.Root.exe",
+            "--webview-exe-version=1.0.0",
+            "--embedded-browser-webview=1",
+            "--extension-process",
+            "--renderer-sub-type=extension",
+            "--video-capture-use-gpu-memory-buffer",
+            "--lang=en-US",
+            "--js-flags",
+            "--device-scale-factor=1.25",
+            "--num-raster-threads=4",
+            "--enable-main-frame-before-activation",
+            "--renderer-client-id=88",
+            "--js-flags=--ms-user-locale=en_IN",
+            "--launch-time-ticks=38905981413",
+            "--ssd-no-pressure-read-main-dll",
+            "--metrics-shmem-handle=6300,i,14971755920581762339,17033280131622442478,2097152",
+            "--field-trial-handle=1932,i,7715108374639249349,15102886463876211626,262144",
+            "--variations-seed-version",
+            "--pseudonymization-salt-handle=1952,i,15330894086889714362,11520592527453800423,4",
+            "--trace-process-track-uuid=3190709068771554206",
+            "--mojo-platform-channel-handle=7052",
+            "/pfhostedapp:ffb280d8619fac8a834c42cfd288352e121b46e9",
+            "/prefetch:9"
+        ],
+        "timestamp": "2026-09-10 20:26:02"
+    },
+    {
+        "pid": 16696,
+        "name": "svchost.exe",
+        "parent_pid": 1688,
+        "username": null,
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "cmdline": null,
+        "timestamp": "2026-09-10 20:26:04"
+    },
+    {
+        "pid": 29724,
+        "name": "RuntimeBroker.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 20:37:23"
+    },
+    {
+        "pid": 29992,
+        "name": "dllhost.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\dllhost.exe",
+        "cmdline": [
+            "C:\\WINDOWS\\system32\\DllHost.exe",
+            "/Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}"
+        ],
+        "timestamp": "2026-09-10 20:37:25"
+    },
+    {
+        "pid": 24252,
+        "name": "RuntimeBroker.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 20:37:25"
+    },
+    {
+        "pid": 12724,
+        "name": "CalculatorApp.exe",
+        "parent_pid": 9028,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsCalculator_11.2607.0.0_x64__8wekyb3d8bbwe\\CalculatorApp.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsCalculator_11.2607.0.0_x64__8wekyb3d8bbwe\\CalculatorApp.exe"
+        ],
+        "timestamp": "2026-09-10 20:37:25"
+    },
+    {
+        "pid": 2168,
+        "name": "git.exe",
+        "parent_pid": 25576,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\Git\\cmd\\git.exe",
+        "cmdline": [
+            "C:\\Program Files\\Git\\cmd\\git.exe",
+            "for-each-ref",
+            "--format=%(refname)%00%(upstream:short)%00%(objectname)%00%(upstream:track)%00%(upstream:remotename)%00%(upstream:remoteref)",
+            "--ignore-case",
+            "refs/heads/main",
+            "refs/remotes/main"
+        ],
+        "timestamp": "2026-09-10 20:37:33"
+    },
+    {
+        "pid": 27092,
+        "name": "msedgewebview2.exe",
+        "parent_pid": 21968,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+        "cmdline": [
+            "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+            "--type=renderer",
+            "--noerrdialogs",
+            "--user-data-dir=C:\\Users\\abhin\\AppData\\Local\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\EBWebView",
+            "--webview-exe-name=WhatsApp.Root.exe",
+            "--webview-exe-version=1.0.0",
+            "--embedded-browser-webview=1",
+            "--video-capture-use-gpu-memory-buffer",
+            "--lang=en-US",
+            "--js-flags",
+            "--device-scale-factor=1.25",
+            "--num-raster-threads=4",
+            "--enable-main-frame-before-activation",
+            "--renderer-client-id=93",
+            "--js-flags=--ms-user-locale=en_IN",
+            "--launch-time-ticks=39603132962",
+            "--skip-read-main-dll",
+            "--metrics-shmem-handle=6388,i,17398513668861065101,10013876339078211039,2097152",
+            "--field-trial-handle=1932,i,7715108374639249349,15102886463876211626,262144",
+            "--variations-seed-version",
+            "--pseudonymization-salt-handle=1952,i,15330894086889714362,11520592527453800423,4",
+            "--trace-process-track-uuid=3190709073456763451",
+            "--mojo-platform-channel-handle=6580",
+            "/pfhostedapp:ffb280d8619fac8a834c42cfd288352e121b46e9",
+            "/prefetch:1"
+        ],
+        "timestamp": "2026-09-10 20:37:40"
+    },
+    {
+        "pid": 8620,
+        "name": "msedgewebview2.exe",
+        "parent_pid": 21968,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+        "cmdline": [
+            "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+            "--type=renderer",
+            "--noerrdialogs",
+            "--user-data-dir=C:\\Users\\abhin\\AppData\\Local\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\EBWebView",
+            "--webview-exe-name=WhatsApp.Root.exe",
+            "--webview-exe-version=1.0.0",
+            "--embedded-browser-webview=1",
+            "--extension-process",
+            "--renderer-sub-type=extension",
+            "--video-capture-use-gpu-memory-buffer",
+            "--lang=en-US",
+            "--js-flags",
+            "--device-scale-factor=1.25",
+            "--num-raster-threads=4",
+            "--enable-main-frame-before-activation",
+            "--renderer-client-id=92",
+            "--js-flags=--ms-user-locale=en_IN",
+            "--launch-time-ticks=39603113447",
+            "--ssd-no-pressure-read-main-dll",
+            "--metrics-shmem-handle=6448,i,6847238367396892959,1642112319273188489,2097152",
+            "--field-trial-handle=1932,i,7715108374639249349,15102886463876211626,262144",
+            "--variations-seed-version",
+            "--pseudonymization-salt-handle=1952,i,15330894086889714362,11520592527453800423,4",
+            "--trace-process-track-uuid=3190709072519721602",
+            "--mojo-platform-channel-handle=4360",
+            "/pfhostedapp:ffb280d8619fac8a834c42cfd288352e121b46e9",
+            "/prefetch:9"
+        ],
+        "timestamp": "2026-09-10 20:37:40"
+    },
+    {
+        "pid": 23692,
+        "name": "dllhost.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\dllhost.exe",
+        "cmdline": [
+            "C:\\WINDOWS\\system32\\DllHost.exe",
+            "/Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}"
+        ],
+        "timestamp": "2026-09-10 20:39:10"
+    },
+    {
+        "pid": 6204,
+        "name": "smartscreen.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\smartscreen.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\smartscreen.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 20:39:10"
+    },
+    {
+        "pid": 25764,
+        "name": "WindowsTerminal.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 20:39:20"
+    },
+    {
+        "pid": 26408,
+        "name": "OpenConsole.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 20:39:20"
+    },
+    {
+        "pid": 27048,
+        "name": "conhost.exe",
+        "parent_pid": 4852,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": [
+            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
+            "0x4"
+        ],
+        "timestamp": "2026-09-10 20:39:20"
+    },
+    {
+        "pid": 9520,
+        "name": "dllhost.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\dllhost.exe",
+        "cmdline": [
+            "C:\\WINDOWS\\system32\\DllHost.exe",
+            "/Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}"
+        ],
+        "timestamp": "2026-09-10 20:39:20"
+    },
+    {
+        "pid": 4852,
+        "name": "powershell.exe",
+        "parent_pid": 10804,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        ],
+        "timestamp": "2026-09-10 20:39:20"
+    },
+    {
+        "pid": 25808,
+        "name": "HxTsr.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\microsoft.windowscommunicationsapps_16005.14326.22342.0_x64__8wekyb3d8bbwe\\HxTsr.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\microsoft.windowscommunicationsapps_16005.14326.22342.0_x64__8wekyb3d8bbwe\\HxTsr.exe",
+            "-ServerName:Hx.IPC.Server"
+        ],
+        "timestamp": "2026-09-10 20:39:27"
+    },
+    {
+        "pid": 27788,
+        "name": "RuntimeBroker.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 20:39:27"
+    },
+    {
+        "pid": 29980,
+        "name": "svchost.exe",
+        "parent_pid": 1688,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\svchost.exe",
+        "cmdline": [
+            "C:\\WINDOWS\\system32\\svchost.exe",
+            "-k",
+            "DevicesFlow",
+            "-s",
+            "ConsentUxUserSvc"
+        ],
+        "timestamp": "2026-09-10 20:39:27"
+    },
+    {
+        "pid": 12480,
+        "name": "backgroundTaskHost.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
+        "cmdline": [
+            "C:\\WINDOWS\\system32\\backgroundTaskHost.exe",
+            "-ServerName:App.AppXe9cvj1thv1hmcw0cs98xm3r97tyzy2xs.mca"
+        ],
+        "timestamp": "2026-09-10 21:25:46"
+    },
+    {
+        "pid": 23104,
+        "name": "OpenConsole.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:25:46"
+    },
+    {
+        "pid": 30436,
+        "name": "smartscreen.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\smartscreen.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\smartscreen.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:25:46"
+    },
+    {
+        "pid": 16412,
+        "name": "RuntimeBroker.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:25:46"
+    },
+    {
+        "pid": 26964,
+        "name": "conhost.exe",
+        "parent_pid": 15896,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": [
+            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
+            "0x4"
+        ],
+        "timestamp": "2026-09-10 21:25:46"
+    },
+    {
+        "pid": 25396,
+        "name": "WindowsTerminal.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:25:46"
+    },
+    {
+        "pid": 15896,
+        "name": "powershell.exe",
+        "parent_pid": 10804,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        ],
+        "timestamp": "2026-09-10 21:25:46"
+    },
+    {
+        "pid": 23676,
+        "name": "RuntimeBroker.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:25:46"
+    },
+    {
+        "pid": 29800,
+        "name": "conhost.exe",
+        "parent_pid": 27520,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": [
+            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
+            "0x4"
+        ],
+        "timestamp": "2026-09-10 21:25:50"
+    },
+    {
+        "pid": 23400,
+        "name": "OpenConsole.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:25:50"
+    },
+    {
+        "pid": 27520,
+        "name": "powershell.exe",
+        "parent_pid": 10804,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        ],
+        "timestamp": "2026-09-10 21:25:50"
+    },
+    {
+        "pid": 20672,
+        "name": "powershell.exe",
+        "parent_pid": 10804,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        ],
+        "timestamp": "2026-09-10 21:27:53"
+    },
+    {
+        "pid": 28480,
+        "name": "RuntimeBroker.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:27:53"
+    },
+    {
+        "pid": 20000,
+        "name": "conhost.exe",
+        "parent_pid": 20672,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": [
+            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
+            "0x4"
+        ],
+        "timestamp": "2026-09-10 21:27:53"
+    },
+    {
+        "pid": 29904,
+        "name": "OpenConsole.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:27:53"
+    },
+    {
+        "pid": 11608,
+        "name": "WindowsTerminal.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:27:53"
+    },
+    {
+        "pid": 1104,
+        "name": "OpenConsole.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:30:08"
+    },
+    {
+        "pid": 15244,
+        "name": "conhost.exe",
+        "parent_pid": 12668,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": [
+            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
+            "0x4"
+        ],
+        "timestamp": "2026-09-10 21:30:08"
+    },
+    {
+        "pid": 28496,
+        "name": "WindowsTerminal.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:30:09"
+    },
+    {
+        "pid": 12668,
+        "name": "powershell.exe",
+        "parent_pid": 10804,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        ],
+        "timestamp": "2026-09-10 21:30:08"
+    },
+    {
+        "pid": 26800,
+        "name": "backgroundTaskHost.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
+        "cmdline": [
+            "C:\\WINDOWS\\system32\\backgroundTaskHost.exe",
+            "-ServerName:App.AppXapskvk16gk8da8kch5g4qxh42vxccved.mca"
+        ],
+        "timestamp": "2026-09-10 21:30:25"
+    },
+    {
+        "pid": 27764,
+        "name": "PhoneExperienceHost.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.YourPhone_1.26071.164.0_x64__8wekyb3d8bbwe\\PhoneExperienceHost.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.YourPhone_1.26071.164.0_x64__8wekyb3d8bbwe\\PhoneExperienceHost.exe",
+            "-ComServer:Background",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:30:25"
+    },
+    {
+        "pid": 9900,
+        "name": "RuntimeBroker.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:30:29"
+    },
+    {
+        "pid": 25136,
+        "name": "msedgewebview2.exe",
+        "parent_pid": 21968,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+        "cmdline": null,
+        "timestamp": "2026-09-10 21:48:05"
+    },
+    {
+        "pid": 22984,
+        "name": "msedgewebview2.exe",
+        "parent_pid": 21968,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
+        "cmdline": null,
+        "timestamp": "2026-09-10 21:48:05"
+    },
+    {
+        "pid": 27604,
+        "name": "OpenConsole.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:52:34"
+    },
+    {
+        "pid": 23500,
+        "name": "WindowsTerminal.exe",
+        "parent_pid": 1832,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+        "cmdline": [
+            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
+            "-Embedding"
+        ],
+        "timestamp": "2026-09-10 21:52:34"
+    },
+    {
+        "pid": 19756,
+        "name": "conhost.exe",
+        "parent_pid": 17908,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\conhost.exe",
+        "cmdline": [
+            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
+            "0x4"
+        ],
+        "timestamp": "2026-09-10 21:52:34"
+    },
+    {
+        "pid": 17908,
+        "name": "powershell.exe",
+        "parent_pid": 10804,
+        "username": "PHANTOM\\abhin",
+        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "cmdline": [
+            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        ],
+        "timestamp": "2026-09-10 21:52:34"
+    }
+]
