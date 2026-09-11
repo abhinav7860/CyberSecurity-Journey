@@ -422,7 +422,7 @@ The important thing was to keep testing the actual target behavior rather than r
 
 # 11. The successful exploitation
 
-After continuing with the correct configuration, I eventually obtained the bind shell.
+After continuing with the correct configuration, I eventually obtained the bind shell.The thing was i restarted my machine  and using "set payloads cmd/unix/bind_perl" i got in .
 
 The important output was:
 
