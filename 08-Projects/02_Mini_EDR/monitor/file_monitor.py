@@ -1,61 +1,115 @@
 import os
-import time
-from datetime import datetime
 
 
 MONITORED_FOLDER = "monitored_files"
 
 
 def get_files():
-    """Get files currently present in the monitored folder."""
+    """Get information about files in the monitored folder."""
 
-    files = set()
+    files = {}
 
-    for root, directories, filenames in os.walk(MONITORED_FOLDER):
+    for root, directories, filenames in os.walk(
+        MONITORED_FOLDER
+    ):
 
         for filename in filenames:
 
-            full_path = os.path.join(root, filename)
+            file_path = os.path.join(
+                root,
+                filename
+            )
 
-            files.add(full_path)
+            try:
+
+                files[file_path] = {
+                    "path": file_path,
+                    "size": os.path.getsize(file_path),
+                    "modified": os.path.getmtime(file_path)
+                }
+
+            except OSError:
+                continue
 
     return files
 
 
-def main():
+def create_file_event(file_path, event_type):
+    """Create a file monitoring event."""
 
-    print("[FILE MONITOR] Started")
-    print(f"[FILE MONITOR] Watching: {MONITORED_FOLDER}\n")
+    return {
+        "event_type": event_type,
+        "file_name": os.path.basename(file_path),
+        "path": os.path.abspath(file_path)
+    }
 
-    previous_files = get_files()
 
-    try:
+def detect_file_changes(previous_files, current_files):
+    """Detect created, modified and deleted files."""
 
-        while True:
+    events = []
 
-            time.sleep(2)
+    # =====================================
+    # Detect created files
+    # =====================================
 
-            current_files = get_files()
+    new_files = (
+        set(current_files)
+        - set(previous_files)
+    )
 
-            new_files = current_files - previous_files
+    for file_path in new_files:
 
-            for file_path in new_files:
+        events.append(
+            create_file_event(
+                file_path,
+                "file_created"
+            )
+        )
 
-                print("\n[FILE CREATED]")
+    # =====================================
+    # Detect modified files
+    # =====================================
 
-                print(
-                    f"Time : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    common_files = (
+        set(current_files)
+        & set(previous_files)
+    )
+
+    for file_path in common_files:
+
+        old_file = previous_files[file_path]
+        new_file = current_files[file_path]
+
+        if (
+            old_file["size"] != new_file["size"]
+            or
+            old_file["modified"] != new_file["modified"]
+        ):
+
+            events.append(
+                create_file_event(
+                    file_path,
+                    "file_modified"
                 )
+            )
 
-                print(f"File : {os.path.basename(file_path)}")
-                print(f"Path : {os.path.abspath(file_path)}")
+    # =====================================
+    # Detect deleted files
+    # =====================================
 
-            previous_files = current_files
+    deleted_files = (
+        set(previous_files)
+        - set(current_files)
+    )
 
-    except KeyboardInterrupt:
+    for file_path in deleted_files:
 
-        print("\n\n[FILE MONITOR] Stopped.")
+        events.append(
+            create_file_event(
+                file_path,
+                "file_deleted"
+            )
+        )
 
-
-if __name__ == "__main__":
-    main()
+    return events
