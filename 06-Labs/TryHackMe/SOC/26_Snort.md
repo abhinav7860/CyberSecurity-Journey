@@ -1149,3 +1149,1241 @@ Need only the first few packets?
 
 ------------------------------------------------------------------------
 
+# Snort --- Part 2
+
+
+> **Sanitisation:** I kept the commands, rule logic and answers useful
+> for revision. Lab-specific IP addresses, MAC addresses, process IDs
+> and other unnecessary environment identifiers are masked where they
+> are not needed. No personal credentials, API keys or tokens are
+> included.
+
+------------------------------------------------------------------------
+
+# My Notes
+
+I continued the Snort room from Part 1. This part moved from basic
+sniffing and logging into IDS/IPS operation, PCAP investigation and
+writing my own Snort rules.
+
+I practiced:
+
+-   IDS vs IPS operation
+-   Alert modes
+-   Disabling logging
+-   Background/daemon mode
+-   Inline IPS mode
+-   PCAP investigation
+-   Multiple PCAP investigation
+-   Snort rule structure
+-   Local rules
+-   IP ID filtering
+-   TCP flag filtering
+-   `sameip`
+-   Rule revision tracking
+-   Main Snort components and configuration
+
+------------------------------------------------------------------------
+
+# Task 7 --- Operation Mode 3: IDS/IPS
+
+In Part 1 I mainly used Snort to sniff and log traffic. Here I started
+using rules to detect traffic.
+
+``` text
+Network Traffic
+      ↓
+Packet Decoder
+      ↓
+Preprocessors
+      ↓
+Detection Engine
+      ↓
+Rules
+      ↓
+Alert / Log / Drop
+```
+
+IDS is mainly:
+
+``` text
+Detect → Alert
+```
+
+IPS is:
+
+``` text
+Detect → Prevent / Drop
+```
+
+## Important Parameters
+
+  Parameter   Purpose
+  ----------- ------------------------
+  `-c`        Configuration file
+  `-T`        Test configuration
+  `-N`        Disable logging
+  `-D`        Background/daemon mode
+  `-A`        Alert mode
+
+## Example ICMP Rule
+
+The room used:
+
+``` text
+alert icmp any any <> any any (msg:"ICMP Packet Found"; sid:100001; rev:1;)
+```
+
+It was located in:
+
+``` text
+/etc/snort/rules/local.rules
+```
+
+This means:
+
+-   `alert` → generate an alert
+-   `icmp` → inspect ICMP
+-   `any any` → any source
+-   `<>` → both directions
+-   `msg` → alert message
+-   `sid` → rule ID
+-   `rev` → revision
+
+------------------------------------------------------------------------
+
+## `-N` --- Disable Logging
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -N
+```
+
+`-N` disables logging while Snort can still process traffic and display
+information if other output options are enabled.
+
+I remember:
+
+``` text
+-N = No logging
+```
+
+------------------------------------------------------------------------
+
+## `-D` --- Background Mode
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -D
+```
+
+This starts Snort in the background.
+
+I can check whether it is running with:
+
+``` shell
+ps -ef | grep snort
+```
+
+The process ID shown by the command can then be used to stop the
+process:
+
+``` shell
+sudo kill -9 <PID>
+```
+
+Daemon mode is useful for automation, but the room recommends using it
+only when the configuration is stable.
+
+------------------------------------------------------------------------
+
+# Alert Modes
+
+## Console
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A console
+```
+
+Shows fast-style alerts on the console.
+
+Useful information includes:
+
+``` text
+Timestamp
+SID
+Message
+Classification
+Priority
+Protocol
+Source
+Destination
+```
+
+## CMG
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A cmg
+```
+
+CMG provides alert information plus packet header and payload details in
+hex/text form.
+
+``` text
+console → quick alert
+cmg     → alert + packet details
+```
+
+## Fast
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A fast
+```
+
+Provides compact alert information such as the message, timestamp,
+source/destination and ports.
+
+## Full
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A full
+```
+
+Provides detailed alert information.
+
+## None
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A none
+```
+
+Disables alerting. Traffic can still be logged.
+
+This showed me that **logging and alerting are separate functions**.
+
+------------------------------------------------------------------------
+
+# IPS / Inline Mode
+
+The room demonstrated inline IPS with:
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -q -Q --daq afpacket -i eth0:eth1 -A console
+```
+
+Important options:
+
+``` text
+-q              → quiet mode
+-Q              → inline mode
+--daq afpacket  → afpacket DAQ
+-i eth0:eth1    → two inline interfaces
+-A console      → console alerts
+```
+
+The lab setup uses two interfaces so traffic can pass through Snort:
+
+``` text
+Interface 1
+    ↓
+Snort IPS
+    ↓
+Interface 2
+```
+
+When the rule action is configured to drop traffic, Snort can show:
+
+``` text
+[Drop]
+```
+
+This is the practical difference:
+
+``` text
+IDS: Traffic → Detect → Alert
+
+IPS: Traffic → Detect → Drop
+```
+
+------------------------------------------------------------------------
+
+# Task 7 Exercise
+
+I ran:
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A full -l .
+```
+
+Then:
+
+``` shell
+sudo ./traffic-generator.sh
+```
+
+I selected:
+
+``` text
+TASK-7 Exercise
+```
+
+### Question
+
+Number of detected HTTP GET methods?
+
+### Answer
+
+``` text
+2
+```
+
+### How I Got It
+
+I let the traffic generator create the exercise traffic and checked
+Snort's detection output. The configured rules generated alerts for the
+HTTP GET activity.
+
+The resulting count was:
+
+``` text
+2
+```
+
+------------------------------------------------------------------------
+
+# Task 8 --- Operation Mode 4: PCAP Investigation
+
+Snort can also investigate previously captured PCAP files.
+
+``` text
+PCAP
+ ↓
+Snort
+ ↓
+Configuration + Rules
+ ↓
+Detection
+ ↓
+Alerts + Statistics
+```
+
+## PCAP Parameters
+
+  Parameter                Purpose
+  ------------------------ ---------------------------------
+  `-r` / `--pcap-single`   Read one PCAP
+  `--pcap-list`            Read multiple PCAPs
+  `--pcap-show`            Show PCAP name while processing
+
+### Single PCAP
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -q -r icmp-test.pcap -A console -n 10
+```
+
+Here:
+
+``` text
+-c → configuration
+-q → quiet
+-r → read PCAP
+-A console → console alerts
+-n 10 → first 10 packets
+```
+
+### Multiple PCAPs
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -q --pcap-list="icmp-test.pcap http2.pcap" -A console
+```
+
+### Show PCAP Names
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -q --pcap-list="icmp-test.pcap http2.pcap" -A console --pcap-show
+```
+
+`--pcap-show` helps me connect alerts to the correct PCAP.
+
+------------------------------------------------------------------------
+
+# Task 8 Exercise Answers
+
+## `mx-1.pcap` --- Default Configuration
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A full -l . -r mx-1.pcap
+```
+
+  Question                            Answer
+  --------------------------------- --------
+  Generated alerts                     `170`
+  TCP Segments Queued                   `18`
+  HTTP response headers extracted        `3`
+
+### How I Got Them
+
+I ran Snort against the PCAP with the default configuration and read the
+statistics reported after processing. I used Snort's own summary instead
+of manually counting the packets.
+
+------------------------------------------------------------------------
+
+## `mx-1.pcap` --- Second Configuration
+
+``` shell
+sudo snort -c /etc/snort/snortv2.conf -A full -l . -r mx-1.pcap
+```
+
+Generated alerts:
+
+``` text
+68
+```
+
+This showed me that the same PCAP can produce a different number of
+detections when a different configuration/rule set is used.
+
+------------------------------------------------------------------------
+
+## `mx-2.pcap`
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A full -l . -r mx-2.pcap
+```
+
+  Question                 Answer
+  ---------------------- --------
+  Generated alerts          `340`
+  Detected TCP packets       `82`
+
+Again, I took these values from Snort's processing summary.
+
+------------------------------------------------------------------------
+
+## `mx-2.pcap` + `mx-3.pcap`
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A full -l . --pcap-list="mx-2.pcap mx-3.pcap"
+```
+
+Generated alerts:
+
+``` text
+1020
+```
+
+------------------------------------------------------------------------
+
+# Task 9 --- Snort Rule Structure
+
+A Snort rule is built from:
+
+``` text
+Action
+Protocol
+Source IP
+Source Port
+Direction
+Destination IP
+Destination Port
+Options
+```
+
+General structure:
+
+``` text
+action protocol source_ip source_port direction destination_ip destination_port (options)
+```
+
+Example:
+
+``` text
+alert tcp any any -> any 80 (msg:"GET Request Found"; content:"GET"; sid:100001; rev:1;)
+```
+
+------------------------------------------------------------------------
+
+# Rule Actions
+
+  Action     Meaning
+  ---------- ----------------------------------
+  `alert`    Alert and log packet
+  `log`      Log packet
+  `drop`     Block and log packet
+  `reject`   Block, log and terminate session
+
+------------------------------------------------------------------------
+
+# Protocol
+
+Snort 2 rules in this room focus on:
+
+``` text
+IP
+TCP
+UDP
+ICMP
+```
+
+For application protocols such as FTP, the rule can use TCP plus the
+appropriate port/options instead of putting `ftp` in the protocol field.
+
+------------------------------------------------------------------------
+
+# Direction
+
+``` text
+->  source to destination
+<>  bidirectional
+```
+
+There is no:
+
+``` text
+<-
+```
+
+operator.
+
+------------------------------------------------------------------------
+
+# Rule Options
+
+The room groups options into:
+
+``` text
+General
+Payload
+Non-Payload
+```
+
+## General
+
+### `msg`
+
+Quick description of the rule.
+
+``` text
+msg:"GET Request Found";
+```
+
+### `sid`
+
+Unique rule ID.
+
+The room explains:
+
+``` text
+<100          → reserved
+100–999999    → build rules
+>=1000000     → user-created rules
+```
+
+The important thing for me is that local SIDs should be unique.
+
+### `reference`
+
+Can point to supporting information such as a CVE.
+
+### `rev`
+
+Revision number for a rule.
+
+If I modify a rule, I should update its revision.
+
+------------------------------------------------------------------------
+
+# Payload Options
+
+## `content`
+
+Searches packet payload for a specific pattern.
+
+``` text
+content:"GET";
+```
+
+HEX can also be used:
+
+``` text
+content:"|47 45 54|";
+```
+
+## `nocase`
+
+Makes content matching case-insensitive:
+
+``` text
+content:"GET"; nocase;
+```
+
+## `fast_pattern`
+
+Helps Snort choose an initial content pattern to speed up searches when
+multiple content options are used.
+
+------------------------------------------------------------------------
+
+# Non-Payload Options
+
+## `id`
+
+Matches a specific IP ID.
+
+``` text
+id:123456;
+```
+
+## `flags`
+
+Filters TCP flags.
+
+``` text
+F → FIN
+S → SYN
+R → RST
+P → PSH
+A → ACK
+U → URG
+```
+
+Example:
+
+``` text
+flags:S;
+```
+
+## `dsize`
+
+Filters payload size:
+
+``` text
+dsize:>100
+dsize:<100
+dsize:100<>300
+```
+
+## `sameip`
+
+Matches packets where source and destination IP are the same.
+
+``` text
+sameip;
+```
+
+------------------------------------------------------------------------
+
+# Local Rules
+
+Custom rules go in:
+
+``` text
+/etc/snort/rules/local.rules
+```
+
+For the Task 9 exercise, I used a local rule file and tested the rules
+against:
+
+``` text
+task9.pcap
+```
+
+------------------------------------------------------------------------
+
+# Task 9 Exercise
+
+## 1. IP ID `35369`
+
+### Rule
+
+``` text
+alert ip any any -> any any (msg:"IP ID 35369"; id:35369; sid:100001; rev:1;)
+```
+
+### Run
+
+``` shell
+sudo snort -c local.rules -A full -l . -r task9.pcap
+```
+
+### Check
+
+``` shell
+cat alert
+```
+
+The alert showed the matching IP ID and the request name:
+
+``` text
+TIMESTAMP REQUEST
+```
+
+### Answer
+
+``` text
+TIMESTAMP REQUEST
+```
+
+### How I Got It
+
+The `id:35369` option told Snort to look for that exact IP ID. After
+processing the PCAP, I opened the generated alert and read the request
+information from the matching packet.
+
+------------------------------------------------------------------------
+
+# 2. SYN Flag
+
+I cleared the old alert:
+
+``` shell
+rm -f alert
+```
+
+Then edited:
+
+``` shell
+nano local.rules
+```
+
+I added:
+
+``` text
+alert tcp any any -> any any (msg:"SYN packet"; flags:S; sid:100002; rev:1;)
+```
+
+Then:
+
+``` shell
+sudo snort -c local.rules -A full -l . -r task9.pcap
+```
+
+and:
+
+``` shell
+cat alert
+```
+
+There was one matching alert.
+
+### Answer
+
+``` text
+1
+```
+
+### How I Got It
+
+The important part was:
+
+``` text
+flags:S
+```
+
+`S` means SYN. I counted the resulting alert entries.
+
+------------------------------------------------------------------------
+
+# 3. Push-Ack
+
+I cleared the previous alert:
+
+``` shell
+rm -f alert
+```
+
+Then added:
+
+``` text
+alert tcp any any -> any any (msg:"Push-Ack packet"; flags:PA; sid:100003; rev:1;)
+```
+
+I ran:
+
+``` shell
+sudo snort -c local.rules -A full -l . -r task9.pcap
+```
+
+and:
+
+``` shell
+cat alert
+```
+
+The result was:
+
+``` text
+216
+```
+
+### Answer
+
+``` text
+216
+```
+
+### How I Got It
+
+The rule uses:
+
+``` text
+flags:PA
+```
+
+where:
+
+``` text
+P = PSH
+A = ACK
+```
+
+I counted the matching alerts generated from the PCAP.
+
+------------------------------------------------------------------------
+
+# 4. UDP Same Source/Destination IP
+
+I cleared the old alert:
+
+``` shell
+rm -f alert
+```
+
+Then added:
+
+``` text
+alert udp any any -> any any (msg:"Same IP UDP"; sameip; sid:100004; rev:1;)
+```
+
+I ran:
+
+``` shell
+sudo snort -c local.rules -A full -l . -r task9.pcap
+```
+
+and:
+
+``` shell
+cat alert
+```
+
+### Answer
+
+``` text
+7
+```
+
+### How I Got It
+
+The key option is:
+
+``` text
+sameip
+```
+
+It tells Snort to detect packets where the source and destination IP
+addresses are the same.
+
+I counted the generated `Same IP UDP` alerts.
+
+------------------------------------------------------------------------
+
+# Task 9 Final Answers
+
+  Question                                   Answer
+  ------------------------------------------ ---------------------
+  IP ID `35369` request                      `TIMESTAMP REQUEST`
+  SYN packets                                `1`
+  Push-Ack packets                           `216`
+  UDP same source/destination IP             `7`
+  Rule option to update after modification   `rev`
+
+------------------------------------------------------------------------
+
+# Task 10 --- Snort Operation Logic
+
+## Main Components
+
+### Packet Decoder
+
+Collects and prepares packets for processing.
+
+### Preprocessors
+
+Arrange/modify packet information before detection.
+
+### Detection Engine
+
+Processes packets and applies the rules.
+
+### Logging and Alerting
+
+Generates alerts and logs.
+
+### Outputs and Plugins
+
+Provide output integrations and additional functionality.
+
+The overall flow I remember is:
+
+``` text
+Packet
+  ↓
+Decoder
+  ↓
+Preprocessors
+  ↓
+Detection Engine
+  ↓
+Rules
+  ↓
+Logging / Alerting / Action
+```
+
+------------------------------------------------------------------------
+
+# Snort Rule Sources
+
+The room covered:
+
+``` text
+Community Rules
+Registered Rules
+Subscriber Rules
+```
+
+For my practical work, the most important file is:
+
+``` text
+local.rules
+```
+
+because this is where I can create my own detection rules.
+
+------------------------------------------------------------------------
+
+# Important Configuration Files
+
+## `snort.conf`
+
+Main configuration file:
+
+``` text
+/etc/snort/snort.conf
+```
+
+## `local.rules`
+
+Local/user-generated rules:
+
+``` text
+/etc/snort/rules/local.rules
+```
+
+------------------------------------------------------------------------
+
+# Important Configuration Variables
+
+The room introduced:
+
+``` text
+HOME_NET
+EXTERNAL_NET
+RULE_PATH
+SO_RULE_PATH
+PREPROC_RULE_PATH
+```
+
+I understand these as defining the protected network, external network
+and rule locations.
+
+------------------------------------------------------------------------
+
+# DAQ
+
+DAQ means **Data Acquisition**.
+
+The room covered:
+
+``` text
+PCAP
+Afpacket
+IPQ
+NFQ
+IPFW
+Dump
+```
+
+The two I need to remember most are:
+
+``` text
+PCAP
+→ normal/sniffer-style operation
+
+Afpacket
+→ inline/IPS operation
+```
+
+------------------------------------------------------------------------
+
+# Custom Ruleset
+
+The local rules file can be included with:
+
+``` text
+include $RULE_PATH/local.rules
+```
+
+The `#` character comments out a configuration line.
+
+So:
+
+``` text
+# include ...
+```
+
+means it is disabled/commented.
+
+------------------------------------------------------------------------
+
+# Part 2 Command Cheatsheet
+
+## IDS Console
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A console
+```
+
+## CMG
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A cmg
+```
+
+## Fast
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A fast
+```
+
+## Full
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A full
+```
+
+## Disable Alerts
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -A none
+```
+
+## Disable Logging
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -N
+```
+
+## Background
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -D
+```
+
+## Check Process
+
+``` shell
+ps -ef | grep snort
+```
+
+## Read PCAP
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -q -r <pcap> -A console
+```
+
+## Multiple PCAPs
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -q --pcap-list="<pcap1> <pcap2>" -A console
+```
+
+## Show PCAP Being Processed
+
+``` shell
+sudo snort -c /etc/snort/snort.conf -q --pcap-list="<pcap1> <pcap2>" -A console --pcap-show
+```
+
+## Test Local Rule
+
+``` shell
+sudo snort -c local.rules -A full -l . -r task9.pcap
+```
+
+## View Alerts
+
+``` shell
+cat alert
+```
+
+------------------------------------------------------------------------
+
+# My Snort Mental Model
+
+After completing the room, I understand Snort roughly like this:
+
+``` text
+                 Network Traffic
+                       ↓
+                 Packet Decoder
+                       ↓
+                  Preprocessors
+                       ↓
+                 Detection Engine
+                       ↓
+                      Rules
+                       ↓
+              ┌────────┴────────┐
+              ↓                 ↓
+           Match             No Match
+              ↓
+        Alert / Log / Drop
+              ↓
+          Investigation
+```
+
+The main progression for me was:
+
+``` text
+Sniff
+  ↓
+Log
+  ↓
+Detect
+  ↓
+Alert
+  ↓
+Prevent
+```
+
+------------------------------------------------------------------------
+
+# What I Learned
+
+The most important thing I took from this part is that Snort is not only
+a packet sniffer.
+
+I can use it to:
+
+-   inspect live traffic
+-   save traffic
+-   investigate PCAPs
+-   detect traffic using rules
+-   generate alerts
+-   run in inline IPS mode
+-   create my own detection rules
+
+I also learned how much the result depends on the ruleset and
+configuration. The same PCAP produced different alert counts with
+different configuration files.
+
+The rule-writing section was especially useful for me because it made me
+think about detection logic rather than just running tools.
+
+For example:
+
+``` text
+Need a specific IP ID?
+→ id
+
+Need SYN?
+→ flags:S
+
+Need PSH + ACK?
+→ flags:PA
+
+Need same source/destination IP?
+→ sameip
+
+Modified a rule?
+→ update rev
+```
+
+------------------------------------------------------------------------
+
+# My SOC Investigation Workflow
+
+The workflow I want to remember is:
+
+``` text
+1. Identify the traffic source
+        ↓
+2. Capture or obtain PCAP
+        ↓
+3. Load the correct Snort configuration
+        ↓
+4. Apply detection rules
+        ↓
+5. Generate alerts
+        ↓
+6. Read the alert/log
+        ↓
+7. Filter the relevant traffic
+        ↓
+8. Investigate the evidence
+        ↓
+9. Tune or improve the rule
+```
+
+This connects Snort directly with SOC work because a detection is only
+the beginning. I still need to understand what triggered it and
+determine whether the activity is actually suspicious.
+
+------------------------------------------------------------------------
+
+# Final Reflection
+
+This part helped me understand the actual detection side of Snort.
+
+In Part 1, I learned how to see and save packets.
+
+In Part 2, I learned how to tell Snort **what I am looking for** by
+creating rules and then using those rules against traffic.
+
+The biggest concepts I want to remember are:
+
+``` text
+IDS
+→ Detect and alert
+
+IPS
+→ Detect and prevent
+
+-r
+→ Read PCAP/log
+
+-A
+→ Alert format
+
+-N
+→ No logging
+
+-D
+→ Background mode
+
+-Q
+→ Inline mode
+
+flags:S
+→ SYN
+
+flags:PA
+→ PSH + ACK
+
+sameip
+→ Same source/destination IP
+
+rev
+→ Rule revision
+```
+
+------------------------------------------------------------------------
