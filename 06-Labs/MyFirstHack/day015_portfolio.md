@@ -17,7 +17,7 @@ From (display): Hannah from DomoAI
 From (actual):  hannah@domoai.app
 Reply-To:       Same as sender (no different Reply-To observed)
 Date received:  Tue, 14 Jul 2026, 7:34 PM
-Recipient:      ab******@gmail.com
+Recipient:      [REDACTED]@gmail.com
 
 
 ------------------------------------------------------------
