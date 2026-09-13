@@ -77,7 +77,6 @@ def detect_suspicious_process(event):
             .split()
         )
 
-
     suspicious_flags = []
 
 
@@ -137,9 +136,15 @@ def detect_suspicious_process(event):
                 "Suspicious PowerShell "
                 "command-line activity"
             ),
-            "pid": event.get("pid"),
-            "process": event.get("name"),
-            "timestamp": event.get("timestamp"),
+            "pid": event.get(
+                "pid"
+            ),
+            "process": event.get(
+                "name"
+            ),
+            "timestamp": event.get(
+                "timestamp"
+            ),
             "indicators": suspicious_flags
         }
 
@@ -169,7 +174,9 @@ def detect_suspicious_file(event):
 
     for extension in SUSPICIOUS_FILE_EXTENSIONS:
 
-        if file_name.endswith(extension):
+        if file_name.endswith(
+            extension
+        ):
 
             return {
                 "rule": "DET-002",
@@ -198,7 +205,7 @@ def detect_suspicious_file(event):
 # ============================================================
 
 def detect_suspicious_network(event):
-    """Detect suspicious network activity."""
+    """Detect network connections that use ports requiring investigation."""
 
     remote_ip = event.get(
         "remote_ip"
@@ -217,24 +224,31 @@ def detect_suspicious_network(event):
     if not remote_ip:
         return None
 
-    # Ports that may deserve investigation
-    suspicious_ports = [
-        21,      # FTP
-        23,      # Telnet
-        445,     # SMB
-        3389,    # RDP
-        4444,    # Common lab/test port
-        5555     # Common Android/debug port
-    ]
+    # Ignore events where the remote port
+    # is unavailable
+    if remote_port is None:
+        return None
 
+    # Ports that may deserve investigation
+    suspicious_ports = {
+        21: "FTP",
+        23: "Telnet",
+        445: "SMB",
+        3389: "RDP",
+        4444: "Common test/lab port",
+        5555: "Common debug/test port"
+    }
+
+    # Check whether the remote port
+    # is in our investigation list
     if remote_port in suspicious_ports:
 
         return {
             "rule": "NET-001",
             "severity": "MEDIUM",
             "detection": (
-                "Connection to suspicious "
-                "remote port"
+                "Network connection to a "
+                "port requiring investigation"
             ),
             "process": process_name,
             "pid": event.get(
@@ -242,6 +256,9 @@ def detect_suspicious_network(event):
             ),
             "remote_ip": remote_ip,
             "remote_port": remote_port,
+            "port_service": suspicious_ports[
+                remote_port
+            ],
             "status": event.get(
                 "status"
             )
@@ -273,38 +290,54 @@ def detect_suspicious_process_location(event):
 
     executable = executable.lower()
 
-    # Windows system processes
-    system_processes = [
+
+    # ========================================================
+    # Windows System Processes
+    # ========================================================
+
+    system_processes = {
         "svchost.exe",
         "lsass.exe",
         "wininit.exe",
         "services.exe",
         "explorer.exe"
-    ]
+    }
 
     # Only inspect known Windows system processes
     if process_name not in system_processes:
         return None
 
-    # Expected Windows locations
+
+    # ========================================================
+    # Expected Windows Locations
+    # ========================================================
+
     expected_locations = [
         r"\windows\system32",
         r"\windows\syswow64"
     ]
+
+
+    # ========================================================
+    # Check Executable Location
+    # ========================================================
 
     for location in expected_locations:
 
         if location in executable:
             return None
 
-    # Known Windows system process
-    # running outside an expected location
+
+    # ========================================================
+    # Generate Detection
+    # ========================================================
+
     return {
         "rule": "PROC-001",
         "severity": "HIGH",
         "detection": (
             "Windows system process "
-            "running from unusual location"
+            "running from an unusual location"
         ),
         "pid": event.get(
             "pid"

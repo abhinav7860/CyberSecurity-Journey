@@ -36,6 +36,15 @@ from detection.detection_engine import (
 
 
 # ============================================================
+# MITRE ATT&CK Mapping
+# ============================================================
+
+from detection.mitre_mapping import (
+    get_mitre_mapping
+)
+
+
+# ============================================================
 # File Monitor
 # ============================================================
 
@@ -203,12 +212,24 @@ def save_process_event(event):
         event_type="process_created",
         source="process_monitor",
         details={
-            "pid": event.get("pid"),
-            "process": event.get("name"),
-            "parent_pid": event.get("parent_pid"),
-            "username": event.get("username"),
-            "exe": event.get("exe"),
-            "cmdline": event.get("cmdline")
+            "pid": event.get(
+                "pid"
+            ),
+            "process": event.get(
+                "name"
+            ),
+            "parent_pid": event.get(
+                "parent_pid"
+            ),
+            "username": event.get(
+                "username"
+            ),
+            "exe": event.get(
+                "exe"
+            ),
+            "cmdline": event.get(
+                "cmdline"
+            )
         }
     )
 
@@ -307,10 +328,19 @@ def save_network_event(event):
     )
 
 
+# ============================================================
+# Detection Logging
+# ============================================================
+
 def save_detection_event(alert):
     """Create and save a standardized detection event."""
 
-    details = {}
+    evidence = {}
+
+
+    # ========================================================
+    # Detection Evidence
+    # ========================================================
 
     for key, value in alert.items():
 
@@ -320,7 +350,64 @@ def save_detection_event(alert):
             "detection"
         ]:
 
-            details[key] = value
+            evidence[key] = value
+
+
+    # ========================================================
+    # MITRE ATT&CK Mapping
+    # ========================================================
+
+    rule_id = alert.get(
+        "rule"
+    )
+
+    mitre_mapping = get_mitre_mapping(
+        rule_id
+    )
+
+    mitre = None
+
+    if mitre_mapping:
+
+        technique_id = (
+            mitre_mapping.get(
+                "technique_id"
+            )
+        )
+
+        if technique_id:
+
+            mitre = {
+                "technique_id": technique_id,
+                "technique": (
+                    mitre_mapping.get(
+                        "technique"
+                    )
+                ),
+                "tactic": (
+                    mitre_mapping.get(
+                        "tactic"
+                    )
+                )
+            }
+
+
+    # ========================================================
+    # Detection Details
+    # ========================================================
+
+    details = {
+        "evidence": evidence
+    }
+
+    if mitre:
+
+        details["mitre"] = mitre
+
+
+    # ========================================================
+    # Create Standardized Detection Event
+    # ========================================================
 
     standardized_event = create_event(
         event_type="detection",
@@ -330,9 +417,7 @@ def save_detection_event(alert):
             "severity",
             "INFO"
         ),
-        rule=alert.get(
-            "rule"
-        ),
+        rule=rule_id,
         detection=alert.get(
             "detection"
         )
@@ -356,31 +441,38 @@ def display_process_event(event):
     print("=" * 60)
 
     print(
-        f"Process : {event.get('name', 'Unknown')}"
+        f"Process : "
+        f"{event.get('name', 'Unknown')}"
     )
 
     print(
-        f"PID     : {event.get('pid', 'Unknown')}"
+        f"PID     : "
+        f"{event.get('pid', 'Unknown')}"
     )
 
     print(
-        f"Parent  : {event.get('parent_pid', 'Unknown')}"
+        f"Parent  : "
+        f"{event.get('parent_pid', 'Unknown')}"
     )
 
     print(
-        f"User    : {event.get('username', 'Unknown')}"
+        f"User    : "
+        f"{event.get('username', 'Unknown')}"
     )
 
     print(
-        f"EXE     : {event.get('exe', 'Unknown')}"
+        f"EXE     : "
+        f"{event.get('exe', 'Unknown')}"
     )
 
     print(
-        f"Command : {event.get('cmdline', 'Unknown')}"
+        f"Command : "
+        f"{event.get('cmdline', 'Unknown')}"
     )
 
     print(
-        f"Time    : {event.get('timestamp', '')}"
+        f"Time    : "
+        f"{event.get('timestamp', '')}"
     )
 
     print("=" * 60)
@@ -395,19 +487,23 @@ def display_file_event(event):
     print("=" * 60)
 
     print(
-        f"Type : {event.get('event_type', 'Unknown')}"
+        f"Type : "
+        f"{event.get('event_type', 'Unknown')}"
     )
 
     print(
-        f"File : {event.get('file_name', 'Unknown')}"
+        f"File : "
+        f"{event.get('file_name', 'Unknown')}"
     )
 
     print(
-        f"Path : {event.get('path', 'Unknown')}"
+        f"Path : "
+        f"{event.get('path', 'Unknown')}"
     )
 
     print(
-        f"Time : {event.get('timestamp', '')}"
+        f"Time : "
+        f"{event.get('timestamp', '')}"
     )
 
     print("=" * 60)
@@ -422,23 +518,28 @@ def display_fim_event(event):
     print("=" * 60)
 
     print(
-        f"Type : {event.get('event_type', 'Unknown')}"
+        f"Type : "
+        f"{event.get('event_type', 'Unknown')}"
     )
 
     print(
-        f"File : {event.get('file_name', 'Unknown')}"
+        f"File : "
+        f"{event.get('file_name', 'Unknown')}"
     )
 
     print(
-        f"Path : {event.get('path', 'Unknown')}"
+        f"Path : "
+        f"{event.get('path', 'Unknown')}"
     )
 
     print(
-        f"Old Hash : {event.get('old_hash', 'None')}"
+        f"Old Hash : "
+        f"{event.get('old_hash', 'None')}"
     )
 
     print(
-        f"New Hash : {event.get('new_hash', 'None')}"
+        f"New Hash : "
+        f"{event.get('new_hash', 'None')}"
     )
 
     print("=" * 60)
@@ -453,11 +554,13 @@ def display_network_event(event):
     print("=" * 60)
 
     print(
-        f"Process : {event.get('process', 'Unknown')}"
+        f"Process : "
+        f"{event.get('process', 'Unknown')}"
     )
 
     print(
-        f"PID     : {event.get('pid', 'Unknown')}"
+        f"PID     : "
+        f"{event.get('pid', 'Unknown')}"
     )
 
     print(
@@ -473,11 +576,13 @@ def display_network_event(event):
     )
 
     print(
-        f"Status  : {event.get('status', 'Unknown')}"
+        f"Status  : "
+        f"{event.get('status', 'Unknown')}"
     )
 
     print(
-        f"Time    : {event.get('timestamp', '')}"
+        f"Time    : "
+        f"{event.get('timestamp', '')}"
     )
 
     print("=" * 60)
@@ -555,6 +660,13 @@ def display_alert(alert):
             f"{alert.get('remote_port')}"
         )
 
+    if "port_service" in alert:
+
+        print(
+            f"Service    : "
+            f"{alert.get('port_service')}"
+        )
+
     if "indicators" in alert:
 
         print(
@@ -573,12 +685,24 @@ def get_connection_fingerprint(connection):
     """Create a unique identifier for a network connection."""
 
     return (
-        connection.get("pid"),
-        connection.get("process"),
-        connection.get("local_ip"),
-        connection.get("local_port"),
-        connection.get("remote_ip"),
-        connection.get("remote_port")
+        connection.get(
+            "pid"
+        ),
+        connection.get(
+            "process"
+        ),
+        connection.get(
+            "local_ip"
+        ),
+        connection.get(
+            "local_port"
+        ),
+        connection.get(
+            "remote_ip"
+        ),
+        connection.get(
+            "remote_port"
+        )
     )
 
 
@@ -613,6 +737,10 @@ def main():
         "[EDR] Network monitoring enabled"
     )
 
+    print(
+        "[EDR] MITRE ATT&CK mapping enabled"
+    )
+
     print("=" * 60)
 
 
@@ -620,11 +748,17 @@ def main():
     # Initial Snapshots
     # ========================================================
 
-    previous_processes = get_processes()
+    previous_processes = (
+        get_processes()
+    )
 
-    previous_files = get_files()
+    previous_files = (
+        get_files()
+    )
 
-    baseline_hashes = get_file_hashes()
+    baseline_hashes = (
+        get_file_hashes()
+    )
 
     previous_connections = (
         get_network_connections()
@@ -664,7 +798,9 @@ def main():
             # Process Monitoring
             # ==================================================
 
-            current_processes = get_processes()
+            current_processes = (
+                get_processes()
+            )
 
             new_pids = (
                 set(current_processes)
@@ -739,7 +875,9 @@ def main():
             # File Monitoring
             # ==================================================
 
-            current_files = get_files()
+            current_files = (
+                get_files()
+            )
 
             file_events = (
                 detect_file_changes(

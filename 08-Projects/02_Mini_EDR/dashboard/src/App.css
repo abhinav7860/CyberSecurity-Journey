@@ -1,0 +1,439 @@
+/* ============================================================
+   Global
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #0b0f14;
+  color: #e6edf3;
+}
+
+
+/* ============================================================
+   Dashboard
+   ============================================================ */
+
+.dashboard {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.header {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+.header p {
+  color: #8b949e;
+  font-size: 14px;
+}
+
+
+/* ============================================================
+   EDR Status
+   ============================================================ */
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 16px;
+
+  border: 1px solid #30363d;
+  border-radius: 10px;
+
+  background: #11161d;
+
+  font-size: 14px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #3fb950;
+}
+
+
+/* ============================================================
+   Statistics
+   ============================================================ */
+
+.stats {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  min-width: 0;
+
+  padding: 22px;
+
+  border: 1px solid #30363d;
+  border-radius: 14px;
+
+  background: #11161d;
+}
+
+.stat-card span {
+  display: block;
+
+  color: #8b949e;
+
+  font-size: 14px;
+
+  margin-bottom: 12px;
+}
+
+.stat-card strong {
+  font-size: 30px;
+}
+
+
+/* ============================================================
+   Main Grid
+   ============================================================ */
+
+.main-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* ============================================================
+   Panels
+   ============================================================ */
+
+.panel {
+  min-width: 0;
+  min-height: 240px;
+
+  padding: 22px;
+
+  border: 1px solid #30363d;
+  border-radius: 14px;
+
+  background: #11161d;
+}
+
+.panel.wide {
+  grid-column: span 2;
+}
+
+
+/* ============================================================
+   Panel Header
+   ============================================================ */
+
+.panel-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+}
+
+.panel-header h2 {
+  font-size: 18px;
+}
+
+.panel-header span {
+  color: #8b949e;
+
+  font-size: 12px;
+}
+
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+
+.empty-state {
+  min-height: 130px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  color: #8b949e;
+
+  text-align: center;
+}
+
+.empty-state p {
+  color: #c9d1d9;
+
+  margin-bottom: 6px;
+}
+
+.empty-state span {
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   Event List
+   ============================================================ */
+
+.event-list {
+  display: flex;
+
+  flex-direction: column;
+
+  width: 100%;
+}
+
+
+/* ============================================================
+   Event
+   ============================================================ */
+
+.event {
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 14px;
+
+  padding: 15px 0;
+
+  border-bottom: 1px solid #21262d;
+}
+
+.event:last-child {
+  border-bottom: none;
+}
+
+
+/* ============================================================
+   Event Indicator
+   ============================================================ */
+
+.event-indicator {
+  width: 9px;
+  height: 9px;
+
+  flex-shrink: 0;
+
+  margin-top: 5px;
+
+  border-radius: 50%;
+
+  background: #58a6ff;
+}
+
+
+/* ============================================================
+   Event Content
+   ============================================================ */
+
+.event-content {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.event strong {
+  display: block;
+
+  font-size: 14px;
+
+  color: #e6edf3;
+}
+
+.event p {
+  color: #8b949e;
+
+  font-size: 12px;
+
+  margin-top: 5px;
+
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   Severity Indicators
+   ============================================================ */
+
+.event-indicator.severity-high {
+  background: #ff4d4f;
+}
+
+.event-indicator.severity-medium {
+  background: #f0a500;
+}
+
+.event-indicator.severity-info {
+  background: #58a6ff;
+}
+
+
+/* ============================================================
+   System Status
+   ============================================================ */
+
+.system-status {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.system-status div {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid #21262d;
+}
+
+.system-status div:last-child {
+  border-bottom: none;
+}
+
+.system-status span {
+  color: #8b949e;
+
+  font-size: 14px;
+}
+
+.system-status strong {
+  font-size: 13px;
+
+  color: #3fb950;
+}
+
+
+/* ============================================================
+   Large Screens
+   ============================================================ */
+
+@media (min-width: 1400px) {
+
+  .dashboard {
+    padding: 35px 45px;
+  }
+
+}
+
+
+/* ============================================================
+   Tablet
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  .dashboard {
+    padding: 24px;
+  }
+
+  .stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel.wide {
+    grid-column: span 1;
+  }
+
+}
+
+
+/* ============================================================
+   Mobile
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  .dashboard {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 18px;
+  }
+
+  .header h1 {
+    font-size: 26px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .panel-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 6px;
+  }
+
+}

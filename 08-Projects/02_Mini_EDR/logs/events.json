@@ -1,2141 +1,913 @@
 [
     {
-        "pid": 7812,
-        "name": "msedgewebview2.exe",
-        "parent_pid": 21968,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-        "cmdline": [
-            "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-            "--type=renderer",
-            "--noerrdialogs",
-            "--user-data-dir=C:\\Users\\abhin\\AppData\\Local\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\EBWebView",
-            "--webview-exe-name=WhatsApp.Root.exe",
-            "--webview-exe-version=1.0.0",
-            "--embedded-browser-webview=1",
-            "--video-capture-use-gpu-memory-buffer",
-            "--lang=en-US",
-            "--js-flags",
-            "--device-scale-factor=1.25",
-            "--num-raster-threads=4",
-            "--enable-main-frame-before-activation",
-            "--renderer-client-id=89",
-            "--js-flags=--ms-user-locale=en_IN",
-            "--launch-time-ticks=38906002476",
-            "--skip-read-main-dll",
-            "--metrics-shmem-handle=5888,i,9372665502120622251,14550013703408217198,2097152",
-            "--field-trial-handle=1932,i,7715108374639249349,15102886463876211626,262144",
-            "--variations-seed-version",
-            "--pseudonymization-salt-handle=1952,i,15330894086889714362,11520592527453800423,4",
-            "--trace-process-track-uuid=3190709069708596055",
-            "--mojo-platform-channel-handle=5364",
-            "/pfhostedapp:ffb280d8619fac8a834c42cfd288352e121b46e9",
-            "/prefetch:1"
-        ],
-        "timestamp": "2026-09-10 20:26:02"
-    },
-    {
-        "pid": 26820,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 20:26:02"
-    },
-    {
-        "pid": 26940,
-        "name": "msedgewebview2.exe",
-        "parent_pid": 21968,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-        "cmdline": [
-            "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-            "--type=renderer",
-            "--noerrdialogs",
-            "--user-data-dir=C:\\Users\\abhin\\AppData\\Local\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\EBWebView",
-            "--webview-exe-name=WhatsApp.Root.exe",
-            "--webview-exe-version=1.0.0",
-            "--embedded-browser-webview=1",
-            "--extension-process",
-            "--renderer-sub-type=extension",
-            "--video-capture-use-gpu-memory-buffer",
-            "--lang=en-US",
-            "--js-flags",
-            "--device-scale-factor=1.25",
-            "--num-raster-threads=4",
-            "--enable-main-frame-before-activation",
-            "--renderer-client-id=88",
-            "--js-flags=--ms-user-locale=en_IN",
-            "--launch-time-ticks=38905981413",
-            "--ssd-no-pressure-read-main-dll",
-            "--metrics-shmem-handle=6300,i,14971755920581762339,17033280131622442478,2097152",
-            "--field-trial-handle=1932,i,7715108374639249349,15102886463876211626,262144",
-            "--variations-seed-version",
-            "--pseudonymization-salt-handle=1952,i,15330894086889714362,11520592527453800423,4",
-            "--trace-process-track-uuid=3190709068771554206",
-            "--mojo-platform-channel-handle=7052",
-            "/pfhostedapp:ffb280d8619fac8a834c42cfd288352e121b46e9",
-            "/prefetch:9"
-        ],
-        "timestamp": "2026-09-10 20:26:02"
-    },
-    {
-        "pid": 16696,
-        "name": "svchost.exe",
-        "parent_pid": 1688,
-        "username": null,
-        "exe": "C:\\Windows\\System32\\svchost.exe",
-        "cmdline": null,
-        "timestamp": "2026-09-10 20:26:04"
-    },
-    {
-        "pid": 29724,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 20:37:23"
-    },
-    {
-        "pid": 29992,
-        "name": "dllhost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\dllhost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\DllHost.exe",
-            "/Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}"
-        ],
-        "timestamp": "2026-09-10 20:37:25"
-    },
-    {
-        "pid": 24252,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 20:37:25"
-    },
-    {
-        "pid": 12724,
-        "name": "CalculatorApp.exe",
-        "parent_pid": 9028,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsCalculator_11.2607.0.0_x64__8wekyb3d8bbwe\\CalculatorApp.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsCalculator_11.2607.0.0_x64__8wekyb3d8bbwe\\CalculatorApp.exe"
-        ],
-        "timestamp": "2026-09-10 20:37:25"
-    },
-    {
-        "pid": 2168,
-        "name": "git.exe",
-        "parent_pid": 25576,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\Git\\cmd\\git.exe",
-        "cmdline": [
-            "C:\\Program Files\\Git\\cmd\\git.exe",
-            "for-each-ref",
-            "--format=%(refname)%00%(upstream:short)%00%(objectname)%00%(upstream:track)%00%(upstream:remotename)%00%(upstream:remoteref)",
-            "--ignore-case",
-            "refs/heads/main",
-            "refs/remotes/main"
-        ],
-        "timestamp": "2026-09-10 20:37:33"
-    },
-    {
-        "pid": 27092,
-        "name": "msedgewebview2.exe",
-        "parent_pid": 21968,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-        "cmdline": [
-            "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-            "--type=renderer",
-            "--noerrdialogs",
-            "--user-data-dir=C:\\Users\\abhin\\AppData\\Local\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\EBWebView",
-            "--webview-exe-name=WhatsApp.Root.exe",
-            "--webview-exe-version=1.0.0",
-            "--embedded-browser-webview=1",
-            "--video-capture-use-gpu-memory-buffer",
-            "--lang=en-US",
-            "--js-flags",
-            "--device-scale-factor=1.25",
-            "--num-raster-threads=4",
-            "--enable-main-frame-before-activation",
-            "--renderer-client-id=93",
-            "--js-flags=--ms-user-locale=en_IN",
-            "--launch-time-ticks=39603132962",
-            "--skip-read-main-dll",
-            "--metrics-shmem-handle=6388,i,17398513668861065101,10013876339078211039,2097152",
-            "--field-trial-handle=1932,i,7715108374639249349,15102886463876211626,262144",
-            "--variations-seed-version",
-            "--pseudonymization-salt-handle=1952,i,15330894086889714362,11520592527453800423,4",
-            "--trace-process-track-uuid=3190709073456763451",
-            "--mojo-platform-channel-handle=6580",
-            "/pfhostedapp:ffb280d8619fac8a834c42cfd288352e121b46e9",
-            "/prefetch:1"
-        ],
-        "timestamp": "2026-09-10 20:37:40"
-    },
-    {
-        "pid": 8620,
-        "name": "msedgewebview2.exe",
-        "parent_pid": 21968,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-        "cmdline": [
-            "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-            "--type=renderer",
-            "--noerrdialogs",
-            "--user-data-dir=C:\\Users\\abhin\\AppData\\Local\\Packages\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\\LocalCache\\EBWebView",
-            "--webview-exe-name=WhatsApp.Root.exe",
-            "--webview-exe-version=1.0.0",
-            "--embedded-browser-webview=1",
-            "--extension-process",
-            "--renderer-sub-type=extension",
-            "--video-capture-use-gpu-memory-buffer",
-            "--lang=en-US",
-            "--js-flags",
-            "--device-scale-factor=1.25",
-            "--num-raster-threads=4",
-            "--enable-main-frame-before-activation",
-            "--renderer-client-id=92",
-            "--js-flags=--ms-user-locale=en_IN",
-            "--launch-time-ticks=39603113447",
-            "--ssd-no-pressure-read-main-dll",
-            "--metrics-shmem-handle=6448,i,6847238367396892959,1642112319273188489,2097152",
-            "--field-trial-handle=1932,i,7715108374639249349,15102886463876211626,262144",
-            "--variations-seed-version",
-            "--pseudonymization-salt-handle=1952,i,15330894086889714362,11520592527453800423,4",
-            "--trace-process-track-uuid=3190709072519721602",
-            "--mojo-platform-channel-handle=4360",
-            "/pfhostedapp:ffb280d8619fac8a834c42cfd288352e121b46e9",
-            "/prefetch:9"
-        ],
-        "timestamp": "2026-09-10 20:37:40"
-    },
-    {
-        "pid": 23692,
-        "name": "dllhost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\dllhost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\DllHost.exe",
-            "/Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}"
-        ],
-        "timestamp": "2026-09-10 20:39:10"
-    },
-    {
-        "pid": 6204,
-        "name": "smartscreen.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\smartscreen.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\smartscreen.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 20:39:10"
-    },
-    {
-        "pid": 25764,
-        "name": "WindowsTerminal.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 20:39:20"
-    },
-    {
-        "pid": 26408,
-        "name": "OpenConsole.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 20:39:20"
-    },
-    {
-        "pid": 27048,
-        "name": "conhost.exe",
-        "parent_pid": 4852,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\conhost.exe",
-        "cmdline": [
-            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
-            "0x4"
-        ],
-        "timestamp": "2026-09-10 20:39:20"
-    },
-    {
-        "pid": 9520,
-        "name": "dllhost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\dllhost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\DllHost.exe",
-            "/Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}"
-        ],
-        "timestamp": "2026-09-10 20:39:20"
-    },
-    {
-        "pid": 4852,
-        "name": "powershell.exe",
-        "parent_pid": 10804,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-        ],
-        "timestamp": "2026-09-10 20:39:20"
-    },
-    {
-        "pid": 25808,
-        "name": "HxTsr.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\microsoft.windowscommunicationsapps_16005.14326.22342.0_x64__8wekyb3d8bbwe\\HxTsr.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\microsoft.windowscommunicationsapps_16005.14326.22342.0_x64__8wekyb3d8bbwe\\HxTsr.exe",
-            "-ServerName:Hx.IPC.Server"
-        ],
-        "timestamp": "2026-09-10 20:39:27"
-    },
-    {
-        "pid": 27788,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 20:39:27"
-    },
-    {
-        "pid": 29980,
-        "name": "svchost.exe",
-        "parent_pid": 1688,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\svchost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\svchost.exe",
-            "-k",
-            "DevicesFlow",
-            "-s",
-            "ConsentUxUserSvc"
-        ],
-        "timestamp": "2026-09-10 20:39:27"
-    },
-    {
-        "pid": 12480,
-        "name": "backgroundTaskHost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\backgroundTaskHost.exe",
-            "-ServerName:App.AppXe9cvj1thv1hmcw0cs98xm3r97tyzy2xs.mca"
-        ],
-        "timestamp": "2026-09-10 21:25:46"
-    },
-    {
-        "pid": 23104,
-        "name": "OpenConsole.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:25:46"
-    },
-    {
-        "pid": 30436,
-        "name": "smartscreen.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\smartscreen.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\smartscreen.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:25:46"
-    },
-    {
-        "pid": 16412,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:25:46"
-    },
-    {
-        "pid": 26964,
-        "name": "conhost.exe",
-        "parent_pid": 15896,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\conhost.exe",
-        "cmdline": [
-            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
-            "0x4"
-        ],
-        "timestamp": "2026-09-10 21:25:46"
-    },
-    {
-        "pid": 25396,
-        "name": "WindowsTerminal.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:25:46"
-    },
-    {
-        "pid": 15896,
-        "name": "powershell.exe",
-        "parent_pid": 10804,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-        ],
-        "timestamp": "2026-09-10 21:25:46"
-    },
-    {
-        "pid": 23676,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:25:46"
-    },
-    {
-        "pid": 29800,
-        "name": "conhost.exe",
-        "parent_pid": 27520,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\conhost.exe",
-        "cmdline": [
-            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
-            "0x4"
-        ],
-        "timestamp": "2026-09-10 21:25:50"
-    },
-    {
-        "pid": 23400,
-        "name": "OpenConsole.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:25:50"
-    },
-    {
-        "pid": 27520,
-        "name": "powershell.exe",
-        "parent_pid": 10804,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-        ],
-        "timestamp": "2026-09-10 21:25:50"
-    },
-    {
-        "pid": 20672,
-        "name": "powershell.exe",
-        "parent_pid": 10804,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-        ],
-        "timestamp": "2026-09-10 21:27:53"
-    },
-    {
-        "pid": 28480,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:27:53"
-    },
-    {
-        "pid": 20000,
-        "name": "conhost.exe",
-        "parent_pid": 20672,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\conhost.exe",
-        "cmdline": [
-            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
-            "0x4"
-        ],
-        "timestamp": "2026-09-10 21:27:53"
-    },
-    {
-        "pid": 29904,
-        "name": "OpenConsole.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:27:53"
-    },
-    {
-        "pid": 11608,
-        "name": "WindowsTerminal.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:27:53"
-    },
-    {
-        "pid": 1104,
-        "name": "OpenConsole.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:30:08"
-    },
-    {
-        "pid": 15244,
-        "name": "conhost.exe",
-        "parent_pid": 12668,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\conhost.exe",
-        "cmdline": [
-            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
-            "0x4"
-        ],
-        "timestamp": "2026-09-10 21:30:08"
-    },
-    {
-        "pid": 28496,
-        "name": "WindowsTerminal.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:30:09"
-    },
-    {
-        "pid": 12668,
-        "name": "powershell.exe",
-        "parent_pid": 10804,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-        ],
-        "timestamp": "2026-09-10 21:30:08"
-    },
-    {
-        "pid": 26800,
-        "name": "backgroundTaskHost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\backgroundTaskHost.exe",
-            "-ServerName:App.AppXapskvk16gk8da8kch5g4qxh42vxccved.mca"
-        ],
-        "timestamp": "2026-09-10 21:30:25"
-    },
-    {
-        "pid": 27764,
-        "name": "PhoneExperienceHost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.YourPhone_1.26071.164.0_x64__8wekyb3d8bbwe\\PhoneExperienceHost.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.YourPhone_1.26071.164.0_x64__8wekyb3d8bbwe\\PhoneExperienceHost.exe",
-            "-ComServer:Background",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:30:25"
-    },
-    {
-        "pid": 9900,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:30:29"
-    },
-    {
-        "pid": 25136,
-        "name": "msedgewebview2.exe",
-        "parent_pid": 21968,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-        "cmdline": null,
-        "timestamp": "2026-09-10 21:48:05"
-    },
-    {
-        "pid": 22984,
-        "name": "msedgewebview2.exe",
-        "parent_pid": 21968,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\152.0.4191.66\\msedgewebview2.exe",
-        "cmdline": null,
-        "timestamp": "2026-09-10 21:48:05"
-    },
-    {
-        "pid": 27604,
-        "name": "OpenConsole.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:52:34"
-    },
-    {
-        "pid": 23500,
-        "name": "WindowsTerminal.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-10 21:52:34"
-    },
-    {
-        "pid": 19756,
-        "name": "conhost.exe",
-        "parent_pid": 17908,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\conhost.exe",
-        "cmdline": [
-            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
-            "0x4"
-        ],
-        "timestamp": "2026-09-10 21:52:34"
-    },
-    {
-        "pid": 17908,
-        "name": "powershell.exe",
-        "parent_pid": 10804,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-        ],
-        "timestamp": "2026-09-10 21:52:34"
-    },
-    {
-        "event_type": "file_created",
-        "file_name": "normal.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal.txt",
-        "timestamp": "2026-09-12 17:53:01"
-    },
-    {
-        "event_type": "file_created",
-        "file_name": "test.exe",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\test.exe",
-        "timestamp": "2026-09-12 17:53:17"
-    },
-    {
-        "event_type": "file_modified",
-        "file_name": "normal.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal.txt",
-        "timestamp": "2026-09-12 18:01:25"
-    },
-    {
-        "event_type": "file_modified",
-        "file_name": "test.exe",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\test.exe",
-        "timestamp": "2026-09-12 18:01:33"
-    },
-    {
-        "event_type": "file_deleted",
-        "file_name": "test.exe",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\test.exe",
-        "timestamp": "2026-09-12 18:04:52"
-    },
-    {
-        "pid": 27132,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 18:17:29"
-    },
-    {
-        "pid": 21544,
-        "name": "conhost.exe",
-        "parent_pid": 5300,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\conhost.exe",
-        "cmdline": [
-            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
-            "0x4"
-        ],
-        "timestamp": "2026-09-12 18:17:31"
-    },
-    {
-        "pid": 5300,
-        "name": "cmd.exe",
-        "parent_pid": 4432,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\cmd.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\cmd.exe"
-        ],
-        "timestamp": "2026-09-12 18:17:31"
-    },
-    {
-        "pid": 7324,
-        "name": "OpenConsole.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 18:17:31"
-    },
-    {
-        "event_type": "file_modified",
-        "file_name": "normal.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal.txt",
-        "timestamp": "2026-09-12 18:31:11"
-    },
-    {
-        "event_type": "file_integrity_changed",
-        "file_name": "normal.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal.txt",
-        "old_hash": "cf3529af1fa76da09318c489e82c4240365b6d41b8cb8a78eae63a527549c99b",
-        "new_hash": "a5c50eb6831e4d48a6f57c9b42bea330b889d1f2c3a7317826dcededfc6edb2e",
-        "timestamp": "2026-09-12 18:31:11"
-    },
-    {
-        "pid": 18612,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 18:31:23"
-    },
-    {
-        "pid": 24136,
-        "name": "OpenConsole.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 18:31:25"
-    },
-    {
-        "pid": 20412,
-        "name": "conhost.exe",
-        "parent_pid": 25796,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\conhost.exe",
-        "cmdline": [
-            "\\??\\C:\\WINDOWS\\system32\\conhost.exe",
-            "0x4"
-        ],
-        "timestamp": "2026-09-12 18:31:25"
-    },
-    {
-        "pid": 22628,
-        "name": "smartscreen.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\smartscreen.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\smartscreen.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 18:31:25"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 21368,
-        "local_address": "10.192.62.141:55074",
-        "remote_address": "52.168.117.174:443",
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 18:40:36"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 21368,
-        "local_address": "10.192.62.141:55079",
-        "remote_address": "52.168.117.174:443",
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 18:40:37"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 11520,
-        "local_address": "0.0.0.0:59265",
-        "remote_address": "",
-        "status": "NONE",
-        "timestamp": "2026-09-12 18:40:37"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 11520,
-        "local_address": ":::59265",
-        "remote_address": "",
-        "status": "NONE",
-        "timestamp": "2026-09-12 18:40:37"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 11520,
-        "local_address": "0.0.0.0:53669",
-        "remote_address": "",
-        "status": "NONE",
-        "timestamp": "2026-09-12 18:40:41"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 11520,
-        "local_address": ":::53669",
-        "remote_address": "",
-        "status": "NONE",
-        "timestamp": "2026-09-12 18:40:41"
-    },
-    {
-        "event_type": "file_created",
-        "file_name": "normal2.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal2.txt",
-        "timestamp": "2026-09-12 18:40:53"
-    },
-    {
-        "event_type": "file_integrity_created",
-        "file_name": "normal2.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal2.txt",
-        "old_hash": null,
-        "new_hash": "d7569f668e08fa81863ee6c072bccd8ac9f8c30688d878ad9a494a64be36127c",
-        "timestamp": "2026-09-12 18:40:54"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 21368,
-        "local_address": "10.192.62.141:55080",
-        "remote_address": "52.168.117.174:443",
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 18:40:56"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 21368,
-        "local_address": "10.192.62.141:55084",
-        "remote_address": "52.168.117.174:443",
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 18:40:56"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 21368,
-        "local_address": "10.192.62.141:55081",
-        "remote_address": "52.168.117.174:443",
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 18:40:56"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 21368,
-        "local_address": "10.192.62.141:55082",
-        "remote_address": "52.168.117.174:443",
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 18:40:56"
-    },
-    {
-        "event_type": "network_connection",
-        "pid": 21368,
-        "local_address": "10.192.62.141:55083",
-        "remote_address": "52.168.117.174:443",
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 18:40:56"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55296,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:26:05"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55342,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:26:05"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55293,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:26:05"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55467,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55466,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55460,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55465,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55459,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55463,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55457,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55458,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55461,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55462,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55410,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55464,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:07"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55477,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:26:10"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55458,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:26:10"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55476,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:26:10"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55473,
-        "remote_ip": "20.42.65.91",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:26:10"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55478,
-        "remote_ip": "140.82.113.22",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:26:24"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:35"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "127.0.0.1",
-        "local_port": 49672,
-        "remote_ip": "127.0.0.1",
-        "remote_port": 5985,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:26:37"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:37"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:39"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "::1",
-        "local_port": 49673,
-        "remote_ip": "::1",
-        "remote_port": 5985,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:26:39"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:41"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49674,
-        "remote_ip": "2600:1417:78::6856:bd31",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:41"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:43"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49674,
-        "remote_ip": "2600:1417:78::6856:bd31",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:43"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:45"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49674,
-        "remote_ip": "2600:1417:78::6856:bd31",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:45"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:47"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49674,
-        "remote_ip": "2600:1417:78::6856:bd31",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:47"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:50"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49674,
-        "remote_ip": "2600:1417:78::6856:bd31",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:50"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:52"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49674,
-        "remote_ip": "2600:1417:78::6856:bd31",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:52"
-    },
-    {
-        "pid": 21972,
-        "process": "msedge.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49670,
-        "remote_ip": "2620:1ec:33::11",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:54"
-    },
-    {
-        "pid": 20404,
-        "process": "svchost.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49674,
-        "remote_ip": "2600:1417:78::6856:bd31",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:26:54"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49258,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49262,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49266,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49261,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49264,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49257,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49259,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49263,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49260,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49265,
-        "remote_ip": "4.207.44.75",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:11"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49267,
-        "remote_ip": "140.82.112.22",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:30"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 49268,
-        "remote_ip": "140.82.112.21",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:30:36"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64149,
-        "remote_ip": "20.184.175.10",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:46:02"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64150,
-        "remote_ip": "20.184.175.10",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:46:02"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64153,
-        "remote_ip": "20.184.175.10",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:46:02"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64151,
-        "remote_ip": "20.184.175.10",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:46:02"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64152,
-        "remote_ip": "20.184.175.10",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 20:46:03"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64159,
-        "remote_ip": "140.82.112.22",
-        "remote_port": 443,
-        "status": "LAST_ACK",
-        "timestamp": "2026-09-12 20:46:50"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 65249,
-        "remote_ip": "140.82.112.22",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:47:13"
-    },
-    {
-        "pid": 23444,
-        "process": "EpicGamesLauncher.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 65260,
-        "remote_ip": "184.193.211.64",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:47:16"
-    },
-    {
-        "pid": 23444,
-        "process": "EpicGamesLauncher.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 65256,
-        "remote_ip": "100.52.28.177",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:47:16"
-    },
-    {
-        "pid": 23444,
-        "process": "EpicGamesLauncher.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 65254,
-        "remote_ip": "100.52.28.177",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:47:16"
-    },
-    {
-        "pid": 23444,
-        "process": "EpicGamesLauncher.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 65255,
-        "remote_ip": "100.52.28.177",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:47:16"
-    },
-    {
-        "pid": 23444,
-        "process": "EpicGamesLauncher.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 65257,
-        "remote_ip": "100.52.28.177",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:47:16"
-    },
-    {
-        "pid": 23444,
-        "process": "EpicGamesLauncher.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 65261,
-        "remote_ip": "184.193.211.64",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:47:16"
-    },
-    {
-        "pid": 3148,
-        "name": "git.exe",
-        "parent_pid": 21368,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\Git\\cmd\\git.exe",
-        "cmdline": [
-            "C:\\Program Files\\Git\\cmd\\git.exe",
-            "config",
-            "--get",
-            "commit.template"
-        ],
-        "timestamp": "2026-09-12 20:47:20"
-    },
-    {
-        "pid": 6132,
-        "process": "OfficeClickToRun.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 65262,
-        "remote_ip": "2603:1063:5:13e::365:7ea3",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:47:32"
-    },
-    {
-        "pid": 2628,
-        "process": "svchost.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 59868,
-        "remote_ip": "2404:6800:4007:815::2003",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:49:29"
-    },
-    {
-        "pid": 2628,
-        "process": "svchost.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 59870,
-        "remote_ip": "104.86.189.83",
-        "remote_port": 80,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:49:31"
-    },
-    {
-        "pid": 11520,
-        "process": "chrome.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 63508,
-        "remote_ip": "172.64.148.235",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:50:59"
-    },
-    {
-        "pid": 17172,
-        "name": "backgroundTaskHost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\backgroundTaskHost.exe",
-            "-ServerName:App.AppXass2jm06pp1n7aktd4dcj305y31qrc54.mca"
-        ],
-        "timestamp": "2026-09-12 20:51:08"
-    },
-    {
-        "pid": 7652,
-        "name": "AsusHapticPadAgent.exe",
-        "parent_pid": 19260,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\ASUS\\ProArt Creator Hub\\ProArtCreatorHubService\\AsusHapticPadAgent.exe",
-        "cmdline": [
-            "AsusHapticPadAgent.exe",
-            "-ishapticPad"
-        ],
-        "timestamp": "2026-09-12 20:51:08"
-    },
-    {
-        "pid": 20884,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 20:51:10"
-    },
-    {
-        "pid": 11520,
-        "process": "chrome.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 54818,
-        "remote_ip": "104.18.39.21",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:51:27"
-    },
-    {
-        "pid": 7192,
-        "process": "Unknown",
-        "local_ip": "10.192.62.141",
-        "local_port": 54824,
-        "remote_ip": "35.170.14.62",
-        "remote_port": 443,
-        "status": "FIN_WAIT1",
-        "timestamp": "2026-09-12 20:52:59"
-    },
-    {
-        "pid": 23444,
-        "process": "EpicGamesLauncher.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 54821,
-        "remote_ip": "35.170.14.62",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:52:59"
-    },
-    {
-        "pid": 4088,
-        "process": "Code.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 54635,
-        "remote_ip": "2603:1061:14:165::1",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:53:06"
-    },
-    {
-        "pid": 11520,
-        "process": "chrome.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 61047,
-        "remote_ip": "64.239.123.129",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 20:53:10"
-    },
-    {
-        "pid": 6988,
-        "name": "powershell.exe",
-        "parent_pid": 14872,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-            "-NoProfile",
-            "-Command",
-            "Start-Sleep -Seconds 5"
-        ],
-        "timestamp": "2026-09-12 20:57:08"
-    },
-    {
-        "rule": "DET-001",
-        "severity": "HIGH",
-        "detection": "Suspicious PowerShell command-line activity",
-        "pid": 6988,
-        "process": "powershell.exe",
-        "timestamp": "2026-09-12 20:57:08",
-        "indicators": [
-            "-nop",
-            "-noprofile"
-        ]
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64128,
-        "remote_ip": "20.184.175.22",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 21:01:58"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64127,
-        "remote_ip": "20.184.175.22",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 21:01:58"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64126,
-        "remote_ip": "20.184.175.22",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 21:01:58"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64129,
-        "remote_ip": "20.184.175.22",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 21:01:58"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 64130,
-        "remote_ip": "140.82.114.22",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 21:02:00"
-    },
-    {
-        "event_type": "file_created",
-        "file_name": "test_detection.exe",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\test_detection.exe",
-        "timestamp": "2026-09-12 21:02:04"
-    },
-    {
-        "rule": "DET-002",
-        "severity": "MEDIUM",
-        "detection": "Executable or script file created",
-        "file": "test_detection.exe",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\test_detection.exe",
-        "timestamp": "2026-09-12 21:02:04",
-        "indicator": ".exe"
-    },
-    {
-        "event_type": "file_integrity_created",
-        "file_name": "test_detection.exe",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\test_detection.exe",
-        "old_hash": null,
-        "new_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "timestamp": "2026-09-12 21:02:04"
-    },
-    {
-        "pid": 6272,
-        "process": "MpDefenderCoreService.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 65486,
-        "remote_ip": "2603:1063:5:104::365:7ea3",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 21:02:13"
-    },
-    {
-        "pid": 11520,
-        "process": "chrome.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 61417,
-        "remote_ip": "2401:4900:95ad:dfd3::47",
-        "remote_port": 53,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 21:02:15"
-    },
-    {
-        "pid": 11520,
-        "process": "chrome.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 64275,
-        "remote_ip": "2401:4900:95ad:dfd3::47",
-        "remote_port": 53,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 21:02:15"
-    },
-    {
-        "pid": 11520,
-        "process": "chrome.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 49334,
-        "remote_ip": "2401:4900:95ad:dfd3::47",
-        "remote_port": 53,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 21:02:15"
-    },
-    {
-        "pid": 11520,
-        "process": "chrome.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 61209,
-        "remote_ip": "18.97.36.14",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 21:02:17"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 61211,
-        "remote_ip": "20.184.175.22",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 21:02:21"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 61210,
-        "remote_ip": "20.184.175.22",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 21:02:21"
-    },
-    {
-        "pid": 31632,
-        "name": "backgroundTaskHost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\backgroundTaskHost.exe",
-            "-ServerName:App.AppXass2jm06pp1n7aktd4dcj305y31qrc54.mca"
-        ],
-        "timestamp": "2026-09-12 21:07:10"
-    },
-    {
-        "pid": 23892,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 21:07:10"
-    },
-    {
-        "pid": 16036,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 21:07:10"
-    },
-    {
-        "pid": 23884,
-        "name": "backgroundTaskHost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\backgroundTaskHost.exe",
-            "-ServerName:App.AppX3yypww7qrft4zqhh57xaatcrnp803bj7.mca"
-        ],
-        "timestamp": "2026-09-12 21:07:10"
-    },
-    {
-        "event_type": "file_modified",
-        "file_name": "normal2.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal2.txt",
-        "timestamp": "2026-09-12 21:07:17"
-    },
-    {
-        "event_type": "file_integrity_changed",
-        "file_name": "normal2.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal2.txt",
-        "old_hash": "d7569f668e08fa81863ee6c072bccd8ac9f8c30688d878ad9a494a64be36127c",
-        "new_hash": "787e068028388dbb1cdb08a9a69736b606460e548cabcc48ded2002c3152d073",
-        "timestamp": "2026-09-12 21:07:17"
-    },
-    {
-        "event_type": "file_modified",
-        "file_name": "normal2.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal2.txt",
-        "timestamp": "2026-09-12 21:07:32"
-    },
-    {
-        "event_type": "file_integrity_changed",
-        "file_name": "normal2.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal2.txt",
-        "old_hash": "787e068028388dbb1cdb08a9a69736b606460e548cabcc48ded2002c3152d073",
-        "new_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "timestamp": "2026-09-12 21:07:32"
-    },
-    {
-        "pid": 22756,
-        "process": "MicrosoftStartFeedProvider.exe",
-        "local_ip": "2401:4900:95ad:dfd3:40d1:1de2:c61b:3443",
-        "local_port": 57190,
-        "remote_ip": "2600:140f:f400::1730:e209",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 21:07:38"
-    },
-    {
-        "event_type": "file_deleted",
-        "file_name": "normal2.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal2.txt",
-        "timestamp": "2026-09-12 21:07:46"
-    },
-    {
-        "event_type": "file_integrity_deleted",
-        "file_name": "normal2.txt",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal2.txt",
-        "old_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "new_hash": null,
-        "timestamp": "2026-09-12 21:07:46"
-    },
-    {
-        "pid": 25944,
-        "name": "backgroundTaskHost.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\backgroundTaskHost.exe",
-        "cmdline": [
-            "C:\\WINDOWS\\system32\\backgroundTaskHost.exe",
-            "-ServerName:App.AppXe9cvj1thv1hmcw0cs98xm3r97tyzy2xs.mca"
-        ],
-        "timestamp": "2026-09-12 21:13:15"
-    },
-    {
-        "pid": 30492,
-        "name": "StoreDesktopExtension.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsStore_22607.1401.9.0_x64__8wekyb3d8bbwe\\StoreDesktopExtension.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsStore_22607.1401.9.0_x64__8wekyb3d8bbwe\\StoreDesktopExtension.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 21:13:15"
-    },
-    {
-        "pid": 11520,
-        "process": "chrome.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55924,
-        "remote_ip": "64.239.109.193",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 21:13:15"
-    },
-    {
-        "pid": 25276,
-        "name": "StoreDesktopExtension.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsStore_22607.1401.9.0_x64__8wekyb3d8bbwe\\StoreDesktopExtension.exe",
-        "cmdline": [
-            "C:\\Program Files\\WindowsApps\\Microsoft.WindowsStore_22607.1401.9.0_x64__8wekyb3d8bbwe\\StoreDesktopExtension.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 21:13:18"
-    },
-    {
-        "event_type": "file_created",
-        "file_name": "test_detection.exe",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\test_detection.exe",
-        "timestamp": "2026-09-12 21:13:20"
-    },
-    {
-        "rule": "DET-002",
-        "severity": "MEDIUM",
-        "detection": "Executable or script file created",
-        "file": "test_detection.exe",
-        "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\test_detection.exe",
-        "timestamp": "2026-09-12 21:13:20",
-        "indicator": ".exe"
-    },
-    {
-        "pid": 13496,
-        "name": "RuntimeBroker.exe",
-        "parent_pid": 1832,
-        "username": "PHANTOM\\abhin",
-        "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
-        "cmdline": [
-            "C:\\Windows\\System32\\RuntimeBroker.exe",
-            "-Embedding"
-        ],
-        "timestamp": "2026-09-12 21:13:22"
-    },
-    {
-        "pid": 21368,
-        "process": "Code.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55925,
-        "remote_ip": "140.82.113.22",
-        "remote_port": 443,
-        "status": "ESTABLISHED",
-        "timestamp": "2026-09-12 21:13:22"
-    },
-    {
-        "pid": 4752,
-        "process": "taskhostw.exe",
-        "local_ip": "10.192.62.141",
-        "local_port": 55926,
-        "remote_ip": "172.215.188.225",
-        "remote_port": 443,
-        "status": "SYN_SENT",
-        "timestamp": "2026-09-12 21:13:24"
-    },
-    {
-        "timestamp": "2026-09-12 21:28:41",
-        "event_type": "network_connection",
-        "source": "network_monitor",
+        "event_id": "2ae14821-7de1-4268-9e80-d5f6b20ca71b",
+        "timestamp": "2026-09-13 21:29:55",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
         "severity": "INFO",
         "rule": null,
         "detection": null,
         "details": {
-            "pid": 29356,
-            "process": "EpicOnlineServicesUserHelper.exe",
-            "local_ip": "10.192.62.141",
-            "local_port": 54409,
-            "remote_ip": "13.223.18.163",
-            "remote_port": 443,
-            "status": "SYN_SENT"
+            "pid": 22988,
+            "process": "Notepad.exe",
+            "parent_pid": 9408,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2607.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe",
+            "cmdline": [
+                "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2607.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe",
+                "/SESSION:9kL/vrgF1UydKTE5LzBRewAAAAABAgABwCQAALgF1UxEAwAAAAAAAA=="
+            ]
         }
     },
     {
-        "timestamp": "2026-09-12 21:28:52",
+        "event_id": "eda9e371-ca84-4f57-b513-099bac05401a",
+        "timestamp": "2026-09-13 21:29:57",
         "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
         "source": "network_monitor",
         "severity": "INFO",
         "rule": null,
         "detection": null,
         "details": {
-            "pid": 4088,
-            "process": "Code.exe",
+            "pid": 14840,
+            "process": "svchost.exe",
             "local_ip": "10.192.62.141",
-            "local_port": 54822,
-            "remote_ip": "20.207.73.85",
+            "local_port": 60792,
+            "remote_ip": "40.126.18.33",
             "remote_port": 443,
             "status": "ESTABLISHED"
         }
     },
     {
-        "timestamp": "2026-09-12 21:49:21",
-        "event_type": "network_connection",
-        "source": "network_monitor",
+        "event_id": "64334372-f8d0-48e5-92c4-70d5d76ca723",
+        "timestamp": "2026-09-13 21:30:06",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
         "severity": "INFO",
         "rule": null,
         "detection": null,
         "details": {
-            "pid": 21368,
-            "process": "Code.exe",
-            "local_ip": "10.192.62.141",
-            "local_port": 51565,
-            "remote_ip": "51.132.193.110",
-            "remote_port": 443,
-            "status": "SYN_SENT"
+            "pid": 7220,
+            "process": "powershell.exe",
+            "parent_pid": 28368,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "cmdline": [
+                "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "-WindowStyle",
+                "Hidden",
+                "-Command",
+                "Start-Sleep -Seconds 5"
+            ]
         }
     },
     {
-        "timestamp": "2026-09-12 21:49:21",
+        "event_id": "bf0253d5-1e7b-4caa-993a-cc436d7fbe57",
+        "timestamp": "2026-09-13 21:30:06",
+        "event_type": "detection",
+        "event_category": "detection",
+        "status": "ALERT",
+        "source": "detection_engine",
+        "severity": "HIGH",
+        "rule": "DET-001",
+        "detection": "Suspicious PowerShell command-line activity",
+        "details": {
+            "evidence": {
+                "pid": 7220,
+                "process": "powershell.exe",
+                "timestamp": "2026-09-13 21:30:06",
+                "indicators": [
+                    "-windowstyle",
+                    "-windowstyle hidden"
+                ]
+            },
+            "mitre": {
+                "technique_id": "T1059.001",
+                "technique": "PowerShell",
+                "tactic": "Execution"
+            }
+        }
+    },
+    {
+        "event_id": "22c80355-5c07-4939-9bbd-29095c871190",
+        "timestamp": "2026-09-13 21:30:10",
         "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
         "source": "network_monitor",
         "severity": "INFO",
         "rule": null,
         "detection": null,
         "details": {
-            "pid": 21368,
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 49672,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "c7f4ca9f-8469-414b-adf7-3722543ac296",
+        "timestamp": "2026-09-13 21:30:10",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 60807,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "9b8d60cf-7f60-4c82-ac53-ed9945bdfc15",
+        "timestamp": "2026-09-13 21:30:10",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 59570,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "46d574ca-e468-445c-82d4-acae386c08fa",
+        "timestamp": "2026-09-13 21:40:24",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 50400,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "42131059-2c9d-46a0-abf4-755311c5a82f",
+        "timestamp": "2026-09-13 21:40:24",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 57480,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "a807a5f8-e146-4705-a0bf-e39964d33405",
+        "timestamp": "2026-09-13 21:40:24",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 53977,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "e06444e8-a59c-4ea0-b50c-fc1981d9d8a3",
+        "timestamp": "2026-09-13 21:40:37",
+        "event_type": "file_modified",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "file_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "file_name": "normal.txt",
+            "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal.txt"
+        }
+    },
+    {
+        "event_id": "197a5499-f358-4c80-8151-9284934c0c6a",
+        "timestamp": "2026-09-13 21:40:37",
+        "event_type": "file_integrity_changed",
+        "event_category": "integrity",
+        "status": "OBSERVED",
+        "source": "file_integrity_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "file_name": "normal.txt",
+            "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\normal.txt",
+            "old_hash": "a5c50eb6831e4d48a6f57c9b42bea330b889d1f2c3a7317826dcededfc6edb2e",
+            "new_hash": "4fa23754ac4e64651e215805e6671fc18687e9db9817e2faf10c8cc6a3172896"
+        }
+    },
+    {
+        "event_id": "32c43edc-91bb-4931-a9d1-29d359424477",
+        "timestamp": "2026-09-13 22:29:34",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 13500,
+            "process": "msedge.exe",
+            "parent_pid": 30284,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+            "cmdline": [
+                "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+                "--type=renderer",
+                "--extension-process",
+                "--renderer-sub-type=extension",
+                "--pdf-upsell-enabled",
+                "--video-capture-use-gpu-memory-buffer",
+                "--lang=en-US",
+                "--js-flags=--ms-user-locale=en_IN",
+                "--device-scale-factor=1.25",
+                "--num-raster-threads=4",
+                "--enable-main-frame-before-activation",
+                "--renderer-client-id=64",
+                "--launch-time-ticks=200289765458",
+                "--ssd-no-pressure-read-main-dll",
+                "--metrics-shmem-handle=8968,i,1191800229525957817,536140223217647865,1048576",
+                "--field-trial-handle=2488,i,10811455105273601643,578953741303114595,262144",
+                "--variations-seed-version",
+                "--pseudonymization-salt-handle=2512,i,9683060459831260580,2794968464241340010,4",
+                "--trace-process-track-uuid=3190709046282549830",
+                "--mojo-platform-channel-handle=8484",
+                "/prefetch:9"
+            ]
+        }
+    },
+    {
+        "event_id": "f80bb152-cd5d-494a-88fd-ab2bad966d90",
+        "timestamp": "2026-09-13 22:29:39",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 25144,
             "process": "Code.exe",
             "local_ip": "10.192.62.141",
-            "local_port": 51569,
-            "remote_ip": "51.132.193.110",
+            "local_port": 61047,
+            "remote_ip": "140.82.112.22",
             "remote_port": 443,
-            "status": "LAST_ACK"
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "025b1ecf-12ef-42a2-a277-1c9f58ff78ed",
+        "timestamp": "2026-09-13 22:29:43",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 27916,
+            "process": "OpenConsole.exe",
+            "parent_pid": 24440,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Users\\abhin\\AppData\\Local\\Programs\\Microsoft VS Code\\645f29cc31\\resources\\app\\node_modules.asar.unpacked\\node-pty\\build\\Release\\conpty\\OpenConsole.exe",
+            "cmdline": [
+                "c:\\Users\\abhin\\AppData\\Local\\Programs\\Microsoft VS Code\\645f29cc31\\resources\\app\\node_modules.asar.unpacked\\node-pty\\build\\Release\\conpty\\OpenConsole.exe",
+                "--headless",
+                "--width",
+                "115",
+                "--height",
+                "25",
+                "--signal",
+                "0xc2c",
+                "--server",
+                "0xc24"
+            ]
+        }
+    },
+    {
+        "event_id": "d38a9f27-1cf4-4147-adbd-2583523a681d",
+        "timestamp": "2026-09-13 22:29:43",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 30500,
+            "process": "powershell.exe",
+            "parent_pid": 24440,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "cmdline": [
+                "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "-noexit",
+                "-command",
+                "try { . \"c:\\Users\\abhin\\AppData\\Local\\Programs\\Microsoft VS Code\\645f29cc31\\resources\\app\\out\\vs\\workbench\\contrib\\terminal\\common\\scripts\\shellIntegration.ps1\" } catch {}"
+            ]
+        }
+    },
+    {
+        "event_id": "fccc9087-b012-4afd-9ccd-f76c5213e594",
+        "timestamp": "2026-09-13 22:29:47",
+        "event_type": "file_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "file_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "file_name": "live_test.txt",
+            "path": "C:\\Users\\abhin\\Desktop\\CyberSecurity-Journey\\08-Projects\\02_Mini_EDR\\monitored_files\\live_test.txt"
+        }
+    },
+    {
+        "event_id": "0e9fd796-1055-46bc-8c52-7d49cd7694bb",
+        "timestamp": "2026-09-13 22:30:00",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 25692,
+            "process": "node.exe",
+            "local_ip": "::1",
+            "local_port": 5173,
+            "remote_ip": "::1",
+            "remote_port": 56823,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "c176d642-64c0-413b-827f-cd718e7df7e6",
+        "timestamp": "2026-09-13 22:30:00",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 25692,
+            "process": "node.exe",
+            "local_ip": "::1",
+            "local_port": 5173,
+            "remote_ip": "::1",
+            "remote_port": 56284,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "e042ae28-e3ce-4276-af2e-da258825a287",
+        "timestamp": "2026-09-13 22:30:00",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 5428,
+            "process": "msedge.exe",
+            "local_ip": "::1",
+            "local_port": 56823,
+            "remote_ip": "::1",
+            "remote_port": 5173,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "8383b1f7-f3cb-432f-9a07-e7fd36b2ae5a",
+        "timestamp": "2026-09-13 22:30:00",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 5428,
+            "process": "msedge.exe",
+            "local_ip": "::1",
+            "local_port": 56284,
+            "remote_ip": "::1",
+            "remote_port": 5173,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "8059d11d-25c8-48d3-86f0-a23a215942c1",
+        "timestamp": "2026-09-13 22:30:00",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 25692,
+            "process": "node.exe",
+            "local_ip": "::1",
+            "local_port": 5173,
+            "remote_ip": "::1",
+            "remote_port": 60648,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "5a3bee09-be6f-4b68-88ff-f67baade1f60",
+        "timestamp": "2026-09-13 22:30:00",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 5428,
+            "process": "msedge.exe",
+            "local_ip": "::1",
+            "local_port": 60648,
+            "remote_ip": "::1",
+            "remote_port": 5173,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "59d9b3da-54e5-4b30-9f41-d920390bb201",
+        "timestamp": "2026-09-13 22:30:02",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 5428,
+            "process": "msedge.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 50928,
+            "remote_ip": "13.89.179.15",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "5dd8fc57-385b-4098-92aa-ec3d018b7fa8",
+        "timestamp": "2026-09-13 22:30:02",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 5428,
+            "process": "msedge.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 49212,
+            "remote_ip": "13.89.179.15",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "e0942b82-c218-4146-aee8-cf156dcf4348",
+        "timestamp": "2026-09-13 22:30:10",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 28360,
+            "process": "SearchProtocolHost.exe",
+            "parent_pid": 15640,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Windows\\System32\\SearchProtocolHost.exe",
+            "cmdline": [
+                "C:\\WINDOWS\\System32\\SearchProtocolHost.exe",
+                "Global\\UsGthrFltPipeMssGthrPipe_S-1-5-21-2571848000-3648690252-1886207600-100157_",
+                "Global\\UsGthrCtrlFltPipeMssGthrPipe_S-1-5-21-2571848000-3648690252-1886207600-100157",
+                "1",
+                "-2147483646",
+                "Software\\Microsoft\\Windows Search",
+                "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT; MS Search 4.0 Robot)",
+                "C:\\ProgramData\\Microsoft\\Search\\Data\\Temp\\usgthrsvc",
+                "DownLevelDaemon",
+                "1"
+            ]
+        }
+    },
+    {
+        "event_id": "b3511e71-e2f8-46c2-83a1-56892a227a9e",
+        "timestamp": "2026-09-13 22:30:12",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 21704,
+            "process": "RuntimeBroker.exe",
+            "parent_pid": 1832,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Windows\\System32\\RuntimeBroker.exe",
+            "cmdline": [
+                "C:\\Windows\\System32\\RuntimeBroker.exe",
+                "-Embedding"
+            ]
+        }
+    },
+    {
+        "event_id": "234a4a38-038e-482c-b3cb-0b3c598f9fbb",
+        "timestamp": "2026-09-13 22:30:12",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 2756,
+            "process": "OneDrive.exe",
+            "local_ip": "2401:4900:6669:1c1c:c1e9:ca14:a0a0:31f6",
+            "local_port": 51836,
+            "remote_ip": "2603:1046:2000:60::80",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "4bc5bff5-de0c-4af6-90d5-6b7beb1ba99a",
+        "timestamp": "2026-09-13 22:30:12",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 21148,
+            "process": "svchost.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 56023,
+            "remote_ip": "40.126.17.132",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "3d45f9ed-67fc-491b-b25b-8346e4d03983",
+        "timestamp": "2026-09-13 22:30:12",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 22452,
+            "process": "msedgewebview2.exe",
+            "local_ip": "2401:4900:6669:1c1c:c1e9:ca14:a0a0:31f6",
+            "local_port": 51834,
+            "remote_ip": "2600:140f:2400::173b:af38",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "4ef9e6b8-2734-4514-bdd0-c5403c8c010c",
+        "timestamp": "2026-09-13 22:30:13",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 31012,
+            "process": "SearchHost.exe",
+            "local_ip": "2401:4900:6669:1c1c:c1e9:ca14:a0a0:31f6",
+            "local_port": 51835,
+            "remote_ip": "2603:1046:c06:c6f::2",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "b71693aa-a9c3-4d09-a651-62ee298e5b80",
+        "timestamp": "2026-09-13 22:30:15",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 20180,
+            "process": "dllhost.exe",
+            "parent_pid": 1832,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Windows\\System32\\dllhost.exe",
+            "cmdline": [
+                "C:\\WINDOWS\\system32\\DllHost.exe",
+                "/Processid:{AB8902B4-09CA-4BB6-B78D-A8F59079A8D5}"
+            ]
+        }
+    },
+    {
+        "event_id": "7f6d7cb3-935f-42af-9ec5-cdf38dff967d",
+        "timestamp": "2026-09-13 22:30:17",
+        "event_type": "process_created",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "process_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 25744,
+            "process": "Notepad.exe",
+            "parent_pid": 18364,
+            "username": "PHANTOM\\abhin",
+            "exe": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2607.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe",
+            "cmdline": [
+                "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad_11.2607.14.0_x64__8wekyb3d8bbwe\\Notepad\\Notepad.exe"
+            ]
+        }
+    },
+    {
+        "event_id": "919b4e8e-e297-42d5-add7-5ec4f2b1e4be",
+        "timestamp": "2026-09-13 22:30:19",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 22452,
+            "process": "msedgewebview2.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 55021,
+            "remote_ip": "13.107.3.254",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "d2f7144a-1ff5-4c0d-8bf4-73630608beae",
+        "timestamp": "2026-09-13 22:30:19",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 22452,
+            "process": "msedgewebview2.exe",
+            "local_ip": "2401:4900:6669:1c1c:c1e9:ca14:a0a0:31f6",
+            "local_port": 61410,
+            "remote_ip": "2603:1061:14:153::1",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "ede8fd65-f6c1-45b3-99d6-0ce2e7e2b163",
+        "timestamp": "2026-09-13 22:30:19",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 22452,
+            "process": "msedgewebview2.exe",
+            "local_ip": "2401:4900:6669:1c1c:c1e9:ca14:a0a0:31f6",
+            "local_port": 58776,
+            "remote_ip": "2620:1ec:44::254",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "8ed49c0f-606a-4f59-bdb1-6774eb989169",
+        "timestamp": "2026-09-13 22:30:21",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 64245,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "e0a7276d-3f3e-4b7e-b925-c4aff37fe2c7",
+        "timestamp": "2026-09-13 22:30:21",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "2401:4900:6669:1c1c:c1e9:ca14:a0a0:31f6",
+            "local_port": 62784,
+            "remote_ip": "2401:4900:6669:1c1c::5b",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "f9e71b55-4f21-409a-aa32-75f85e2b66d6",
+        "timestamp": "2026-09-13 22:30:21",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 57296,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "c8fd665f-5708-4241-94b7-32de3fa2ae5e",
+        "timestamp": "2026-09-13 22:30:21",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 56036,
+            "remote_ip": "10.192.62.208",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "04fdbe8d-970c-4d3d-bc2f-383814a29f45",
+        "timestamp": "2026-09-13 22:30:21",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "2401:4900:6669:1c1c:c1e9:ca14:a0a0:31f6",
+            "local_port": 58896,
+            "remote_ip": "2401:4900:6669:1c1c::5b",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "2d0cc825-c91a-420d-be57-dff61ffdeb14",
+        "timestamp": "2026-09-13 22:30:21",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 22452,
+            "process": "msedgewebview2.exe",
+            "local_ip": "10.192.62.141",
+            "local_port": 64444,
+            "remote_ip": "204.79.197.222",
+            "remote_port": 443,
+            "status": "ESTABLISHED"
+        }
+    },
+    {
+        "event_id": "ae00d69b-11a0-4d0e-b9b9-11248b6badac",
+        "timestamp": "2026-09-13 22:30:21",
+        "event_type": "network_connection",
+        "event_category": "telemetry",
+        "status": "OBSERVED",
+        "source": "network_monitor",
+        "severity": "INFO",
+        "rule": null,
+        "detection": null,
+        "details": {
+            "pid": 6888,
+            "process": "chrome.exe",
+            "local_ip": "2401:4900:6669:1c1c:c1e9:ca14:a0a0:31f6",
+            "local_port": 61954,
+            "remote_ip": "2401:4900:6669:1c1c::5b",
+            "remote_port": 53,
+            "status": "ESTABLISHED"
         }
     }
 ]
