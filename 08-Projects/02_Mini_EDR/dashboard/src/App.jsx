@@ -1,429 +1,515 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
 import "./App.css";
 
+const API_BASE = "http://localhost:8000";
 
-function getSeverityClass(severity) {
 
-  if (severity === "HIGH") {
-    return "severity-high";
-  }
+// =========================
+// DATA HELPERS
+// =========================
 
-  if (severity === "MEDIUM") {
-    return "severity-medium";
-  }
+function getEventTypeData(events) {
+  const counts = {};
 
-  return "severity-info";
+  events.forEach((event) => {
+    const type = event.event_type || "unknown";
+    counts[type] = (counts[type] || 0) + 1;
+  });
+
+  return Object.entries(counts)
+    .map(([type, count]) => ({
+      type,
+      count,
+    }))
+    .sort((a, b) => b.count - a.count);
 }
 
+
+function getSeverityData(events) {
+  const counts = {
+    INFO: 0,
+    MEDIUM: 0,
+    HIGH: 0,
+  };
+
+  events.forEach((event) => {
+    const severity = event.severity || "INFO";
+
+    if (counts[severity] !== undefined) {
+      counts[severity]++;
+    }
+  });
+
+  return Object.entries(counts)
+    .filter(([, count]) => count > 0)
+    .map(([severity, count]) => ({
+      severity,
+      count,
+    }));
+}
+
+
+function getDetectionRuleData(events) {
+  const counts = {};
+
+  events
+    .filter((event) => event.event_category === "detection")
+    .forEach((event) => {
+      const rule = event.rule || "Unknown";
+
+      counts[rule] = (counts[rule] || 0) + 1;
+    });
+
+  return Object.entries(counts)
+    .map(([rule, count]) => ({
+      rule,
+      count,
+    }))
+    .sort((a, b) => b.count - a.count);
+}
+
+
+function getTopProcessData(events) {
+  const counts = {};
+
+  events.forEach((event) => {
+    const details = event.details || {};
+
+    let process = details.process;
+
+    if (!process && details.evidence) {
+      process = details.evidence.process;
+    }
+
+    if (!process) {
+      return;
+    }
+
+    counts[process] = (counts[process] || 0) + 1;
+  });
+
+  return Object.entries(counts)
+    .map(([process, count]) => ({
+      process,
+      count,
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 8);
+}
+
+
+function getEventTimeline(events) {
+  const counts = {};
+
+  events.forEach((event) => {
+    if (!event.timestamp) {
+      return;
+    }
+
+    const time = event.timestamp.substring(11, 16);
+
+    counts[time] = (counts[time] || 0) + 1;
+  });
+
+  return Object.entries(counts)
+    .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
+    .map(([time, count]) => ({
+      time,
+      count,
+    }));
+}
+
+
+// =========================
+// EVENT DISPLAY HELPERS
+// =========================
 
 function getEventTitle(event) {
-
   if (event.event_type === "process_created") {
-    return "PROCESS CREATED";
+    return event.details?.name || "Process Created";
   }
 
   if (event.event_type === "network_connection") {
-    return "NETWORK CONNECTION";
+    return event.details?.process || "Network Connection";
   }
-
-  if (event.event_type === "file_created") {
-    return "FILE CREATED";
-  }
-
-  if (event.event_type === "file_modified") {
-    return "FILE MODIFIED";
-  }
-
-  if (event.event_type === "file_deleted") {
-    return "FILE DELETED";
-  }
-
-  if (event.event_type === "file_integrity_changed") {
-    return "FILE INTEGRITY CHANGED";
-  }
-
-  if (event.event_type === "file_integrity_deleted") {
-    return "FILE INTEGRITY DELETED";
-  }
-
-  if (event.event_type === "detection") {
-    return event.rule || "DETECTION";
-  }
-
-  return event.event_type || "EVENT";
-}
-
-
-function getEventDetails(event) {
-
-  const details = event.details || {};
-
-
-  // ==========================================================
-  // Process Event
-  // ==========================================================
-
-  if (event.event_type === "process_created") {
-
-    return (
-      <>
-        <p>
-          {details.process || "Unknown process"}
-          {" · "}
-          PID {details.pid ?? "N/A"}
-        </p>
-
-        {details.parent_pid !== undefined && (
-          <p>
-            Parent PID: {details.parent_pid}
-          </p>
-        )}
-      </>
-    );
-  }
-
-
-  // ==========================================================
-  // Network Event
-  // ==========================================================
-
-  if (event.event_type === "network_connection") {
-
-    const localAddress =
-      details.local_ip && details.local_port
-        ? `${details.local_ip}:${details.local_port}`
-        : "Unknown";
-
-    const remoteAddress =
-      details.remote_ip && details.remote_port
-        ? `${details.remote_ip}:${details.remote_port}`
-        : "Unknown";
-
-    return (
-      <>
-        <p>
-          {details.process || "Unknown process"}
-          {" · "}
-          PID {details.pid ?? "N/A"}
-        </p>
-
-        <p>
-          {localAddress}
-          {" → "}
-          {remoteAddress}
-        </p>
-
-        <p>
-          Status: {details.status || "Unknown"}
-        </p>
-      </>
-    );
-  }
-
-
-  // ==========================================================
-  // File Events
-  // ==========================================================
 
   if (
     event.event_type === "file_created" ||
     event.event_type === "file_modified" ||
     event.event_type === "file_deleted"
   ) {
-
-    return (
-      <>
-        <p>
-          {details.file_name || "Unknown file"}
-        </p>
-
-        <p>
-          {details.path || "Unknown path"}
-        </p>
-      </>
-    );
+    return event.details?.file_name || event.event_type;
   }
-
-
-  // ==========================================================
-  // File Integrity Events
-  // ==========================================================
 
   if (
     event.event_type === "file_integrity_changed" ||
     event.event_type === "file_integrity_deleted"
   ) {
-
-    return (
-      <>
-        <p>
-          {details.file_name || "Unknown file"}
-        </p>
-
-        {details.old_hash && (
-          <p>
-            Old SHA-256: {details.old_hash}
-          </p>
-        )}
-
-        {details.new_hash && (
-          <p>
-            New SHA-256: {details.new_hash}
-          </p>
-        )}
-      </>
-    );
+    return event.details?.file_name || event.event_type;
   }
-
-
-  // ==========================================================
-  // Detection
-  // ==========================================================
 
   if (event.event_type === "detection") {
-
-    return (
-      <>
-        <p>
-          {event.detection || "Detection requires investigation"}
-        </p>
-
-        {details.evidence?.process && (
-          <p>
-            Process: {details.evidence.process}
-          </p>
-        )}
-      </>
-    );
+    return event.detection || "Detection Alert";
   }
 
-
-  return (
-    <p>
-      {event.source || "EDR telemetry"}
-    </p>
-  );
+  return event.event_type || "Unknown Event";
 }
 
 
-function getMixedRecentEvents(events) {
+function getEventClass(event) {
+  if (event.event_category === "detection") {
+    return "event-detection";
+  }
 
-  const selected = [];
+  if (event.event_type === "network_connection") {
+    return "event-network";
+  }
 
-  const seenTypes = new Set();
-
-  // ----------------------------------------------------------
-  // First pass:
-  // Pick recent events while preferring different types.
-  // ----------------------------------------------------------
-
-  for (
-    let index = events.length - 1;
-    index >= 0 && selected.length < 8;
-    index--
+  if (
+    event.event_type === "file_created" ||
+    event.event_type === "file_modified" ||
+    event.event_type === "file_deleted"
   ) {
-
-    const event = events[index];
-
-    const eventType =
-      event.event_type || "unknown";
-
-    if (!seenTypes.has(eventType)) {
-
-      selected.push(event);
-
-      seenTypes.add(eventType);
-    }
+    return "event-file";
   }
 
-
-  // ----------------------------------------------------------
-  // Second pass:
-  // Fill remaining slots with recent events.
-  // ----------------------------------------------------------
-
-  if (selected.length < 8) {
-
-    for (
-      let index = events.length - 1;
-      index >= 0 && selected.length < 8;
-      index--
-    ) {
-
-      const event = events[index];
-
-      if (!selected.includes(event)) {
-
-        selected.push(event);
-      }
-    }
+  if (
+    event.event_type === "file_integrity_changed" ||
+    event.event_type === "file_integrity_deleted"
+  ) {
+    return "event-integrity";
   }
 
-
-  return selected;
+  return "event-process";
 }
 
+
+function formatValue(value) {
+  if (value === null || value === undefined) {
+    return "N/A";
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(value, null, 2);
+  }
+
+  return String(value);
+}
+
+
+// =========================
+// APP
+// =========================
 
 function App() {
-
   const [events, setEvents] = useState([]);
   const [incidents, setIncidents] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+  const [apiOnline, setApiOnline] = useState(false);
 
-  // ==========================================================
-  // Load EDR Data
-  // ==========================================================
+  const [expandedEventId, setExpandedEventId] = useState(null);
+
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+
+
+  // =========================
+  // FETCH DATA
+  // =========================
+
+  const fetchData = async () => {
+    try {
+      const [eventsResponse, incidentsResponse] =
+        await Promise.all([
+          fetch(`${API_BASE}/api/events`),
+          fetch(`${API_BASE}/api/incidents`),
+        ]);
+
+      if (
+        !eventsResponse.ok ||
+        !incidentsResponse.ok
+      ) {
+        throw new Error("API request failed");
+      }
+
+      const eventsData =
+        await eventsResponse.json();
+
+      const incidentsData =
+        await incidentsResponse.json();
+
+      setEvents(
+        Array.isArray(eventsData)
+          ? eventsData
+          : []
+      );
+
+      setIncidents(
+        Array.isArray(incidentsData)
+          ? incidentsData
+          : []
+      );
+
+      setApiOnline(true);
+      setLoading(false);
+    } catch (error) {
+      console.error(
+        "Failed to fetch EDR data:",
+        error
+      );
+
+      setApiOnline(false);
+      setLoading(false);
+    }
+  };
+
+
+  // =========================
+  // AUTO REFRESH
+  // =========================
 
   useEffect(() => {
+    fetchData();
 
-    const loadData = () => {
-
-      fetch("http://localhost:8000/api/events")
-        .then((response) => response.json())
-        .then((data) => {
-
-          setEvents(data);
-
-        })
-        .catch((error) => {
-
-          console.error(
-            "Failed to load events:",
-            error
-          );
-
-        });
-
-
-      fetch("http://localhost:8000/api/incidents")
-        .then((response) => response.json())
-        .then((data) => {
-
-          setIncidents(data);
-
-        })
-        .catch((error) => {
-
-          console.error(
-            "Failed to load incidents:",
-            error
-          );
-
-        });
-
-    };
-
-
-    // Load immediately
-    loadData();
-
-
-    // Refresh every 2 seconds
     const interval = setInterval(
-      loadData,
+      fetchData,
       2000
     );
 
-
-    return () => {
-
-      clearInterval(interval);
-
-    };
-
+    return () => clearInterval(interval);
   }, []);
 
 
-  // ==========================================================
-  // Detection Events
-  // ==========================================================
+  // =========================
+  // STATISTICS
+  // =========================
 
-  const alerts = events.filter(
+  const totalEvents = events.length;
+
+  const totalAlerts = events.filter(
     (event) =>
       event.event_category === "detection"
-  );
-
-
-  // ==========================================================
-  // High Severity Alerts
-  // ==========================================================
+  ).length;
 
   const highSeverity = events.filter(
     (event) =>
-      event.severity === "HIGH" &&
-      event.event_category === "detection"
-  );
+      event.severity === "HIGH"
+  ).length;
+
+  const totalIncidents =
+    incidents.length;
 
 
-  // ==========================================================
-  // MITRE Mapped Alerts
-  // ==========================================================
+  // =========================
+  // FILTER EVENTS
+  // =========================
 
-  const mitreAlerts = alerts.filter(
-    (alert) =>
-      alert.details?.mitre
-  );
+  const filteredEvents = useMemo(() => {
+    let result = [...events];
+
+    if (activeFilter !== "all") {
+      result = result.filter((event) => {
+        switch (activeFilter) {
+          case "process":
+            return (
+              event.event_type ===
+                "process_created" ||
+              event.event_type ===
+                "process_terminated"
+            );
+
+          case "network":
+            return (
+              event.event_type ===
+              "network_connection"
+            );
+
+          case "file":
+            return (
+              event.event_type ===
+                "file_created" ||
+              event.event_type ===
+                "file_modified" ||
+              event.event_type ===
+                "file_deleted"
+            );
+
+          case "integrity":
+            return (
+              event.event_type ===
+                "file_integrity_changed" ||
+              event.event_type ===
+                "file_integrity_deleted"
+            );
+
+          case "detection":
+            return (
+              event.event_category ===
+              "detection"
+            );
+
+          default:
+            return true;
+        }
+      });
+    }
+
+    if (searchTerm.trim()) {
+      const search =
+        searchTerm.toLowerCase();
+
+      result = result.filter((event) =>
+        JSON.stringify(event)
+          .toLowerCase()
+          .includes(search)
+      );
+    }
+
+    return result;
+  }, [
+    events,
+    activeFilter,
+    searchTerm,
+  ]);
 
 
-  // ==========================================================
-  // Mixed Recent Activity
-  // ==========================================================
+  // =========================
+  // RECENT EVENTS
+  // =========================
 
-  const recentEvents =
-    getMixedRecentEvents(events);
+  const recentEvents = useMemo(() => {
+    return [...filteredEvents]
+      .reverse()
+      .slice(0, 8);
+  }, [filteredEvents]);
 
+
+  // =========================
+  // ANALYTICS
+  // =========================
+
+  const eventTypeData =
+    getEventTypeData(events);
+
+  const severityData =
+    getSeverityData(events);
+
+  const detectionRuleData =
+    getDetectionRuleData(events);
+
+  const topProcessData =
+    getTopProcessData(events);
+
+  const eventTimeline =
+    getEventTimeline(events);
+
+
+  // =========================
+  // SEVERITY COLORS
+  // =========================
+
+  const getSeverityColor = (
+    severity
+  ) => {
+    if (severity === "HIGH") {
+      return "#ef4444";
+    }
+
+    if (severity === "MEDIUM") {
+      return "#f59e0b";
+    }
+
+    return "#22c55e";
+  };
+
+
+  // =========================
+  // DETECTION CHART SCALE
+  // =========================
+
+  const detectionMax =
+    detectionRuleData.length > 0
+      ? Math.max(
+          ...detectionRuleData.map(
+            (item) => item.count
+          )
+        )
+      : 0;
+
+  const detectionYAxisMax =
+    Math.max(2, detectionMax + 1);
+
+
+  // =========================
+  // RENDER
+  // =========================
 
   return (
-
     <div className="dashboard">
 
+      {/* =========================
+          HEADER
+          ========================= */}
 
-      {/* ======================================================
-          Header
-          ====================================================== */}
-
-      <header className="header">
+      <header className="dashboard-header">
 
         <div>
-
-          <h1>
-            Mini EDR
-          </h1>
+          <h1>Mini EDR</h1>
 
           <p>
-            Endpoint Detection & Response Dashboard
+            Endpoint Detection &amp;
+            Response Dashboard
           </p>
-
         </div>
 
-
-        <div className="status">
-
+        <div
+          className={`api-status ${
+            apiOnline
+              ? "online"
+              : "offline"
+          }`}
+        >
           <span className="status-dot"></span>
 
-          EDR Active
-
+          {apiOnline
+            ? "EDR Active"
+            : "API Offline"}
         </div>
 
       </header>
 
 
+      {/* =========================
+          STATISTICS
+          ========================= */}
 
-      {/* ======================================================
-          Statistics
-          ====================================================== */}
-
-      <section className="stats">
-
+      <section className="stats-grid">
 
         <div className="stat-card">
 
-          <span>
+          <span className="stat-label">
             Total Events
           </span>
 
-          <strong>
-            {events.length}
+          <strong className="stat-value blue">
+            {totalEvents}
           </strong>
 
         </div>
@@ -431,12 +517,12 @@ function App() {
 
         <div className="stat-card">
 
-          <span>
+          <span className="stat-label">
             Total Alerts
           </span>
 
-          <strong>
-            {alerts.length}
+          <strong className="stat-value red">
+            {totalAlerts}
           </strong>
 
         </div>
@@ -444,12 +530,12 @@ function App() {
 
         <div className="stat-card">
 
-          <span>
+          <span className="stat-label">
             High Severity
           </span>
 
-          <strong>
-            {highSeverity.length}
+          <strong className="stat-value danger">
+            {highSeverity}
           </strong>
 
         </div>
@@ -457,33 +543,504 @@ function App() {
 
         <div className="stat-card">
 
-          <span>
+          <span className="stat-label">
             Incidents
           </span>
 
-          <strong>
-            {incidents.length}
+          <strong className="stat-value purple">
+            {totalIncidents}
           </strong>
 
         </div>
-
 
       </section>
 
 
+      {/* =========================
+          ANALYTICS
+          ========================= */}
 
-      {/* ======================================================
-          Main Dashboard
-          ====================================================== */}
+      <section className="analytics-grid">
 
-      <main className="main-grid">
+        {/* =========================
+            SEVERITY DISTRIBUTION
+            ========================= */}
+
+        <div className="panel chart-panel">
+
+          <div className="panel-header">
+
+            <h2>
+              Severity Distribution
+            </h2>
+
+            <span>
+              Event Severity
+            </span>
+
+          </div>
+
+          <div className="chart-container">
+
+            {severityData.length > 0 ? (
+
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+
+                <PieChart>
+
+                  <Pie
+                    data={severityData}
+                    dataKey="count"
+                    nameKey="severity"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={65}
+                    outerRadius={95}
+                    paddingAngle={3}
+                    label
+                  >
+
+                    {severityData.map(
+                      (entry) => (
+
+                        <Cell
+                          key={`severity-${entry.severity}`}
+                          fill={getSeverityColor(
+                            entry.severity
+                          )}
+                        />
+
+                      )
+                    )}
+
+                  </Pie>
+
+                  <Tooltip />
+
+                </PieChart>
+
+              </ResponsiveContainer>
+
+            ) : (
+
+              <div className="no-data">
+                No severity data
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
 
 
-        {/* ====================================================
-            Recent Alerts
-            ==================================================== */}
+        {/* =========================
+            EVENTS BY TYPE
+            ========================= */}
 
-        <section className="panel">
+        <div className="panel chart-panel">
+
+          <div className="panel-header">
+
+            <h2>
+              Events by Type
+            </h2>
+
+            <span>
+              Event Categories
+            </span>
+
+          </div>
+
+          <div className="chart-container">
+
+            {eventTypeData.length > 0 ? (
+
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+
+                <BarChart
+                  data={eventTypeData}
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    left: 0,
+                    bottom: 45,
+                  }}
+                >
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                  />
+
+                  <XAxis
+                    dataKey="type"
+                    angle={-35}
+                    textAnchor="end"
+                    interval={0}
+                  />
+
+                  <YAxis
+                    label={{
+                      value:
+                        "Number of Events",
+                      angle: -90,
+                      position:
+                        "insideLeft",
+                      fill: "#94a3b8",
+                      fontSize: 10,
+                    }}
+                  />
+
+                  <Tooltip />
+
+                  <Bar
+                    dataKey="count"
+                    fill="#38bdf8"
+                    radius={[
+                      4,
+                      4,
+                      0,
+                      0,
+                    ]}
+                  />
+
+                </BarChart>
+
+              </ResponsiveContainer>
+
+            ) : (
+
+              <div className="no-data">
+                No event data
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
+
+
+        {/* =========================
+            EVENTS OVER TIME
+            ========================= */}
+
+        <div className="panel chart-panel wide">
+
+          <div className="panel-header">
+
+            <h2>
+              Events Over Time
+            </h2>
+
+            <span>
+              Event Activity
+            </span>
+
+          </div>
+
+          <div className="chart-container">
+
+            {eventTimeline.length > 0 ? (
+
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+
+                <LineChart
+                  data={eventTimeline}
+                  margin={{
+                    top: 15,
+                    right: 15,
+                    left: 15,
+                    bottom: 20,
+                  }}
+                >
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                  />
+
+                  <XAxis
+                    dataKey="time"
+                    label={{
+                      value: "Time",
+                      position:
+                        "insideBottom",
+                      offset: -10,
+                      fill: "#94a3b8",
+                      fontSize: 11,
+                    }}
+                  />
+
+                  <YAxis
+                    allowDecimals={false}
+                    label={{
+                      value:
+                        "Number of Events",
+                      angle: -90,
+                      position:
+                        "insideLeft",
+                      fill: "#94a3b8",
+                      fontSize: 11,
+                    }}
+                  />
+
+                  <Tooltip />
+
+                  <Line
+                    type="monotone"
+                    dataKey="count"
+                    stroke="#22d3ee"
+                    strokeWidth={3}
+                    dot={{
+                      r: 4,
+                      fill: "#22d3ee",
+                      stroke:
+                        "#e0f2fe",
+                      strokeWidth: 2,
+                    }}
+                    activeDot={{
+                      r: 6,
+                    }}
+                  />
+
+                </LineChart>
+
+              </ResponsiveContainer>
+
+            ) : (
+
+              <div className="no-data">
+                No timeline data
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
+
+
+        {/* =========================
+            DETECTION RULES
+            ========================= */}
+
+        <div className="panel chart-panel">
+
+          <div className="panel-header">
+
+            <h2>
+              Detection Rules
+            </h2>
+
+            <span>
+              Alert Frequency
+            </span>
+
+          </div>
+
+          <div className="chart-container">
+
+            {detectionRuleData.length > 0 ? (
+
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+
+                <BarChart
+                  data={detectionRuleData}
+                  margin={{
+                    top: 25,
+                    right: 15,
+                    left: 15,
+                    bottom: 30,
+                  }}
+                >
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                  />
+
+                  <XAxis
+                    dataKey="rule"
+                    label={{
+                      value:
+                        "Detection Rule",
+                      position:
+                        "insideBottom",
+                      offset: -15,
+                      fill: "#94a3b8",
+                      fontSize: 10,
+                    }}
+                  />
+
+                  <YAxis
+                    allowDecimals={false}
+                    domain={[
+                      0,
+                      detectionYAxisMax,
+                    ]}
+                    label={{
+                      value:
+                        "Number of Alerts",
+                      angle: -90,
+                      position:
+                        "insideLeft",
+                      fill: "#94a3b8",
+                      fontSize: 10,
+                    }}
+                  />
+
+                  <Tooltip />
+
+                  <Bar
+                    dataKey="count"
+                    fill="#a78bfa"
+                    radius={[
+                      4,
+                      4,
+                      0,
+                      0,
+                    ]}
+                    label={{
+                      position: "top",
+                      fill: "#e2e8f0",
+                      fontSize: 11,
+                      fontWeight: 700,
+                    }}
+                  />
+
+                </BarChart>
+
+              </ResponsiveContainer>
+
+            ) : (
+
+              <div className="no-data">
+                No detection rules triggered
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
+
+
+        {/* =========================
+            TOP PROCESSES
+            ========================= */}
+
+        <div className="panel chart-panel">
+
+          <div className="panel-header">
+
+            <h2>
+              Top Processes
+            </h2>
+
+            <span>
+              Process Activity
+            </span>
+
+          </div>
+
+          <div className="chart-container">
+
+            {topProcessData.length > 0 ? (
+
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+
+                <BarChart
+                  layout="vertical"
+                  data={topProcessData}
+                  margin={{
+                    top: 5,
+                    right: 15,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                  />
+
+                  <XAxis
+                    type="number"
+                    allowDecimals={false}
+                    label={{
+                      value:
+                        "Number of Events",
+                      position:
+                        "insideBottom",
+                      offset: -3,
+                      fill: "#94a3b8",
+                      fontSize: 10,
+                    }}
+                  />
+
+                  <YAxis
+                    type="category"
+                    dataKey="process"
+                    width={75}
+                  />
+
+                  <Tooltip />
+
+                  <Bar
+                    dataKey="count"
+                    fill="#60a5fa"
+                    radius={[
+                      0,
+                      4,
+                      4,
+                      0,
+                    ]}
+                  />
+
+                </BarChart>
+
+              </ResponsiveContainer>
+
+            ) : (
+
+              <div className="no-data">
+                No process data
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* =========================
+          MAIN GRID
+          ========================= */}
+
+      <section className="main-grid">
+
+        {/* =========================
+            RECENT ALERTS
+            ========================= */}
+
+        <div className="panel">
 
           <div className="panel-header">
 
@@ -492,76 +1049,89 @@ function App() {
             </h2>
 
             <span>
-              Detection Engine
+              {totalAlerts} Total Alerts
             </span>
 
           </div>
 
+          <div className="alert-list">
 
-          {alerts.length === 0 ? (
+            {events
+              .filter(
+                (event) =>
+                  event.event_category ===
+                  "detection"
+              )
+              .slice(-5)
+              .reverse()
+              .map((alert) => (
 
-            <div className="empty-state">
+                <div
+                  className={`alert-item ${
+                    alert.severity ===
+                    "HIGH"
+                      ? "alert-high"
+                      : alert.severity ===
+                        "MEDIUM"
+                      ? "alert-medium"
+                      : "alert-info"
+                  }`}
+                  key={alert.event_id}
+                >
 
-              <p>
-                No alerts available
-              </p>
+                  <div className="alert-main">
 
-              <span>
-                Detection events will appear here.
-              </span>
+                    <span className="rule-badge">
+                      {alert.rule ||
+                        "ALERT"}
+                    </span>
 
-            </div>
-
-          ) : (
-
-            <div className="event-list">
-
-              {alerts
-                .slice(-5)
-                .reverse()
-                .map((alert) => (
-
-                  <div
-                    className="event"
-                    key={alert.event_id}
-                  >
-
-                    <div
-                      className={`event-indicator ${getSeverityClass(
-                        alert.severity
-                      )}`}
-                    ></div>
-
-
-                    <div>
-
-                      <strong>
-                        {alert.rule}
-                      </strong>
-
-                      <p>
-                        {alert.detection}
-                      </p>
-
-                    </div>
+                    <strong>
+                      {alert.detection ||
+                        "Detection Alert"}
+                    </strong>
 
                   </div>
 
-                ))}
+                  <div className="alert-meta">
 
-            </div>
+                    <span
+                      className={`severity-badge ${(
+                        alert.severity ||
+                        "INFO"
+                      ).toLowerCase()}`}
+                    >
+                      {alert.severity ||
+                        "INFO"}
+                    </span>
 
-          )}
+                    <span>
+                      {alert.timestamp ||
+                        ""}
+                    </span>
 
-        </section>
+                  </div>
+
+                </div>
+
+              ))}
+
+            {totalAlerts === 0 && (
+              <div className="empty-state">
+                No alerts detected
+              </div>
+            )}
+
+          </div>
+
+        </div>
 
 
+        {/* =========================
+            INCIDENTS
+            ========================= */}
 
-        {/* ====================================================
-            Incidents
-            ==================================================== */}
-
-        <section className="panel">
+        <div className="panel">
 
           <div className="panel-header">
 
@@ -570,130 +1140,52 @@ function App() {
             </h2>
 
             <span>
-              Incident Manager
+              {totalIncidents} Total
+              Incidents
             </span>
 
           </div>
 
+          <div className="incident-list">
 
-          {incidents.length === 0 ? (
+            {incidents
+              .slice(-5)
+              .reverse()
+              .map((incident) => (
 
-            <div className="empty-state">
+                <div
+                  className="incident-item"
+                  key={
+                    incident.incident_id
+                  }
+                >
 
-              <p>
-                No incidents available
-              </p>
+                  <div className="incident-main">
 
-              <span>
-                Created incidents will appear here.
-              </span>
+                    <span className="incident-id">
+                      {
+                        incident.incident_id
+                      }
+                    </span>
 
-            </div>
-
-          ) : (
-
-            <div className="event-list">
-
-              {incidents
-                .slice(-5)
-                .reverse()
-                .map((incident) => (
-
-                  <div
-                    className="event"
-                    key={incident.incident_id}
-                  >
-
-                    <div
-                      className={`event-indicator ${getSeverityClass(
-                        incident.severity
-                      )}`}
-                    ></div>
-
-
-                    <div>
-
-                      <strong>
-                        {incident.incident_id}
-                      </strong>
-
-                      <p>
-                        {incident.rule} ·{" "}
-                        {incident.severity}
-                      </p>
-
-                    </div>
+                    <strong>
+                      {incident.detection ||
+                        "Security Incident"}
+                    </strong>
 
                   </div>
 
-                ))}
+                  <div className="incident-meta">
 
-            </div>
+                    <span className="severity-badge high">
+                      {incident.severity ||
+                        "HIGH"}
+                    </span>
 
-          )}
-
-        </section>
-
-
-
-        {/* ====================================================
-            Recent Event Activity
-            ==================================================== */}
-
-        <section className="panel wide">
-
-          <div className="panel-header">
-
-            <h2>
-              Recent Event Activity
-            </h2>
-
-            <span>
-              EDR Telemetry
-            </span>
-
-          </div>
-
-
-          {recentEvents.length === 0 ? (
-
-            <div className="empty-state">
-
-              <p>
-                No events available
-              </p>
-
-              <span>
-                EDR telemetry will appear here.
-              </span>
-
-            </div>
-
-          ) : (
-
-            <div className="event-list">
-
-              {recentEvents.map((event) => (
-
-                <div
-                  className="event"
-                  key={event.event_id}
-                >
-
-                  <div
-                    className={`event-indicator ${getSeverityClass(
-                      event.severity
-                    )}`}
-                  ></div>
-
-
-                  <div className="event-content">
-
-                    <strong>
-                      {getEventTitle(event)}
-                    </strong>
-
-                    {getEventDetails(event)}
+                    <span>
+                      {incident.status ||
+                        "NEW"}
+                    </span>
 
                   </div>
 
@@ -701,24 +1193,382 @@ function App() {
 
               ))}
 
+            {totalIncidents === 0 && (
+              <div className="empty-state">
+                No incidents created
+              </div>
+            )}
+
+          </div>
+
+        </div>
+
+
+        {/* =========================
+            RECENT EVENT ACTIVITY
+            ========================= */}
+
+        <div className="panel wide">
+
+          <div className="panel-header">
+
+            <div>
+
+              <h2>
+                Recent Event Activity
+              </h2>
+
+              <span>
+                Click an event to view
+                details
+              </span>
+
             </div>
 
-          )}
+            <div className="event-count">
+              {filteredEvents.length} Events
+            </div>
 
-        </section>
+          </div>
 
 
+          {/* FILTERS */}
 
-        {/* ====================================================
+          <div className="filter-row">
+
+            {[
+              ["all", "All"],
+              ["process", "Process"],
+              ["network", "Network"],
+              ["file", "File"],
+              ["integrity", "Integrity"],
+              ["detection", "Detection"],
+            ].map(
+              ([value, label]) => (
+
+                <button
+                  key={value}
+                  className={`filter-button ${
+                    activeFilter ===
+                    value
+                      ? "active"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    setActiveFilter(
+                      value
+                    )
+                  }
+                >
+                  {label}
+                </button>
+
+              )
+            )}
+
+          </div>
+
+
+          {/* SEARCH */}
+
+          <div className="search-row">
+
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search events, processes, files, rules..."
+              value={searchTerm}
+              onChange={(event) =>
+                setSearchTerm(
+                  event.target.value
+                )
+              }
+            />
+
+          </div>
+
+
+          {/* EVENT LIST */}
+
+          <div className="event-list">
+
+            {loading ? (
+
+              <div className="empty-state">
+                Loading EDR events...
+              </div>
+
+            ) : recentEvents.length ===
+              0 ? (
+
+              <div className="empty-state">
+                No matching events found
+              </div>
+
+            ) : (
+
+              recentEvents.map(
+                (event) => {
+
+                  const isExpanded =
+                    expandedEventId ===
+                    event.event_id;
+
+                  return (
+
+                    <div
+                      className={`event-item ${
+                        isExpanded
+                          ? "expanded"
+                          : ""
+                      } ${
+                        event.event_category ===
+                        "detection"
+                          ? "detection-event"
+                          : ""
+                      }`}
+                      key={
+                        event.event_id
+                      }
+                      onClick={() =>
+                        setExpandedEventId(
+                          isExpanded
+                            ? null
+                            : event.event_id
+                        )
+                      }
+                    >
+
+                      <div className="event-summary">
+
+                        <div className="event-left">
+
+                          <span
+                            className={`event-type ${getEventClass(
+                              event
+                            )}`}
+                          >
+                            {event.event_type ||
+                              "unknown"}
+                          </span>
+
+                          <strong>
+                            {getEventTitle(
+                              event
+                            )}
+                          </strong>
+
+                        </div>
+
+
+                        <div className="event-right">
+
+                          <span
+                            className={`severity-badge ${(
+                              event.severity ||
+                              "INFO"
+                            ).toLowerCase()}`}
+                          >
+                            {event.severity ||
+                              "INFO"}
+                          </span>
+
+                          <span className="event-time">
+                            {event.timestamp ||
+                              ""}
+                          </span>
+
+                          <span className="expand-icon">
+                            {isExpanded
+                              ? "▲"
+                              : "▼"}
+                          </span>
+
+                        </div>
+
+                      </div>
+
+
+                      {isExpanded && (
+
+                        <div className="event-details">
+
+                          <div className="detail-grid">
+
+                            <div className="detail-row">
+
+                              <span>
+                                Event ID
+                              </span>
+
+                              <code>
+                                {
+                                  event.event_id
+                                }
+                              </code>
+
+                            </div>
+
+
+                            <div className="detail-row">
+
+                              <span>
+                                Event Type
+                              </span>
+
+                              <strong>
+                                {
+                                  event.event_type ||
+                                  "N/A"
+                                }
+                              </strong>
+
+                            </div>
+
+
+                            <div className="detail-row">
+
+                              <span>
+                                Category
+                              </span>
+
+                              <strong>
+                                {
+                                  event.event_category ||
+                                  "N/A"
+                                }
+                              </strong>
+
+                            </div>
+
+
+                            <div className="detail-row">
+
+                              <span>
+                                Status
+                              </span>
+
+                              <strong>
+                                {
+                                  event.status ||
+                                  "N/A"
+                                }
+                              </strong>
+
+                            </div>
+
+
+                            <div className="detail-row">
+
+                              <span>
+                                Source
+                              </span>
+
+                              <strong>
+                                {
+                                  event.source ||
+                                  "N/A"
+                                }
+                              </strong>
+
+                            </div>
+
+
+                            <div className="detail-row">
+
+                              <span>
+                                Severity
+                              </span>
+
+                              <strong>
+                                {
+                                  event.severity ||
+                                  "INFO"
+                                }
+                              </strong>
+
+                            </div>
+
+
+                            {event.rule && (
+
+                              <div className="detail-row">
+
+                                <span>
+                                  Detection Rule
+                                </span>
+
+                                <strong>
+                                  {event.rule}
+                                </strong>
+
+                              </div>
+
+                            )}
+
+
+                            {event.detection && (
+
+                              <div className="detail-row">
+
+                                <span>
+                                  Detection
+                                </span>
+
+                                <strong>
+                                  {
+                                    event.detection
+                                  }
+                                </strong>
+
+                              </div>
+
+                            )}
+
+                          </div>
+
+
+                          <div className="raw-details">
+
+                            <div className="raw-details-title">
+                              Event Details
+                            </div>
+
+                            <pre>
+                              {formatValue(
+                                event.details
+                              )}
+                            </pre>
+
+                          </div>
+
+                        </div>
+
+                      )}
+
+                    </div>
+
+                  );
+                }
+              )
+
+            )}
+
+          </div>
+
+        </div>
+
+
+        {/* =========================
             MITRE ATT&CK
-            ==================================================== */}
+            ========================= */}
 
-        <section className="panel">
+        <div className="panel">
 
           <div className="panel-header">
 
             <h2>
-              MITRE ATT&CK
+              MITRE ATT&amp;CK
             </h2>
 
             <span>
@@ -727,80 +1577,72 @@ function App() {
 
           </div>
 
+          <div className="mitre-list">
 
-          {mitreAlerts.length === 0 ? (
+            {events
+              .filter(
+                (event) =>
+                  event.details?.mitre
+              )
+              .slice(-5)
+              .reverse()
+              .map((event) => {
 
-            <div className="empty-state">
+                const mitre =
+                  event.details.mitre;
 
-              <p>
-                No techniques detected
-              </p>
+                return (
 
-              <span>
-                MITRE mappings will appear here.
-              </span>
+                  <div
+                    className="mitre-item"
+                    key={
+                      event.event_id
+                    }
+                  >
 
-            </div>
+                    <span className="mitre-id">
+                      {
+                        mitre.technique_id
+                      }
+                    </span>
 
-          ) : (
+                    <strong>
+                      {
+                        mitre.technique
+                      }
+                    </strong>
 
-            <div className="event-list">
+                    <span className="mitre-tactic">
+                      {mitre.tactic}
+                    </span>
 
-              {mitreAlerts
-                .slice(-5)
-                .reverse()
-                .map((alert) => {
+                  </div>
 
-                  const mitre =
-                    alert.details.mitre;
+                );
 
+              })}
 
-                  return (
+            {events.filter(
+              (event) =>
+                event.details?.mitre
+            ).length === 0 && (
 
-                    <div
-                      className="event"
-                      key={alert.event_id}
-                    >
+              <div className="empty-state">
+                No MITRE mappings
+              </div>
 
-                      <div
-                        className={`event-indicator ${getSeverityClass(
-                          alert.severity
-                        )}`}
-                      ></div>
+            )}
 
+          </div>
 
-                      <div>
-
-                        <strong>
-                          {mitre.technique_id}
-                        </strong>
-
-                        <p>
-                          {mitre.technique} ·{" "}
-                          {mitre.tactic}
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                  );
-
-                })}
-
-            </div>
-
-          )}
-
-        </section>
+        </div>
 
 
+        {/* =========================
+            SYSTEM STATUS
+            ========================= */}
 
-        {/* ====================================================
-            System Status
-            ==================================================== */}
-
-        <section className="panel">
+        <div className="panel">
 
           <div className="panel-header">
 
@@ -814,73 +1656,101 @@ function App() {
 
           </div>
 
+          <div className="system-status-list">
 
-          <div className="system-status">
-
-
-            <div>
+            <div className="system-status-item">
 
               <span>
                 Process Monitor
               </span>
 
-              <strong>
+              <strong className="healthy">
                 Active
               </strong>
 
             </div>
 
 
-            <div>
+            <div className="system-status-item">
 
               <span>
                 File Monitor
               </span>
 
-              <strong>
+              <strong className="healthy">
                 Active
               </strong>
 
             </div>
 
 
-            <div>
+            <div className="system-status-item">
 
               <span>
-                FIM
+                File Integrity
               </span>
 
-              <strong>
+              <strong className="healthy">
                 Active
               </strong>
 
             </div>
 
 
-            <div>
+            <div className="system-status-item">
 
               <span>
                 Network Monitor
               </span>
 
-              <strong>
+              <strong className="healthy">
                 Active
               </strong>
 
             </div>
 
 
+            <div className="system-status-item">
+
+              <span>
+                Detection Engine
+              </span>
+
+              <strong className="healthy">
+                Active
+              </strong>
+
+            </div>
+
+
+            <div className="system-status-item">
+
+              <span>
+                API
+              </span>
+
+              <strong
+                className={
+                  apiOnline
+                    ? "healthy"
+                    : "danger-text"
+                }
+              >
+                {apiOnline
+                  ? "Online"
+                  : "Offline"}
+              </strong>
+
+            </div>
+
           </div>
 
-        </section>
+        </div>
 
-
-      </main>
+      </section>
 
     </div>
-
   );
 }
-
 
 export default App;

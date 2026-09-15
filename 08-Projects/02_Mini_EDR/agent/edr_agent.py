@@ -2,15 +2,13 @@
 
 import os
 import sys
-import json
 import time
 import psutil
-
-from datetime import datetime
+import hashlib
 
 
 # ============================================================
-# Add Project Root To Python Path
+# PROJECT PATH
 # ============================================================
 
 PROJECT_ROOT = os.path.dirname(
@@ -20,32 +18,11 @@ PROJECT_ROOT = os.path.dirname(
 )
 
 if PROJECT_ROOT not in sys.path:
-    sys.path.append(PROJECT_ROOT)
+    sys.path.insert(0, PROJECT_ROOT)
 
 
 # ============================================================
-# Detection Engine
-# ============================================================
-
-from detection.detection_engine import (
-    detect_suspicious_process,
-    detect_suspicious_file,
-    detect_suspicious_network,
-    detect_suspicious_process_location
-)
-
-
-# ============================================================
-# MITRE ATT&CK Mapping
-# ============================================================
-
-from detection.mitre_mapping import (
-    get_mitre_mapping
-)
-
-
-# ============================================================
-# File Monitor
+# IMPORTS
 # ============================================================
 
 from monitor.file_monitor import (
@@ -53,29 +30,26 @@ from monitor.file_monitor import (
     detect_file_changes
 )
 
-
-# ============================================================
-# File Integrity Monitoring
-# ============================================================
-
 from monitor.file_integrity import (
     get_file_hashes,
     detect_integrity_changes
 )
 
-
-# ============================================================
-# Network Monitor
-# ============================================================
-
 from monitor.network_monitor import (
     get_network_connections
 )
 
+from detection.detection_engine import (
+    detect_suspicious_process,
+    detect_suspicious_powershell_content,
+    detect_suspicious_file,
+    detect_suspicious_network,
+    detect_suspicious_process_location
+)
 
-# ============================================================
-# Event Schema
-# ============================================================
+from detection.mitre_mapping import (
+    get_mitre_mapping
+)
 
 from utils.event_schema import (
     create_event
@@ -83,113 +57,155 @@ from utils.event_schema import (
 
 
 # ============================================================
-# Configuration
+# LOG FILES
 # ============================================================
 
-LOG_FILE = os.path.join(
+LOG_DIRECTORY = os.path.join(
     PROJECT_ROOT,
-    "logs",
+    "logs"
+)
+
+EVENTS_FILE = os.path.join(
+    LOG_DIRECTORY,
     "events.json"
 )
 
 
 # ============================================================
-# Process Monitoring
+# PROCESS FINGERPRINTS
 # ============================================================
 
-def get_process_info(process):
-    """Collect information about a process."""
+previous_processes = {}
+
+
+def get_process_fingerprint(process):
+    """
+    Create a fingerprint for a process.
+
+    The fingerprint helps prevent the same process
+    from being processed repeatedly.
+    """
 
     try:
+        pid = process.pid
 
-        return {
-            "pid": process.pid,
-            "name": process.name(),
-            "parent_pid": process.ppid(),
-            "username": process.username(),
-            "exe": process.exe(),
-            "cmdline": process.cmdline(),
-            "timestamp": datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
-        }
+        create_time = process.create_time()
+
+        return f"{pid}-{create_time}"
 
     except (
         psutil.NoSuchProcess,
         psutil.AccessDenied,
         psutil.ZombieProcess
     ):
-
         return None
 
 
+# ============================================================
+# PROCESS MONITORING
+# ============================================================
+
 def get_processes():
-    """Get a snapshot of currently running processes."""
+    """
+    Get information about currently running processes.
+    """
 
-    processes = {}
+    processes = []
 
-    for process in psutil.process_iter():
+    for process in psutil.process_iter(
+        [
+            "pid",
+            "name",
+            "exe",
+            "cmdline",
+            "username"
+        ]
+    ):
 
-        info = get_process_info(
-            process
-        )
+        try:
 
-        if info:
-            processes[info["pid"]] = info
+            process_info = process.info
+
+            processes.append({
+                "pid": process_info.get("pid"),
+                "name": process_info.get("name"),
+                "exe": process_info.get("exe"),
+                "cmdline": process_info.get("cmdline"),
+                "username": process_info.get("username")
+            })
+
+        except (
+            psutil.NoSuchProcess,
+            psutil.AccessDenied,
+            psutil.ZombieProcess
+        ):
+            continue
 
     return processes
 
 
 # ============================================================
-# Logging
+# JSON LOGGING
 # ============================================================
 
-def save_event(event):
-    """Save a standardized event to the JSON log."""
+def load_events():
+    """
+    Load existing EDR events from events.json.
+    """
+
+    import json
+
+    if not os.path.exists(EVENTS_FILE):
+        return []
 
     try:
 
-        os.makedirs(
-            os.path.dirname(LOG_FILE),
-            exist_ok=True
-        )
+        with open(
+            EVENTS_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
 
-        existing_events = []
+            data = json.load(file)
 
-        if os.path.exists(LOG_FILE):
+            if isinstance(data, list):
+                return data
 
-            try:
+    except (
+        json.JSONDecodeError,
+        OSError
+    ):
+        pass
 
-                with open(
-                    LOG_FILE,
-                    "r",
-                    encoding="utf-8"
-                ) as file:
+    return []
 
-                    data = json.load(file)
 
-                    if isinstance(data, list):
-                        existing_events = data
+def save_event(event):
+    """
+    Save a standardized event to events.json.
+    """
 
-            except (
-                json.JSONDecodeError,
-                OSError
-            ):
+    import json
 
-                existing_events = []
+    os.makedirs(
+        LOG_DIRECTORY,
+        exist_ok=True
+    )
 
-        existing_events.append(
-            event
-        )
+    events = load_events()
+
+    events.append(event)
+
+    try:
 
         with open(
-            LOG_FILE,
+            EVENTS_FILE,
             "w",
             encoding="utf-8"
         ) as file:
 
             json.dump(
-                existing_events,
+                events,
                 file,
                 indent=4
             )
@@ -197,150 +213,20 @@ def save_event(event):
     except OSError as error:
 
         print(
-            f"[LOG ERROR] {error}"
+            f"[ERROR] Could not save event: {error}"
         )
 
 
 # ============================================================
-# Event Creation Helpers
-# ============================================================
-
-def save_process_event(event):
-    """Create and save a standardized process event."""
-
-    standardized_event = create_event(
-        event_type="process_created",
-        source="process_monitor",
-        details={
-            "pid": event.get(
-                "pid"
-            ),
-            "process": event.get(
-                "name"
-            ),
-            "parent_pid": event.get(
-                "parent_pid"
-            ),
-            "username": event.get(
-                "username"
-            ),
-            "exe": event.get(
-                "exe"
-            ),
-            "cmdline": event.get(
-                "cmdline"
-            )
-        }
-    )
-
-    save_event(
-        standardized_event
-    )
-
-
-def save_file_event(event):
-    """Create and save a standardized file event."""
-
-    standardized_event = create_event(
-        event_type=event.get(
-            "event_type",
-            "file_event"
-        ),
-        source="file_monitor",
-        details={
-            "file_name": event.get(
-                "file_name"
-            ),
-            "path": event.get(
-                "path"
-            )
-        }
-    )
-
-    save_event(
-        standardized_event
-    )
-
-
-def save_fim_event(event):
-    """Create and save a standardized FIM event."""
-
-    standardized_event = create_event(
-        event_type=event.get(
-            "event_type",
-            "file_integrity_event"
-        ),
-        source="file_integrity_monitor",
-        details={
-            "file_name": event.get(
-                "file_name"
-            ),
-            "path": event.get(
-                "path"
-            ),
-            "old_hash": event.get(
-                "old_hash"
-            ),
-            "new_hash": event.get(
-                "new_hash"
-            )
-        }
-    )
-
-    save_event(
-        standardized_event
-    )
-
-
-def save_network_event(event):
-    """Create and save a standardized network event."""
-
-    standardized_event = create_event(
-        event_type="network_connection",
-        source="network_monitor",
-        details={
-            "pid": event.get(
-                "pid"
-            ),
-            "process": event.get(
-                "process"
-            ),
-            "local_ip": event.get(
-                "local_ip"
-            ),
-            "local_port": event.get(
-                "local_port"
-            ),
-            "remote_ip": event.get(
-                "remote_ip"
-            ),
-            "remote_port": event.get(
-                "remote_port"
-            ),
-            "status": event.get(
-                "status"
-            )
-        }
-    )
-
-    save_event(
-        standardized_event
-    )
-
-
-# ============================================================
-# Detection Logging
+# STANDARDIZED DETECTION LOGGING
 # ============================================================
 
 def save_detection_event(alert):
-    """Create and save a standardized detection event."""
+    """
+    Create and save a standardized detection event.
+    """
 
     evidence = {}
-
-
-    # ========================================================
-    # Detection Evidence
-    # ========================================================
 
     for key, value in alert.items():
 
@@ -352,14 +238,7 @@ def save_detection_event(alert):
 
             evidence[key] = value
 
-
-    # ========================================================
-    # MITRE ATT&CK Mapping
-    # ========================================================
-
-    rule_id = alert.get(
-        "rule"
-    )
+    rule_id = alert.get("rule")
 
     mitre_mapping = get_mitre_mapping(
         rule_id
@@ -369,32 +248,21 @@ def save_detection_event(alert):
 
     if mitre_mapping:
 
-        technique_id = (
-            mitre_mapping.get(
-                "technique_id"
-            )
+        technique_id = mitre_mapping.get(
+            "technique_id"
         )
 
         if technique_id:
 
             mitre = {
                 "technique_id": technique_id,
-                "technique": (
-                    mitre_mapping.get(
-                        "technique"
-                    )
+                "technique": mitre_mapping.get(
+                    "technique"
                 ),
-                "tactic": (
-                    mitre_mapping.get(
-                        "tactic"
-                    )
+                "tactic": mitre_mapping.get(
+                    "tactic"
                 )
             }
-
-
-    # ========================================================
-    # Detection Details
-    # ========================================================
 
     details = {
         "evidence": evidence
@@ -403,11 +271,6 @@ def save_detection_event(alert):
     if mitre:
 
         details["mitre"] = mitre
-
-
-    # ========================================================
-    # Create Standardized Detection Event
-    # ========================================================
 
     standardized_event = create_event(
         event_type="detection",
@@ -429,365 +292,547 @@ def save_detection_event(alert):
 
 
 # ============================================================
-# Display Functions
+# TELEMETRY EVENT
 # ============================================================
 
-def display_process_event(event):
-    """Display a new process event."""
+def save_telemetry_event(
+    event_type,
+    source,
+    details
+):
+    """
+    Create and save a standardized telemetry event.
+    """
 
-    print()
-    print("=" * 60)
-    print("                    NEW PROCESS")
-    print("=" * 60)
+    standardized_event = create_event(
+        event_type=event_type,
+        source=source,
+        details=details
+    )
+
+    save_event(
+        standardized_event
+    )
+
+
+# ============================================================
+# PROCESS DISPLAY
+# ============================================================
+
+def display_process(process):
+    """
+    Display detailed process information.
+    """
+
+    print("\n" + "=" * 70)
+    print("                    MINI EDR - PROCESS EVENT")
+    print("=" * 70)
 
     print(
-        f"Process : "
-        f"{event.get('name', 'Unknown')}"
+        f"[+] Process Name  : "
+        f"{process.get('name')}"
     )
 
     print(
-        f"PID     : "
-        f"{event.get('pid', 'Unknown')}"
+        f"[+] PID            : "
+        f"{process.get('pid')}"
     )
 
     print(
-        f"Parent  : "
-        f"{event.get('parent_pid', 'Unknown')}"
+        f"[+] Executable     : "
+        f"{process.get('exe')}"
     )
 
     print(
-        f"User    : "
-        f"{event.get('username', 'Unknown')}"
+        f"[+] Username       : "
+        f"{process.get('username')}"
     )
+
+    command_line = process.get(
+        "cmdline"
+    )
+
+    if isinstance(command_line, list):
+
+        command_line = " ".join(
+            str(part)
+            for part in command_line
+        )
 
     print(
-        f"EXE     : "
-        f"{event.get('exe', 'Unknown')}"
+        f"[+] Command Line   : "
+        f"{command_line}"
     )
 
-    print(
-        f"Command : "
-        f"{event.get('cmdline', 'Unknown')}"
-    )
+    print("-" * 70)
 
-    print(
-        f"Time    : "
-        f"{event.get('timestamp', '')}"
-    )
 
-    print("=" * 60)
-
+# ============================================================
+# FILE EVENT DISPLAY
+# ============================================================
 
 def display_file_event(event):
-    """Display a file monitoring event."""
+    """
+    Display detailed file monitoring information.
+    """
 
-    print()
-    print("=" * 60)
-    print("                     FILE EVENT")
-    print("=" * 60)
+    print("\n" + "=" * 70)
+    print("                     MINI EDR - FILE EVENT")
+    print("=" * 70)
 
     print(
-        f"Type : "
-        f"{event.get('event_type', 'Unknown')}"
+        f"[+] Event Type     : "
+        f"{event.get('event_type')}"
     )
 
     print(
-        f"File : "
-        f"{event.get('file_name', 'Unknown')}"
+        f"[+] File Name      : "
+        f"{event.get('file_name')}"
     )
 
     print(
-        f"Path : "
-        f"{event.get('path', 'Unknown')}"
+        f"[+] Path           : "
+        f"{event.get('path')}"
     )
 
-    print(
-        f"Time : "
-        f"{event.get('timestamp', '')}"
-    )
-
-    print("=" * 60)
+    print("-" * 70)
 
 
-def display_fim_event(event):
-    """Display a file integrity event."""
-
-    print()
-    print("=" * 60)
-    print("               FILE INTEGRITY EVENT")
-    print("=" * 60)
-
-    print(
-        f"Type : "
-        f"{event.get('event_type', 'Unknown')}"
-    )
-
-    print(
-        f"File : "
-        f"{event.get('file_name', 'Unknown')}"
-    )
-
-    print(
-        f"Path : "
-        f"{event.get('path', 'Unknown')}"
-    )
-
-    print(
-        f"Old Hash : "
-        f"{event.get('old_hash', 'None')}"
-    )
-
-    print(
-        f"New Hash : "
-        f"{event.get('new_hash', 'None')}"
-    )
-
-    print("=" * 60)
-
+# ============================================================
+# NETWORK EVENT DISPLAY
+# ============================================================
 
 def display_network_event(event):
-    """Display a new network connection."""
+    """
+    Display detailed network connection information.
+    """
 
-    print()
-    print("=" * 60)
-    print("                  NETWORK CONNECTION")
-    print("=" * 60)
+    print("\n" + "=" * 70)
+    print("                  MINI EDR - NETWORK EVENT")
+    print("=" * 70)
 
     print(
-        f"Process : "
-        f"{event.get('process', 'Unknown')}"
+        f"[+] Process        : "
+        f"{event.get('process')}"
     )
 
     print(
-        f"PID     : "
-        f"{event.get('pid', 'Unknown')}"
+        f"[+] PID            : "
+        f"{event.get('pid')}"
     )
 
     print(
-        f"Local   : "
-        f"{event.get('local_ip', '')}:"
-        f"{event.get('local_port', '')}"
+        f"[+] Local Address  : "
+        f"{event.get('local_ip')}:"
+        f"{event.get('local_port')}"
     )
 
     print(
-        f"Remote  : "
-        f"{event.get('remote_ip', '')}:"
-        f"{event.get('remote_port', '')}"
+        f"[+] Remote Address : "
+        f"{event.get('remote_ip')}:"
+        f"{event.get('remote_port')}"
     )
 
     print(
-        f"Status  : "
-        f"{event.get('status', 'Unknown')}"
+        f"[+] Status         : "
+        f"{event.get('status')}"
+    )
+
+    print("-" * 70)
+
+
+# ============================================================
+# DETECTION DISPLAY
+# ============================================================
+
+def display_detection(alert):
+    """
+    Display detailed security detection information.
+    """
+
+    print("\n" + "=" * 70)
+    print("                  !!! SECURITY ALERT !!!")
+    print("=" * 70)
+
+    print(
+        f"[!] Rule           : "
+        f"{alert.get('rule')}"
     )
 
     print(
-        f"Time    : "
-        f"{event.get('timestamp', '')}"
-    )
-
-    print("=" * 60)
-
-
-def display_alert(alert):
-    """Display a security alert."""
-
-    print()
-    print("!" * 60)
-    print("                    SECURITY ALERT")
-    print("!" * 60)
-
-    print(
-        f"Rule       : "
-        f"{alert.get('rule', 'Unknown')}"
+        f"[!] Severity       : "
+        f"{alert.get('severity')}"
     )
 
     print(
-        f"Severity   : "
-        f"{alert.get('severity', 'Unknown')}"
+        f"[!] Detection      : "
+        f"{alert.get('detection')}"
     )
 
     print(
-        f"Detection  : "
-        f"{alert.get('detection', 'Unknown')}"
+        f"[+] Timestamp      : "
+        f"{alert.get('timestamp')}"
     )
 
-    if "pid" in alert:
+    if alert.get("pid") is not None:
 
         print(
-            f"PID        : "
+            f"[+] PID            : "
             f"{alert.get('pid')}"
         )
 
-    if "process" in alert:
+    if alert.get("process"):
 
         print(
-            f"Process    : "
+            f"[+] Process        : "
             f"{alert.get('process')}"
         )
 
-    if "exe" in alert:
+    if alert.get("file"):
 
         print(
-            f"EXE        : "
-            f"{alert.get('exe')}"
-        )
-
-    if "file" in alert:
-
-        print(
-            f"File       : "
+            f"[+] File           : "
             f"{alert.get('file')}"
         )
 
-    if "path" in alert:
+    if alert.get("path"):
 
         print(
-            f"Path       : "
+            f"[+] Path           : "
             f"{alert.get('path')}"
         )
 
-    if "remote_ip" in alert:
+    if alert.get("remote_ip"):
 
         print(
-            f"Remote IP  : "
-            f"{alert.get('remote_ip')}"
-        )
-
-    if "remote_port" in alert:
-
-        print(
-            f"Remote Port: "
+            f"[+] Remote Address : "
+            f"{alert.get('remote_ip')}:"
             f"{alert.get('remote_port')}"
         )
 
-    if "port_service" in alert:
+    if alert.get("port_service"):
 
         print(
-            f"Service    : "
+            f"[+] Service         : "
             f"{alert.get('port_service')}"
         )
 
-    if "indicators" in alert:
+    if alert.get("indicator"):
 
         print(
-            f"Indicators : "
-            f"{alert.get('indicators')}"
+            f"[+] Indicator       : "
+            f"{alert.get('indicator')}"
         )
 
-    print("!" * 60)
+    indicators = alert.get(
+        "indicators"
+    )
 
+    if indicators:
 
-# ============================================================
-# Network Fingerprint
-# ============================================================
+        print("[+] Indicators     :")
 
-def get_connection_fingerprint(connection):
-    """Create a unique identifier for a network connection."""
+        for indicator in indicators:
 
-    return (
-        connection.get(
-            "pid"
-        ),
-        connection.get(
-            "process"
-        ),
-        connection.get(
-            "local_ip"
-        ),
-        connection.get(
-            "local_port"
-        ),
-        connection.get(
-            "remote_ip"
-        ),
-        connection.get(
-            "remote_port"
+            print(
+                f"    - {indicator}"
+            )
+
+    if alert.get("command_line"):
+
+        command_line = alert.get(
+            "command_line"
         )
+
+        if isinstance(command_line, list):
+
+            command_line = " ".join(
+                str(part)
+                for part in command_line
+            )
+
+        print(
+            f"[+] Command Line   : "
+            f"{command_line}"
+        )
+
+    print(
+        "[!] ACTION         : "
+        "INVESTIGATION REQUIRED"
+    )
+
+    print("=" * 70)
+
+
+# ============================================================
+# PROCESS DETECTION
+# ============================================================
+
+def analyze_process(process):
+    """
+    Run all process-related detection rules.
+    """
+
+    # --------------------------------------------------------
+    # DET-001
+    # Suspicious PowerShell flags
+    # --------------------------------------------------------
+
+    alert = detect_suspicious_process(
+        process
+    )
+
+    if alert:
+
+        display_detection(
+            alert
+        )
+
+        save_detection_event(
+            alert
+        )
+
+    # --------------------------------------------------------
+    # DET-003
+    # Suspicious PowerShell command content
+    # --------------------------------------------------------
+
+    alert = detect_suspicious_powershell_content(
+        process
+    )
+
+    if alert:
+
+        display_detection(
+            alert
+        )
+
+        save_detection_event(
+            alert
+        )
+
+    # --------------------------------------------------------
+    # PROC-001
+    # Suspicious system process location
+    # --------------------------------------------------------
+
+    alert = detect_suspicious_process_location(
+        process
+    )
+
+    if alert:
+
+        display_detection(
+            alert
+        )
+
+        save_detection_event(
+            alert
+        )
+
+
+# ============================================================
+# FILE DETECTION
+# ============================================================
+
+def analyze_file_event(event):
+    """
+    Run file-related detection rules.
+    """
+
+    alert = detect_suspicious_file(
+        event
+    )
+
+    if alert:
+
+        display_detection(
+            alert
+        )
+
+        save_detection_event(
+            alert
+        )
+
+
+# ============================================================
+# NETWORK DETECTION
+# ============================================================
+
+def analyze_network_event(event):
+    """
+    Run network-related detection rules.
+    """
+
+    alert = detect_suspicious_network(
+        event
+    )
+
+    if alert:
+
+        display_detection(
+            alert
+        )
+
+        save_detection_event(
+            alert
+        )
+
+
+# ============================================================
+# FILE INTEGRITY
+# ============================================================
+
+def create_integrity_event(
+    event
+):
+    """
+    Save a file integrity event.
+    """
+
+    save_telemetry_event(
+        event_type=event.get(
+            "event_type"
+        ),
+        source="file_integrity",
+        details={
+            "file_name": event.get(
+                "file_name"
+            ),
+            "path": event.get(
+                "path"
+            ),
+            "old_hash": event.get(
+                "old_hash"
+            ),
+            "new_hash": event.get(
+                "new_hash"
+            )
+        }
     )
 
 
 # ============================================================
-# Main EDR
+# MAIN EDR LOOP
 # ============================================================
 
-def main():
+def run_edr():
+    """
+    Main Mini EDR monitoring loop.
+    """
 
-    print()
-    print("=" * 60)
-    print("                    MINI EDR")
-    print("=" * 60)
+    global previous_processes
 
     print(
-        "[EDR] Mini EDR started"
+        "============================================"
     )
 
     print(
-        "[EDR] Monitoring processes..."
+        "           MINI EDR STARTED"
     )
 
     print(
-        "[EDR] Monitoring files..."
+        "============================================"
     )
 
     print(
-        "[EDR] File Integrity Monitoring enabled"
+        f"[INFO] Project root: {PROJECT_ROOT}"
     )
 
     print(
-        "[EDR] Network monitoring enabled"
+        "[INFO] Monitoring processes..."
     )
 
     print(
-        "[EDR] MITRE ATT&CK mapping enabled"
+        "[INFO] Monitoring files..."
     )
 
-    print("=" * 60)
+    print(
+        "[INFO] Monitoring file integrity..."
+    )
+
+    print(
+        "[INFO] Monitoring network connections..."
+    )
+
+    print(
+        "[INFO] Detection Engine active..."
+    )
+
+    print(
+        "[INFO] Press CTRL+C to stop."
+    )
+
+    print(
+        "============================================"
+    )
 
 
     # ========================================================
-    # Initial Snapshots
+    # INITIAL PROCESS SNAPSHOT
     # ========================================================
 
-    previous_processes = (
-        get_processes()
-    )
+    current_processes = {}
 
-    previous_files = (
-        get_files()
-    )
-
-    baseline_hashes = (
-        get_file_hashes()
-    )
-
-    previous_connections = (
-        get_network_connections()
-    )
-
-    previous_connection_fingerprints = set()
-
-    for connection in previous_connections:
+    for process in get_processes():
 
         fingerprint = (
-            get_connection_fingerprint(
-                connection
+            get_process_fingerprint(
+                psutil.Process(
+                    process["pid"]
+                )
             )
+            if process.get("pid")
+            else None
         )
 
-        previous_connection_fingerprints.add(
-            fingerprint
-        )
+        if fingerprint:
 
+            current_processes[
+                fingerprint
+            ] = process
 
-    print()
-    print(
-        f"[FIM] Baseline created for "
-        f"{len(baseline_hashes)} file(s)."
-    )
+    previous_processes = current_processes
 
 
     # ========================================================
-    # Monitoring Loop
+    # INITIAL FILE SNAPSHOT
+    # ========================================================
+
+    previous_files = get_files()
+
+
+    # ========================================================
+    # INITIAL FILE INTEGRITY SNAPSHOT
+    # ========================================================
+
+    baseline_hashes = get_file_hashes()
+
+
+    # ========================================================
+    # INITIAL NETWORK SNAPSHOT
+    # ========================================================
+
+    previous_network = {}
+
+    for connection in get_network_connections():
+
+        fingerprint = (
+            connection.get("pid"),
+            connection.get("local_ip"),
+            connection.get("local_port"),
+            connection.get("remote_ip"),
+            connection.get("remote_port"),
+            connection.get("status")
+        )
+
+        previous_network[
+            fingerprint
+        ] = connection
+
+
+    # ========================================================
+    # MONITORING LOOP
     # ========================================================
 
     try:
@@ -795,76 +840,73 @@ def main():
         while True:
 
             # ==================================================
-            # Process Monitoring
+            # PROCESS MONITORING
             # ==================================================
 
-            current_processes = (
-                get_processes()
-            )
+            current_processes = {}
 
-            new_pids = (
+            for process in get_processes():
+
+                pid = process.get(
+                    "pid"
+                )
+
+                if not pid:
+                    continue
+
+                try:
+
+                    psutil_process = psutil.Process(
+                        pid
+                    )
+
+                    fingerprint = get_process_fingerprint(
+                        psutil_process
+                    )
+
+                except (
+                    psutil.NoSuchProcess,
+                    psutil.AccessDenied,
+                    psutil.ZombieProcess
+                ):
+
+                    continue
+
+                if not fingerprint:
+                    continue
+
+                current_processes[
+                    fingerprint
+                ] = process
+
+            new_processes = (
                 set(current_processes)
                 - set(previous_processes)
             )
 
-            for pid in new_pids:
+            for fingerprint in new_processes:
 
-                process_event = (
-                    current_processes[pid]
+                process = current_processes[
+                    fingerprint
+                ]
+
+                display_process(
+                    process
                 )
 
-                display_process_event(
-                    process_event
+                save_telemetry_event(
+                    event_type="process_created",
+                    source="process_monitor",
+                    details=process
                 )
 
-                save_process_event(
-                    process_event
+                # ----------------------------------------------
+                # Run all process detections
+                # ----------------------------------------------
+
+                analyze_process(
+                    process
                 )
-
-
-                # ==============================================
-                # DET-001
-                # Suspicious PowerShell
-                # ==============================================
-
-                alert = (
-                    detect_suspicious_process(
-                        process_event
-                    )
-                )
-
-                if alert:
-
-                    display_alert(
-                        alert
-                    )
-
-                    save_detection_event(
-                        alert
-                    )
-
-
-                # ==============================================
-                # PROC-001
-                # Suspicious Process Location
-                # ==============================================
-
-                location_alert = (
-                    detect_suspicious_process_location(
-                        process_event
-                    )
-                )
-
-                if location_alert:
-
-                    display_alert(
-                        location_alert
-                    )
-
-                    save_detection_event(
-                        location_alert
-                    )
-
 
             previous_processes = (
                 current_processes
@@ -872,58 +914,40 @@ def main():
 
 
             # ==================================================
-            # File Monitoring
+            # FILE MONITORING
             # ==================================================
 
-            current_files = (
-                get_files()
-            )
+            current_files = get_files()
 
-            file_events = (
-                detect_file_changes(
-                    previous_files,
-                    current_files
-                )
+            file_events = detect_file_changes(
+                previous_files,
+                current_files
             )
 
             for event in file_events:
-
-                event["timestamp"] = (
-                    datetime.now().strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    )
-                )
 
                 display_file_event(
                     event
                 )
 
-                save_file_event(
+                save_telemetry_event(
+                    event_type=event.get(
+                        "event_type"
+                    ),
+                    source="file_monitor",
+                    details={
+                        "file_name": event.get(
+                            "file_name"
+                        ),
+                        "path": event.get(
+                            "path"
+                        )
+                    }
+                )
+
+                analyze_file_event(
                     event
                 )
-
-
-                # ==============================================
-                # DET-002
-                # Suspicious File
-                # ==============================================
-
-                alert = (
-                    detect_suspicious_file(
-                        event
-                    )
-                )
-
-                if alert:
-
-                    display_alert(
-                        alert
-                    )
-
-                    save_detection_event(
-                        alert
-                    )
-
 
             previous_files = (
                 current_files
@@ -931,12 +955,10 @@ def main():
 
 
             # ==================================================
-            # File Integrity Monitoring
+            # FILE INTEGRITY MONITORING
             # ==================================================
 
-            current_hashes = (
-                get_file_hashes()
-            )
+            current_hashes = get_file_hashes()
 
             integrity_events = (
                 detect_integrity_changes(
@@ -947,132 +969,109 @@ def main():
 
             for event in integrity_events:
 
-                event["timestamp"] = (
-                    datetime.now().strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    )
+                print(
+                    "\n" + "=" * 70
                 )
 
-                display_fim_event(
+                print(
+                    "                MINI EDR - INTEGRITY EVENT"
+                )
+
+                print(
+                    "=" * 70
+                )
+
+                print(
+                    f"[+] Event Type     : "
+                    f"{event.get('event_type')}"
+                )
+
+                print(
+                    f"[+] File Name      : "
+                    f"{event.get('file_name')}"
+                )
+
+                print(
+                    f"[+] Path           : "
+                    f"{event.get('path')}"
+                )
+
+                print(
+                    f"[+] Old SHA-256    : "
+                    f"{event.get('old_hash')}"
+                )
+
+                print(
+                    f"[+] New SHA-256    : "
+                    f"{event.get('new_hash')}"
+                )
+
+                print(
+                    "-" * 70
+                )
+
+                create_integrity_event(
                     event
                 )
 
-                save_fim_event(
-                    event
-                )
-
-
-            # Update FIM baseline
             baseline_hashes = (
                 current_hashes
             )
 
 
             # ==================================================
-            # Network Monitoring
+            # NETWORK MONITORING
             # ==================================================
 
-            current_connections = (
-                get_network_connections()
-            )
+            current_network = {}
 
-            current_connection_fingerprints = set()
-
-
-            for connection in current_connections:
+            for connection in get_network_connections():
 
                 fingerprint = (
-                    get_connection_fingerprint(
-                        connection
-                    )
+                    connection.get("pid"),
+                    connection.get("local_ip"),
+                    connection.get("local_port"),
+                    connection.get("remote_ip"),
+                    connection.get("remote_port"),
+                    connection.get("status")
                 )
 
-                current_connection_fingerprints.add(
+                current_network[
                     fingerprint
-                )
+                ] = connection
 
+            new_connections = (
+                set(current_network)
+                - set(previous_network)
+            )
 
-                # Only process genuinely new connections
-                if (
+            for fingerprint in new_connections:
+
+                connection = current_network[
                     fingerprint
-                    in previous_connection_fingerprints
-                ):
-                    continue
-
-
-                network_event = {
-                    "pid": connection.get(
-                        "pid"
-                    ),
-                    "process": connection.get(
-                        "process",
-                        "Unknown"
-                    ),
-                    "local_ip": connection.get(
-                        "local_ip"
-                    ),
-                    "local_port": connection.get(
-                        "local_port"
-                    ),
-                    "remote_ip": connection.get(
-                        "remote_ip"
-                    ),
-                    "remote_port": connection.get(
-                        "remote_port"
-                    ),
-                    "status": connection.get(
-                        "status"
-                    ),
-                    "timestamp": (
-                        datetime.now().strftime(
-                            "%Y-%m-%d %H:%M:%S"
-                        )
-                    )
-                }
-
+                ]
 
                 display_network_event(
-                    network_event
+                    connection
                 )
 
-                save_network_event(
-                    network_event
+                save_telemetry_event(
+                    event_type="network_connection",
+                    source="network_monitor",
+                    details=connection
                 )
 
-
-                # ==============================================
-                # NET-001
-                # Suspicious Network Connection
-                # ==============================================
-
-                alert = (
-                    detect_suspicious_network(
-                        network_event
-                    )
+                analyze_network_event(
+                    connection
                 )
 
-                if alert:
-
-                    alert["timestamp"] = (
-                        network_event["timestamp"]
-                    )
-
-                    display_alert(
-                        alert
-                    )
-
-                    save_detection_event(
-                        alert
-                    )
-
-
-            previous_connection_fingerprints = (
-                current_connection_fingerprints
+            previous_network = (
+                current_network
             )
 
 
             # ==================================================
-            # Wait Before Next Scan
+            # LOOP DELAY
             # ==================================================
 
             time.sleep(2)
@@ -1080,19 +1079,15 @@ def main():
 
     except KeyboardInterrupt:
 
-        print()
         print(
-            "[EDR] Monitoring stopped."
-        )
-
-        print(
-            "[EDR] Mini EDR shutdown complete."
+            "\n[INFO] Mini EDR stopped."
         )
 
 
 # ============================================================
-# Entry Point
+# ENTRY POINT
 # ============================================================
 
 if __name__ == "__main__":
-    main()
+
+    run_edr()

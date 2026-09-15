@@ -2,7 +2,8 @@
 
 
 # ============================================================
-# Suspicious PowerShell Indicators
+# DET-001
+# Suspicious PowerShell Flags
 # ============================================================
 
 SUSPICIOUS_POWERSHELL_FLAGS = [
@@ -23,7 +24,8 @@ SUSPICIOUS_POWERSHELL_COMBINATIONS = [
 
 
 # ============================================================
-# Suspicious File Extensions
+# DET-002
+# Suspicious File Creation
 # ============================================================
 
 SUSPICIOUS_FILE_EXTENSIONS = [
@@ -39,29 +41,61 @@ SUSPICIOUS_FILE_EXTENSIONS = [
 
 
 # ============================================================
-# Process Detection
+# DET-003
+# Suspicious PowerShell Command Content
+# ============================================================
+
+SUSPICIOUS_POWERSHELL_COMMANDS = [
+    "invoke-expression",
+    "iex",
+    "invoke-webrequest",
+    "downloadstring",
+    "downloadfile",
+    "net.webclient",
+    "frombase64string",
+    "start-bitstransfer"
+]
+
+
+# ============================================================
+# NET-001
+# Suspicious Network Connection
+# ============================================================
+
+SUSPICIOUS_NETWORK_PORTS = {
+    21: "FTP",
+    23: "Telnet",
+    445: "SMB",
+    3389: "RDP",
+    4444: "Common test/lab port",
+    5555: "Common debug/test port"
+}
+
+
+# ============================================================
+# DET-001
 # ============================================================
 
 def detect_suspicious_process(event):
-    """Detect suspicious PowerShell command-line activity."""
+    """
+    Detect suspicious PowerShell command-line activity.
+
+    DET-001 focuses on suspicious PowerShell flags/options.
+    """
 
     process_name = event.get(
         "name",
         ""
     ).lower()
 
-    # Only inspect PowerShell
     if process_name != "powershell.exe":
         return None
 
-    command_line = event.get(
-        "cmdline"
-    )
+    command_line = event.get("cmdline")
 
     if not command_line:
         return None
 
-    # Convert command line into a list
     if isinstance(command_line, list):
 
         command_parts = [
@@ -79,11 +113,7 @@ def detect_suspicious_process(event):
 
     suspicious_flags = []
 
-
-    # ========================================================
-    # Check Individual Indicators
-    # ========================================================
-
+    # Check individual flags
     for flag in SUSPICIOUS_POWERSHELL_FLAGS:
 
         if flag in command_parts:
@@ -92,16 +122,10 @@ def detect_suspicious_process(event):
                 flag
             )
 
-
-    # ========================================================
-    # Check Suspicious Combinations
-    # ========================================================
-
+    # Check suspicious flag combinations
     for combination in SUSPICIOUS_POWERSHELL_COMBINATIONS:
 
-        combination_length = len(
-            combination
-        )
+        combination_length = len(combination)
 
         for index in range(
             len(command_parts)
@@ -111,7 +135,8 @@ def detect_suspicious_process(event):
 
             if (
                 command_parts[
-                    index:index + combination_length
+                    index:
+                    index + combination_length
                 ]
                 == combination
             ):
@@ -122,29 +147,16 @@ def detect_suspicious_process(event):
 
                 break
 
-
-    # ========================================================
-    # Generate Detection
-    # ========================================================
-
     if suspicious_flags:
 
         return {
             "rule": "DET-001",
             "severity": "HIGH",
-            "detection": (
-                "Suspicious PowerShell "
-                "command-line activity"
-            ),
-            "pid": event.get(
-                "pid"
-            ),
-            "process": event.get(
-                "name"
-            ),
-            "timestamp": event.get(
-                "timestamp"
-            ),
+            "detection":
+                "Suspicious PowerShell command-line activity",
+            "pid": event.get("pid"),
+            "process": event.get("name"),
+            "timestamp": event.get("timestamp"),
             "indicators": suspicious_flags
         }
 
@@ -152,18 +164,19 @@ def detect_suspicious_process(event):
 
 
 # ============================================================
-# File Detection
+# DET-002
 # ============================================================
 
 def detect_suspicious_file(event):
-    """Detect suspicious executable or script file creation."""
+    """
+    Detect suspicious executable or script file creation.
+    """
 
     event_type = event.get(
         "event_type",
         ""
     )
 
-    # Only inspect newly created files
     if event_type != "file_created":
         return None
 
@@ -174,26 +187,16 @@ def detect_suspicious_file(event):
 
     for extension in SUSPICIOUS_FILE_EXTENSIONS:
 
-        if file_name.endswith(
-            extension
-        ):
+        if file_name.endswith(extension):
 
             return {
                 "rule": "DET-002",
                 "severity": "MEDIUM",
-                "detection": (
-                    "Executable or script "
-                    "file created"
-                ),
-                "file": event.get(
-                    "file_name"
-                ),
-                "path": event.get(
-                    "path"
-                ),
-                "timestamp": event.get(
-                    "timestamp"
-                ),
+                "detection":
+                    "Executable or script file created",
+                "file": event.get("file_name"),
+                "path": event.get("path"),
+                "timestamp": event.get("timestamp"),
                 "indicator": extension
             }
 
@@ -201,11 +204,79 @@ def detect_suspicious_file(event):
 
 
 # ============================================================
-# Network Detection
+# DET-003
+# ============================================================
+
+def detect_suspicious_powershell_content(event):
+    """
+    Detect suspicious PowerShell command content.
+
+    This rule looks for command patterns that may require
+    investigation. It does not determine whether the command
+    is malicious by itself.
+    """
+
+    process_name = event.get(
+        "name",
+        ""
+    ).lower()
+
+    if process_name != "powershell.exe":
+        return None
+
+    command_line = event.get("cmdline")
+
+    if not command_line:
+        return None
+
+    if isinstance(command_line, list):
+
+        command_text = " ".join(
+            str(part)
+            for part in command_line
+        ).lower()
+
+    else:
+
+        command_text = str(
+            command_line
+        ).lower()
+
+    matched_indicators = []
+
+    for indicator in SUSPICIOUS_POWERSHELL_COMMANDS:
+
+        if indicator in command_text:
+
+            matched_indicators.append(
+                indicator
+            )
+
+    if not matched_indicators:
+        return None
+
+    return {
+        "rule": "DET-003",
+        "severity": "HIGH",
+        "detection":
+            "Suspicious PowerShell command content",
+        "pid": event.get("pid"),
+        "process": event.get("name"),
+        "timestamp": event.get("timestamp"),
+        "indicators": matched_indicators,
+        "command_line": event.get("cmdline")
+    }
+
+
+# ============================================================
+# NET-001
 # ============================================================
 
 def detect_suspicious_network(event):
-    """Detect network connections that use ports requiring investigation."""
+    """
+    Detect network connections that use ports
+    requiring investigation.
+    """
 
     remote_ip = event.get(
         "remote_ip"
@@ -220,59 +291,42 @@ def detect_suspicious_network(event):
         "Unknown"
     )
 
-    # Ignore connections without a remote endpoint
     if not remote_ip:
         return None
 
-    # Ignore events where the remote port
-    # is unavailable
     if remote_port is None:
         return None
 
-    # Ports that may deserve investigation
-    suspicious_ports = {
-        21: "FTP",
-        23: "Telnet",
-        445: "SMB",
-        3389: "RDP",
-        4444: "Common test/lab port",
-        5555: "Common debug/test port"
-    }
-
-    # Check whether the remote port
-    # is in our investigation list
-    if remote_port in suspicious_ports:
+    if remote_port in SUSPICIOUS_NETWORK_PORTS:
 
         return {
             "rule": "NET-001",
             "severity": "MEDIUM",
-            "detection": (
-                "Network connection to a "
-                "port requiring investigation"
-            ),
+            "detection":
+                "Network connection to a port requiring investigation",
             "process": process_name,
-            "pid": event.get(
-                "pid"
-            ),
+            "pid": event.get("pid"),
             "remote_ip": remote_ip,
             "remote_port": remote_port,
-            "port_service": suspicious_ports[
-                remote_port
-            ],
-            "status": event.get(
-                "status"
-            )
+            "port_service":
+                SUSPICIOUS_NETWORK_PORTS[
+                    remote_port
+                ],
+            "status": event.get("status")
         }
 
     return None
 
 
 # ============================================================
-# Process Location Detection
+# PROC-001
 # ============================================================
 
 def detect_suspicious_process_location(event):
-    """Detect Windows system processes running from unusual locations."""
+    """
+    Detect Windows system processes running
+    from unusual locations.
+    """
 
     process_name = event.get(
         "name",
@@ -283,17 +337,10 @@ def detect_suspicious_process_location(event):
         "exe"
     )
 
-    # Cannot analyze a process without
-    # an executable path
     if not executable:
         return None
 
     executable = executable.lower()
-
-
-    # ========================================================
-    # Windows System Processes
-    # ========================================================
 
     system_processes = {
         "svchost.exe",
@@ -303,52 +350,26 @@ def detect_suspicious_process_location(event):
         "explorer.exe"
     }
 
-    # Only inspect known Windows system processes
     if process_name not in system_processes:
         return None
-
-
-    # ========================================================
-    # Expected Windows Locations
-    # ========================================================
 
     expected_locations = [
         r"\windows\system32",
         r"\windows\syswow64"
     ]
 
-
-    # ========================================================
-    # Check Executable Location
-    # ========================================================
-
     for location in expected_locations:
 
         if location in executable:
             return None
 
-
-    # ========================================================
-    # Generate Detection
-    # ========================================================
-
     return {
         "rule": "PROC-001",
         "severity": "HIGH",
-        "detection": (
-            "Windows system process "
-            "running from an unusual location"
-        ),
-        "pid": event.get(
-            "pid"
-        ),
-        "process": event.get(
-            "name"
-        ),
-        "exe": event.get(
-            "exe"
-        ),
-        "timestamp": event.get(
-            "timestamp"
-        )
+        "detection":
+            "Windows system process running from an unusual location",
+        "pid": event.get("pid"),
+        "process": event.get("name"),
+        "exe": event.get("exe"),
+        "timestamp": event.get("timestamp")
     }

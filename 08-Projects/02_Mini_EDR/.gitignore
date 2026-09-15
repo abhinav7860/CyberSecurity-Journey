@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+.venv/
+
+# EDR generated logs
+logs/events.json
+logs/incidents.json
+
+# Node
+dashboard/node_modules/
+dashboard/dist/
+
+# Environment files
+.env
+.env.*
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
