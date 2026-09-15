@@ -961,8 +961,41 @@ body {
 .event-count {
   color: #38bdf8;
 
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 600;
+}
+
+.event-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.view-all-events-button {
+  padding: 6px 10px;
+
+  background: #0d131a;
+  color: #38bdf8;
+
+  border: 1px solid #263241;
+  border-radius: 4px;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.view-all-events-button:hover {
+  color: #ffffff;
+  background: #0369a1;
+  border-color: #0ea5e9;
 }
 
 
@@ -1093,4 +1126,291 @@ body {
     align-items: flex-start;
   }
 
+}
+
+/* =========================
+   UI REFINEMENT
+   Larger typography, cleaner
+   event details, full lists
+   ========================= */
+
+.dashboard-header h1 {
+  font-size: 30px;
+}
+
+.dashboard-header p {
+  font-size: 14px;
+}
+
+.api-status {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+}
+
+.stat-label {
+  font-size: 11px;
+}
+
+.stat-value {
+  font-size: 28px;
+}
+
+.panel-header {
+  min-height: 48px;
+  padding: 12px 15px;
+}
+
+.panel-header h2 {
+  font-size: 15px;
+}
+
+.panel-header span {
+  font-size: 10px;
+}
+
+.chart-container {
+  padding: 12px;
+}
+
+.recharts-text {
+  font-size: 11px;
+}
+
+.recharts-layer.recharts-cartesian-axis-tick text {
+  font-size: 11px;
+}
+
+.recharts-tooltip-label,
+.recharts-tooltip-item,
+.recharts-legend-item-text {
+  font-size: 12px !important;
+}
+
+.alert-item,
+.incident-item {
+  padding: 13px 11px;
+}
+
+.alert-main {
+  gap: 7px;
+}
+
+.alert-main strong {
+  font-size: 13px;
+}
+
+.rule-badge {
+  font-size: 10px;
+}
+
+.alert-meta,
+.incident-meta {
+  font-size: 10px;
+}
+
+.severity-badge {
+  padding: 4px 7px;
+  font-size: 10px;
+}
+
+.incident-id {
+  font-size: 10px;
+}
+
+.incident-main strong {
+  font-size: 13px;
+}
+
+.filter-row {
+  gap: 7px;
+  padding: 12px 14px 8px;
+}
+
+.filter-button {
+  padding: 7px 11px;
+  font-size: 11px;
+}
+
+.search-row {
+  padding: 5px 14px 12px;
+}
+
+.search-input {
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+.event-list {
+  padding: 0 14px 14px;
+}
+
+.event-item {
+  margin-bottom: 7px;
+}
+
+.event-summary {
+  min-height: 48px;
+  padding: 11px 13px;
+}
+
+.event-left {
+  gap: 11px;
+}
+
+.event-left strong {
+  font-size: 12px;
+}
+
+.event-type {
+  font-size: 10px;
+}
+
+.event-right {
+  gap: 11px;
+}
+
+.event-time {
+  font-size: 10px;
+}
+
+.expand-icon {
+  font-size: 10px;
+}
+
+.event-details {
+  padding: 14px;
+}
+
+.detail-grid {
+  gap: 8px 12px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 125px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 10px 11px;
+  background: #0d131a;
+  border: 1px solid #1f2937;
+  border-radius: 4px;
+}
+
+.detail-row > span {
+  font-size: 10px;
+}
+
+.detail-row > strong {
+  font-size: 12px;
+}
+
+.detail-row code {
+  font-size: 10px;
+}
+
+.raw-details {
+  margin-top: 14px;
+}
+
+.raw-details-title {
+  margin-bottom: 7px;
+  font-size: 10px;
+}
+
+.raw-details pre {
+  padding: 11px;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.mitre-item {
+  padding: 12px 10px;
+}
+
+.mitre-id {
+  font-size: 10px;
+}
+
+.mitre-item strong {
+  font-size: 13px;
+}
+
+.mitre-tactic {
+  font-size: 10px;
+}
+
+.system-status-list {
+  padding: 7px 14px;
+}
+
+.system-status-item {
+  padding: 10px 2px;
+}
+
+.system-status-item span {
+  font-size: 11px;
+}
+
+.system-status-item strong {
+  font-size: 10px;
+}
+
+.empty-state {
+  padding: 30px 12px;
+  font-size: 12px;
+}
+
+.event-count {
+  font-size: 11px;
+}
+
+@media (max-width: 900px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-header h1 {
+    font-size: 26px;
+  }
+
+  .dashboard-header p {
+    font-size: 12px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
+
+  .panel-header h2 {
+    font-size: 14px;
+  }
+
+  .event-left strong {
+    font-size: 11px;
+  }
+
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .detail-row > span {
+    font-size: 9px;
+  }
+
+  .detail-row > strong,
+  .detail-row code {
+    font-size: 11px;
+  }
 }

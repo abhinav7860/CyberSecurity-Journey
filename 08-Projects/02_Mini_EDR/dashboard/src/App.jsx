@@ -225,6 +225,7 @@ function App() {
   const [apiOnline, setApiOnline] = useState(false);
 
   const [expandedEventId, setExpandedEventId] = useState(null);
+  const [showAllEvents, setShowAllEvents] = useState(false);
 
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -395,10 +396,12 @@ function App() {
   // =========================
 
   const recentEvents = useMemo(() => {
-    return [...filteredEvents]
-      .reverse()
-      .slice(0, 8);
-  }, [filteredEvents]);
+    const orderedEvents = [...filteredEvents].reverse();
+
+    return showAllEvents
+      ? orderedEvents
+      : orderedEvents.slice(0, 10);
+  }, [filteredEvents, showAllEvents]);
 
 
   // =========================
@@ -1062,7 +1065,6 @@ function App() {
                   event.event_category ===
                   "detection"
               )
-              .slice(-5)
               .reverse()
               .map((alert) => (
 
@@ -1149,7 +1151,7 @@ function App() {
           <div className="incident-list">
 
             {incidents
-              .slice(-5)
+              .slice()
               .reverse()
               .map((incident) => (
 
@@ -1225,8 +1227,19 @@ function App() {
 
             </div>
 
-            <div className="event-count">
-              {filteredEvents.length} Events
+            <div className="event-header-actions">
+              <div className="event-count">
+                {filteredEvents.length} Events
+              </div>
+
+              {filteredEvents.length > 10 && (
+                <button
+                  className="view-all-events-button"
+                  onClick={() => setShowAllEvents((current) => !current)}
+                >
+                  {showAllEvents ? "Show Recent" : "View All Events"}
+                </button>
+              )}
             </div>
 
           </div>
@@ -1584,7 +1597,7 @@ function App() {
                 (event) =>
                   event.details?.mitre
               )
-              .slice(-5)
+              .slice()
               .reverse()
               .map((event) => {
 
