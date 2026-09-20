@@ -1995,29 +1995,3 @@ That is the main SOC skill I took away from this room.
 
 ------------------------------------------------------------------------
 
-# 25. Medium Walkthroughs Used for Cross-Checking
-
-I used these Medium walkthroughs to cross-check the practical Splunk
-investigation flow and answers:
-
-1.  **Birdv --- TryHackMe Log Analysis with SIEM Walkthrough**\
-    https://medium.com/@birdv/tryhackme-log-analysis-with-siem-walkthrough-cf5515ab41d7
-
-2.  **AbbasMurshid --- TryHackMe: Log Analysis with SIEM**\
-    https://medium.com/@abbasmurshidm/tryhackme-log-analysis-with-siem-db98b0c4137a
-
-3.  **Corliss --- TryHackMe Log Analysis with SIEM**\
-    https://medium.com/@corlissS/tryhackme-log-analysis-with-siem-thm-1811810fe7eb
-
-4.  **LawVye --- Log Analysis with SIEM THM Writeup**\
-    https://medium.com/@lawvye/log-analysis-with-siem-thm-tryhackme-writeup-924263adfddc
-
-5.  **Sle3pyHead --- Log Analysis with SIEM Walkthrough Notes**\
-    https://medium.com/@Sle3pyHead/log-analysis-with-siem-walkthrough-notes-tryhackme-60c63f3cf588
-
-6.  **Joshua B. Pointer --- Log Analysis with SIEM**\
-    https://medium.com/@joshuabpointer1/log-analysis-with-siem-259e691e6daa
-
-I used the walkthroughs as cross-checks for the practical steps. The
-room content and the answers I obtained from the lab remain the primary
-basis of my notes.
