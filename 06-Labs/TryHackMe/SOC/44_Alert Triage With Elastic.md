@@ -1388,12 +1388,3 @@ discrepancy rather than silently changing it.
 
 ------------------------------------------------------------------------
 
-# Sanitization Note
-
-This README is intended as a learning document and portfolio-style
-record.
-
-The lab-specific infrastructure details and temporary environment
-identifiers should not be treated as real production indicators. The
-investigation logic, KQL queries, Windows event IDs, process-analysis
-techniques, and attack-chain reasoning are the important reusable parts.
