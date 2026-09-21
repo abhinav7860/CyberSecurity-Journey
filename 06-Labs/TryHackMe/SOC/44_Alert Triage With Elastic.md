@@ -1362,29 +1362,3 @@ the timeline, and escalate with evidence.**
 
 ------------------------------------------------------------------------
 
-# Sources / Walkthrough References
-
-I used the TryHackMe room material as the primary source for the
-commands and investigation flow. I also checked multiple walkthroughs to
-cross-check the room answers and investigation approach.
-
-- TryHackMe — Alert Triage With Elastic:
-  https://tryhackme.com/room/alerttriagewithelastic
-- Medium — Lintu Oommen walkthrough:
-  https://medium.com/%40oomensusan/alert-triage-with-elastic-tryhackme-walkthrough-1ce82775c91d
-- Medium — Darshan walkthrough:
-  https://medium.com/%40darshan331740_89257/alert-triage-with-elastic-tryhackme-write-up-ec46a99af738
-- Medium — Axoloth / T3CH walkthrough:
-  https://medium.com/h7w/tryhackme-alert-triage-with-elastic-writeup-761820485779
-- Medium — AbbasMurshid walkthrough:
-  https://medium.com/%40abbasmurshidm/tryhackme-alert-triage-with-elastic-6777141f16eb
-- Medium — Shyroot walkthrough:
-  https://medium.com/%40shyroot1/alert-triage-with-elastic-walkthrough-tryhackme-f8daf3a7b8d3
-
-The Medium walkthroughs confirm the main answer set and the overall
-investigation flow. Where my supplied notes and an external walkthrough
-differed on the Remote Desktop Users command, I explicitly preserved the
-discrepancy rather than silently changing it.
-
-------------------------------------------------------------------------
-
