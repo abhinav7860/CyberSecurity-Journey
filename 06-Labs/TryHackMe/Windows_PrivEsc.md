@@ -652,31 +652,4 @@ as detection and hardening opportunities.
 
 ------------------------------------------------------------------------
 
-# Conclusion
-
-Completing this room gave me a much better understanding of how Windows
-privilege escalation works in practice.
-
-The biggest lesson I took away is that privilege escalation often comes
-from **small security weaknesses combining together**:
-
-``` text
-Low-privileged user
-        ↓
-Weak permission / misconfiguration
-        ↓
-Modify privileged component
-        ↓
-Privileged process executes attacker-controlled code
-        ↓
-Administrator / SYSTEM
-```
-
-Instead of simply memorizing exploitation commands, I now have a better
-process for investigating a Windows system and asking **why a particular
-configuration can lead to privilege escalation**.
-
-**Room: Windows PrivEsc --- Completed**
-
-------------------------------------------------------------------------
 
