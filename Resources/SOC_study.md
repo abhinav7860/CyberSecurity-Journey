@@ -260,4 +260,12 @@ How did the logs help you reconstruct the attacker's actions and create a timeli
 If you encountered a similar investigation in a real SOC and didn't know which command or log to look at, what would be your investigation approach?
 Which part of Task 5 or Task 6 was difficult for you, and what did you understand after getting help?
 
-
+Linux Threat Detection 3
+What was the main attack activity investigated in Threat Detection 3?
+What evidence/logs helped you identify the attacker's actions?
+What persistence or access-maintaining technique did you learn to detect?
+What commands or Linux artifacts were useful during the investigation?
+How did you determine which activity was suspicious rather than normal administrative activity?
+How would you build a timeline of the attack using the available Linux evidence?
+If you saw similar activity in a real SOC, what would you investigate first?
+What was the most confusing or difficult part of Threat Detection 3?
