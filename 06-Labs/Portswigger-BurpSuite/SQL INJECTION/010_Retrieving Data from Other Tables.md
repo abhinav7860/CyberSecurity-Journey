@@ -5,7 +5,7 @@
 **Date:** 25 September 2026
 **Platform:** PortSwigger Web Security Academy
 **Category:** SQL Injection
-**Difficulty:** Practitioner
+
 
 ---
 
