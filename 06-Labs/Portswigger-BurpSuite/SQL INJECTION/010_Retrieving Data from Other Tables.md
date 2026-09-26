@@ -6,7 +6,6 @@
 **Platform:** PortSwigger Web Security Academy
 **Category:** SQL Injection
 
-
 ---
 
 ## 1. Lab Overview
