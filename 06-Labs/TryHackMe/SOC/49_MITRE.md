@@ -1,6 +1,5 @@
 # MITRE Frameworks and ATT&CK — Detailed Study Notes
 
-**Learning Track:** SOC / Blue Team
 **Platform:** TryHackMe
 **Topic:** MITRE ATT&CK, CAR, D3FEND and related MITRE resources
 **Date:** 28 September 2026
