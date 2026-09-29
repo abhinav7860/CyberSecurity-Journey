@@ -1,5 +1,6 @@
 # Web Security Essentials
 
+**Date:** 28 September 2026
 > **Goal:** Understand how modern web applications work, why they are attractive targets for attackers, what components make up a web service, and how defenders protect those components.
 
 ---
