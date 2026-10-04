@@ -1059,3 +1059,45 @@ test.txt
 
 ---
 
+# 29. Key Takeaways
+
+> **A suspicious file is not just a filename.**
+
+The useful evidence can be found in:
+
+```text
+Hash
+Strings
+Imports
+URLs
+Domains
+Processes
+Command lines
+Network connections
+Files created
+```
+
+The most important SOC lesson from this lab is **correlation**.
+
+One event by itself may not tell the full story.
+
+But:
+
+```text
+Suspicious executable
+      +
+Suspicious URL
+      +
+PowerShell download
+      +
+Encoded command
+      +
+Execution
+      +
+File creation
+```
+
+can form a much clearer incident timeline.
+
+---
+
