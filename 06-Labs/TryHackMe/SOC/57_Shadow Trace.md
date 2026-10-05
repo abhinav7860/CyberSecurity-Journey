@@ -1089,15 +1089,4 @@ Suspicious URL
       +
 PowerShell download
       +
-Encoded command
-      +
-Execution
-      +
-File creation
-```
-
-can form a much clearer incident timeline.
-
----
-
 
