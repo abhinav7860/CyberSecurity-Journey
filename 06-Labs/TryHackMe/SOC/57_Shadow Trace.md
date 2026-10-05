@@ -1036,4 +1036,68 @@ THM{you_g0t_some_IOCs_friend}
 ```text
 WS2_32.dll
 ```
+## Task 3
+
+### Malicious URL from powershell.exe
+
+```text
+https://tryhatme.com/dev/main.exe
+```
+
+### Malicious URL from chrome.exe
+
+```text
+https://reallysecureupdate.tryhatme.com/update.exe
+```
+
+### File saved by chrome.exe
+
+```text
+test.txt
+```
+
+---
+
+# 29. Key Takeaways
+
+> **A suspicious file is not just a filename.**
+
+The useful evidence can be found in:
+
+```text
+Hash
+Strings
+Imports
+URLs
+Domains
+Processes
+Command lines
+Network connections
+Files created
+```
+
+The most important SOC lesson from this lab is **correlation**.
+
+One event by itself may not tell the full story.
+
+But:
+
+```text
+Suspicious executable
+      +
+Suspicious URL
+      +
+PowerShell download
+      +
+Encoded command
+      +
+Execution
+      +
+File creation
+```
+
+can form a much clearer incident timeline.
+
+---
+
 
