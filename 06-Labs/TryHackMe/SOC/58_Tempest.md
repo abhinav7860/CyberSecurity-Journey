@@ -1,5 +1,5 @@
 # TryHackMe Tempest — SOC Incident Investigation
-
+**Date:** 06 October 2026 
 ## Overview
 
 This document contains my complete investigation of the **TryHackMe Tempest** incident from Task 1 through Task 9.
