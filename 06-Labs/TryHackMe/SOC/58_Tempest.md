@@ -1212,12 +1212,3 @@ The most important lesson I took from this investigation is that successful SOC 
 
 ---
 
-# Conclusion
-
-This investigation gave me practical experience in SOC-style incident response and log analysis.
-
-I learned how to move from a suspicious document to endpoint execution, network communication, command and control, internal reconnaissance, credential discovery, remote access, privilege escalation, and persistence.
-
-More importantly, I learned to investigate using evidence rather than relying on assumptions. I repeatedly correlated process creation events with network traffic, DNS queries, command lines, hashes, and Windows Security Events.
-
-The Tempest investigation therefore helped me understand how a SOC analyst can reconstruct an entire intrusion from seemingly unrelated logs and turn those individual artefacts into a clear incident timeline.
