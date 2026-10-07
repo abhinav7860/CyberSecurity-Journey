@@ -2133,11 +2133,3 @@ investigations.
 
 ------------------------------------------------------------------------
 
-## Reference
-
-Official TryHackMe room:
-
-https://tryhackme.com/room/boogeyman2
-
-This document is my own investigation and learning record based on the
-authorised TryHackMe lab work performed on 
