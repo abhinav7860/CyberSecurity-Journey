@@ -6,14 +6,7 @@
 correlation, persistence, UAC bypass, credential dumping, lateral
 movement, DCSync, and ransomware execution\
 **Status:** Investigation completed for the questions worked through in
-this session
-
-> **Sanitization notice:** This document is intentionally sanitized for
-> safe GitHub/recruiter sharing. Real credentials, NTLM hashes, external
-> infrastructure/IP addresses, and direct malicious download URLs
-> discovered during the lab are redacted. The investigation methodology,
-> process names, commands, event types, reasoning, and artifact names
-> are preserved so I can reproduce the investigation later.
+this session.
 
 ------------------------------------------------------------------------
 
@@ -1435,30 +1428,3 @@ That is the mindset I want to carry forward into SOC investigations:
 
 ------------------------------------------------------------------------
 
-## Safe Sharing Note
-
-This version intentionally removes:
-
--   Real passwords
--   NTLM hashes
--   External attacker IP addresses
--   Direct malicious download URLs
--   Other reusable authentication material
-
-The sanitized version retains the **methodology, process names,
-investigation queries, event IDs, attack sequence, and defensive
-lessons** so it can be used as a learning record or recruiter-facing SOC
-project note.
-
-------------------------------------------------------------------------
-
-## Investigation Completion
-
-**Room:** Boogeyman 3\
-**Date documented:** 2026-10-07\
-**Platform:** Elastic / Kibana\
-**Primary telemetry:** Windows Event Logs / Sysmon-style process
-telemetry\
-**Investigation focus:** Endpoint detection, process-tree analysis,
-persistence, UAC bypass, credential access, lateral movement, Active
-Directory attack techniques, and ransomware activity
