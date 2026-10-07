@@ -8,13 +8,6 @@
 Analysis\
 **Purpose:** Personal learning documentation and future revision
 
-> **Sanitization note:** This README intentionally redacts passwords,
-> account/card numbers, personal email addresses, exact attacker
-> infrastructure, and other sensitive indicators. Placeholders such as
-> `<ATTACKER_IP>`, `<FILE_HOST>`, and `<C2_HOST>` are used where
-> appropriate. The investigation methodology and commands are preserved
-> so I can reproduce the analysis later.
-
 ------------------------------------------------------------------------
 
 # 1. Investigation Overview
@@ -1177,21 +1170,4 @@ Sensitive values intentionally omitted from this documentation:
 [REDACTED] CVV
 ```
 
-------------------------------------------------------------------------
 
-# 33. Key Takeaway
-
-The biggest lesson from this room is:
-
-> **Don't solve an investigation by guessing the answer. Follow the
-> evidence through the attack chain.**
-
-Every important conclusion came from connecting evidence from one stage
-to the next:
-
-``` text
-Email → Execution → Logs → Network → Exfiltration → Recovery
-```
-
-That is the investigation mindset I want to carry into future SOC
-investigations.
