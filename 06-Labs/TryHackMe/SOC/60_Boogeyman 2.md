@@ -8,14 +8,7 @@ Malicious Binary → C2 → Persistence\
 **Primary Tools:** `olevba`, Volatility 3, Linux command-line utilities
 such as `grep` and `strings`
 
-> **Sanitization note:** This document is intended as a personal
-> learning/revision record. Victim email addresses and lab host IP
-> addresses have been removed or generalized. Malicious infrastructure
-> indicators are **defanged** where appropriate. File names, commands,
-> process IDs, paths, and investigation methodology are retained because
-> they are useful for understanding and reproducing the forensic
-> workflow inside the authorised TryHackMe lab.
-
+> 
 ------------------------------------------------------------------------
 
 ## 1. What this room was about
@@ -2095,41 +2088,6 @@ For personal revision after completing the room:
 
   Registry payload location           `HKCU:\Software\Microsoft\Windows\CurrentVersion\debug`
   -------------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
-# 41. Final takeaway
-
-The biggest thing I learned from this room is that **forensic
-investigation is about connecting evidence**.
-
-A single string can be misleading.
-
-A single process can look harmless.
-
-A single URL can belong to a different stage of the attack.
-
-But when I connect:
-
-``` text
-Email
-→ Attachment
-→ Macro
-→ Script
-→ Process
-→ Child Process
-→ Network Connection
-→ File Path
-→ Memory Strings
-→ Persistence
-```
-
-the complete attack story becomes visible.
-
-This is the methodology I want to carry into future SOC and DFIR
-investigations.
-
-**Do not just find an IOC. Find the story behind the IOC.**
 
 ------------------------------------------------------------------------
 
