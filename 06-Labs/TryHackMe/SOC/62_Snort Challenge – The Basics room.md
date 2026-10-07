@@ -1860,12 +1860,3 @@ Always correlate the exact packet before decoding a payload.
 ```
 
 ------------------------------------------------------------------------
-
-## Reference
-
-The official TryHackMe room describes **Snort Challenge -- The Basics**
-as a practical challenge for investigating traffic data and using Snort
-rules against captured network traffic. urlTryHackMe -- Snort
-Challenge: The Basicshttps://tryhackme.com/room/snortchallenges1
-
-**Document created:** 2026-10-07
