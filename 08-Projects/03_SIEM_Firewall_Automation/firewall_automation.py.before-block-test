@@ -1,0 +1,392 @@
+
+import csv
+import ipaddress
+import json
+import os
+import subprocess
+import tempfile
+import winreg
+from datetime import datetime, timezone
+
+import requests
+
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
+LOOKUP_FILE = (
+    r"C:\Program Files\Splunk\etc\apps\search"
+    r"\lookups\suspicious_firewall_iocs.csv"
+)
+
+LOG_FILE = (
+    r"C:\Program Files\Splunk\var\log\splunk"
+    r"\firewall_automation.log"
+)
+
+STATE_FILE = (
+    r"C:\Program Files\Splunk\var\log\splunk"
+    r"\firewall_automation_state.json"
+)
+
+ABUSEIPDB_URL = "https://api.abuseipdb.com/api/v2/check"
+ABUSE_SCORE_THRESHOLD = 50
+REQUEST_TIMEOUT = 15
+
+
+# ============================================================
+# LOGGING
+# ============================================================
+
+def log(message):
+    """Write a timestamped message to the automation log."""
+    timestamp = datetime.now().astimezone().isoformat(
+        timespec="seconds"
+    )
+
+    with open(LOG_FILE, "a", encoding="utf-8") as file:
+        file.write(f"{timestamp} | {message}\n")
+
+
+# ============================================================
+# API KEY
+# ============================================================
+
+def get_api_key():
+    """Read the machine-level AbuseIPDB key from the registry."""
+    registry_path = (
+        r"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+    )
+
+    with winreg.OpenKey(
+        winreg.HKEY_LOCAL_MACHINE, registry_path
+    ) as key:
+        api_key, _ = winreg.QueryValueEx(
+            key, "ABUSEIPDB_API_KEY"
+        )
+
+    if not api_key or not api_key.strip():
+        raise ValueError("ABUSEIPDB_API_KEY is empty")
+
+    return api_key.strip()
+
+
+# ============================================================
+# IP VALIDATION
+# ============================================================
+
+def validate_ip(value):
+    """Accept valid, globally routable IP addresses only."""
+    try:
+        address = ipaddress.ip_address(value.strip())
+    except (ValueError, AttributeError):
+        log(f"SAFETY: Invalid IP skipped: {value!r}")
+        return None
+
+    if not address.is_global:
+        log(f"SAFETY: Non-global IP skipped: {address}")
+        return None
+
+    return str(address)
+
+
+# ============================================================
+# PERSISTENT STATE / DEDUPLICATION
+# ============================================================
+
+def load_state():
+    """Load previously completed IOC decisions."""
+    if not os.path.exists(STATE_FILE):
+        return {}
+
+    with open(STATE_FILE, "r", encoding="utf-8") as file:
+        state = json.load(file)
+
+    if not isinstance(state, dict):
+        raise ValueError("State file must contain a JSON object")
+
+    return state
+
+
+def save_state(state):
+    """Atomically save the state file."""
+    state_dir = os.path.dirname(STATE_FILE)
+
+    fd, temporary_path = tempfile.mkstemp(
+        prefix="firewall_state_",
+        suffix=".tmp",
+        dir=state_dir,
+        text=True,
+    )
+
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as file:
+            json.dump(state, file, indent=2)
+            file.write("\n")
+
+        os.replace(temporary_path, STATE_FILE)
+
+    finally:
+        if os.path.exists(temporary_path):
+            os.remove(temporary_path)
+
+
+# ============================================================
+# ABUSEIPDB ENRICHMENT
+# ============================================================
+
+def enrich_ip(ip, api_key):
+    """Return the AbuseIPDB abuse confidence score, or None."""
+    log(f"Starting IOC enrichment: {ip}")
+
+    headers = {
+        "Key": api_key,
+        "Accept": "application/json",
+    }
+
+    params = {
+        "ipAddress": ip,
+        "maxAgeInDays": 90,
+    }
+
+    try:
+        response = requests.get(
+            ABUSEIPDB_URL,
+            headers=headers,
+            params=params,
+            timeout=REQUEST_TIMEOUT,
+        )
+
+        response.raise_for_status()
+
+        data = response.json()["data"]
+        score = int(data["abuseConfidenceScore"])
+
+        if not 0 <= score <= 100:
+            raise ValueError("Unexpected abuse confidence score")
+
+        log(f"AbuseIPDB score: {score}")
+        log(f"Total reports: {data.get('totalReports')}")
+        log(f"Country: {data.get('countryCode')}")
+        log(f"ISP: {data.get('isp')}")
+        log(f"Domain: {data.get('domain')}")
+
+        return score
+
+    except Exception as error:
+        log(f"ENRICHMENT FAILED for {ip}: {error}")
+        return None
+
+
+# ============================================================
+# WINDOWS FIREWALL
+# ============================================================
+
+def block_ip(ip):
+    """
+    Create an outbound block rule and verify that it exists,
+    is enabled, and has the Block action.
+    """
+    rule_name = f"SIEM-AutoBlock-{ip}"
+
+    # Revalidate before using the address in a PowerShell command.
+    validated_ip = validate_ip(ip)
+
+    if validated_ip is None:
+        log(f"BLOCK REFUSED: Invalid or non-global IP: {ip}")
+        return False
+
+    # IP characters have been validated before interpolation.
+    rule_name_ps = rule_name.replace("'", "''")
+
+    verify_command = (
+        "$ErrorActionPreference = 'Stop'; "
+        f"$r = Get-NetFirewallRule -DisplayName '{rule_name_ps}' "
+        "-ErrorAction SilentlyContinue; "
+        "if ($null -ne $r -and "
+        "$r.Enabled -contains 'True' -and "
+        "$r.Action -contains 'Block') { exit 0 } "
+        "else { exit 1 }"
+    )
+
+    try:
+        existing = subprocess.run(
+            [
+                "powershell.exe",
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                verify_command,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=20,
+        )
+
+        if existing.returncode == 0:
+            log(f"VERIFIED: Existing block rule is enabled: {ip}")
+            return True
+
+        create_command = (
+            "$ErrorActionPreference = 'Stop'; "
+            f"New-NetFirewallRule "
+            f"-DisplayName '{rule_name_ps}' "
+            "-Direction Outbound "
+            f"-RemoteAddress '{validated_ip}' "
+            "-Action Block "
+            "-Profile Any "
+            "-Enabled True | Out-Null; "
+            f"$r = Get-NetFirewallRule -DisplayName '{rule_name_ps}' "
+            "-ErrorAction Stop; "
+            "if ($r.Enabled -contains 'True' -and "
+            "$r.Action -contains 'Block') { exit 0 } "
+            "else { exit 1 }"
+        )
+
+        result = subprocess.run(
+            [
+                "powershell.exe",
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                create_command,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+
+        if result.returncode == 0:
+            log(f"FIREWALL BLOCK CREATED AND VERIFIED: {ip}")
+            return True
+
+        log(f"FIREWALL BLOCK FAILED: {ip}")
+        if result.stderr.strip():
+            log(f"PowerShell error: {result.stderr.strip()}")
+
+        return False
+
+    except Exception as error:
+        log(f"FIREWALL BLOCK ERROR for {ip}: {error}")
+        return False
+
+
+# ============================================================
+# MAIN AUTOMATION
+# ============================================================
+
+def main():
+    log("=== SIEM FIREWALL AUTOMATION STARTED ===")
+
+    # Check inputs before making any response decision.
+    if not os.path.isfile(LOOKUP_FILE):
+        log(f"ERROR: Lookup file not found: {LOOKUP_FILE}")
+        return 1
+
+    try:
+        state = load_state()
+    except Exception as error:
+        # Fail closed: do not process all IPs if state is unreadable.
+        log(f"ERROR: Could not load state; stopping safely: {error}")
+        return 1
+
+    try:
+        api_key = get_api_key()
+    except Exception as error:
+        log(f"ERROR: Cannot retrieve AbuseIPDB API key: {error}")
+        return 1
+
+    seen_this_run = set()
+
+    try:
+        with open(
+            LOOKUP_FILE,
+            "r",
+            encoding="utf-8-sig",
+            newline="",
+        ) as file:
+            reader = csv.DictReader(file)
+
+            if not reader.fieldnames or "dst_ip" not in reader.fieldnames:
+                log("ERROR: Lookup CSV must contain a dst_ip column")
+                return 1
+
+            for row in reader:
+                raw_ip = (row.get("dst_ip") or "").strip()
+                log(f"Splunk detection: {row}")
+
+                ip = validate_ip(raw_ip)
+
+                if ip is None:
+                    continue
+
+                if ip in seen_this_run:
+                    log(f"Duplicate IOC skipped this run: {ip}")
+                    continue
+
+                seen_this_run.add(ip)
+
+                if ip in state:
+                    log(f"Previously processed IOC skipped: {ip}")
+                    continue
+
+                score = enrich_ip(ip, api_key)
+
+                # Do not mark failed enrichment as processed.
+                # The next scheduled run can retry it.
+                if score is None:
+                    log(f"ACTION: MONITOR {ip}; enrichment unavailable")
+                    continue
+
+                if score >= ABUSE_SCORE_THRESHOLD:
+                    log(
+                        f"DECISION: BLOCK CANDIDATE {ip}; "
+                        f"AbuseIPDB score={score}"
+                    )
+
+                    # Record completion only if blocking succeeds.
+                    if not block_ip(ip):
+                        log(
+                            f"NOT MARKED PROCESSED: Firewall action "
+                            f"failed for {ip}; will retry"
+                        )
+                        continue
+
+                    decision = "blocked"
+
+                else:
+                    log(
+                        f"DECISION: MONITOR {ip}; "
+                        f"AbuseIPDB score={score}"
+                    )
+                    decision = "monitor"
+
+                # Persist completed decisions to avoid repeat API calls.
+                state[ip] = {
+                    "processed_at": datetime.now(
+                        timezone.utc
+                    ).isoformat(),
+                    "abuse_score": score,
+                    "decision": decision,
+                }
+
+                try:
+                    save_state(state)
+                except Exception as error:
+                    log(
+                        f"CRITICAL: Could not save state for {ip}: "
+                        f"{error}"
+                    )
+                    return 1
+
+    except Exception as error:
+        log(f"ERROR while processing lookup: {error}")
+        return 1
+
+    log("=== SIEM FIREWALL AUTOMATION FINISHED ===")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

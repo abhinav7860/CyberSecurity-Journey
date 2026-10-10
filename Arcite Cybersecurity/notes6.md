@@ -545,12 +545,5 @@ These fines demonstrate that organizations must take user privacy seriously.
 
 # Key Differences
 
-| ISO 27001 | NIST | GDPR |
-|------------|-------|-------|
-| International security standard | Cybersecurity framework | Privacy regulation |
-| Focuses on Information Security Management | Focuses on cybersecurity lifecycle | Focuses on protecting personal data |
-| Risk Management | Security Operations | Data Privacy |
-| Can be certified | Voluntary framework | Legal requirement for applicable organizations |
 
----
 

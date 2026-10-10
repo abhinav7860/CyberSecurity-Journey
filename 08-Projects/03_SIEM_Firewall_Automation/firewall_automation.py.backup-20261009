@@ -1,0 +1,146 @@
+import sys
+import csv
+import gzip
+import os
+import ipaddress
+import subprocess
+from datetime import datetime
+
+LOG_FILE = r"C:\Program Files\Splunk\var\log\splunk\firewall_automation.log"
+
+
+def log(message):
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        f.write(f"{datetime.now()} | {message}\n")
+
+
+def is_valid_ip(ip):
+    try:
+        ipaddress.ip_address(ip)
+        return True
+    except ValueError:
+        return False
+
+
+def block_ip(ip):
+    rule_name = f"SIEM-AutoBlock-{ip}"
+
+    log(f"Attempting firewall block: {ip}")
+    log(f"Firewall rule name: {rule_name}")
+
+    command = [
+        "powershell.exe",
+        "-NoProfile",
+        "-Command",
+        f'New-NetFirewallRule '
+        f'-DisplayName "{rule_name}" '
+        f'-Direction Outbound '
+        f'-RemoteAddress {ip} '
+        f'-Action Block '
+        f'-Profile Any '
+        f'-ErrorAction Stop'
+    ]
+
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True
+        )
+
+        if result.returncode == 0:
+            log(f"FIREWALL BLOCK SUCCESS: {ip}")
+            return True
+
+        log(f"FIREWALL BLOCK FAILED: {ip}")
+        log(f"PowerShell error: {result.stderr}")
+        return False
+
+    except Exception as e:
+        log(f"FIREWALL BLOCK ERROR: {e}")
+        return False
+
+
+log("=== SIEM FIREWALL AUTOMATION STARTED ===")
+log(f"Arguments received: {sys.argv}")
+
+
+if len(sys.argv) < 2:
+    log("ERROR: No Splunk result file received.")
+    sys.exit(1)
+
+
+result_file = sys.argv[-1]
+
+log(f"Result file: {result_file}")
+
+
+if not os.path.exists(result_file):
+    log("ERROR: Result file does not exist.")
+    sys.exit(1)
+
+
+log("Result file exists.")
+
+
+try:
+
+    if result_file.endswith(".gz"):
+
+        with gzip.open(result_file, "rt", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+
+            for row in reader:
+
+                log(f"Splunk result: {row}")
+
+                src_ip = row.get("src_ip")
+
+                if not src_ip:
+                    log("No source IP found.")
+                    continue
+
+                log(f"IOC extracted: {src_ip}")
+
+
+                if not is_valid_ip(src_ip):
+                    log(f"Invalid IP address: {src_ip}")
+                    continue
+
+
+                log(f"Valid IP address: {src_ip}")
+
+
+                # Temporary lab decision.
+                # This will later be replaced with IOC enrichment.
+                if src_ip == "10.207.67.141":
+
+                    log(f"DECISION: MALICIOUS IOC -> {src_ip}")
+
+                    block_ip(src_ip)
+
+                else:
+
+                    log(
+                        f"DECISION: IOC NOT CONFIRMED MALICIOUS -> {src_ip}"
+                    )
+
+                    log(f"ACTION: MONITOR {src_ip}")
+
+
+    else:
+
+        with open(result_file, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+
+            for row in reader:
+
+                log(f"Splunk result: {row}")
+
+except Exception as e:
+
+    log(f"ERROR while reading result: {e}")
+    sys.exit(1)
+
+
+log("=== SIEM FIREWALL AUTOMATION FINISHED ===")
