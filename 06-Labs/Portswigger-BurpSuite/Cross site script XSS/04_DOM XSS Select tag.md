@@ -1,10 +1,8 @@
 # PortSwigger Lab: DOM XSS in `document.write` Sink Using `location.search` Inside a Select Element
 
-**Platform:** PortSwigger Web Security Academy\
-**Difficulty:** Practitioner\
-**Status:** Solved\
-**Date completed:** 13 October 2026\
-**Date documented:** 13 October 2026\
+**Platform:** PortSwigger Web Security Academy
+**Date completed:** 13 October 2026
+
 **Category:** Web Security / Cross-Site Scripting (XSS) / DOM-based XSS
 
 ## 1. What I Worked On
@@ -409,19 +407,4 @@ My main takeaway is that I should not rely on memorizing payloads. I
 should first understand where the input comes from, how the application
 processes it, where it is used, and how the browser interprets it.
 
-## Lab Reference
 
--   **Lab:** DOM XSS in `document.write` sink using source
-    `location.search` inside a select element
--   **Platform:** PortSwigger Web Security Academy
--   **Difficulty:** Practitioner
--   **Status:** Solved
--   **Completed:** 13 October 2026
--   **Lab entry point:**
-    https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-document-write-sink-inside-select-element
-
-------------------------------------------------------------------------
-
-*These notes document my own learning process in an intentionally
-vulnerable training lab. I will use the techniques only in systems where
-I have permission to test.*
