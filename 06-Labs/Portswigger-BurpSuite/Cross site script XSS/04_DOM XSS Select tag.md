@@ -1,5 +1,4 @@
 # PortSwigger Lab: DOM XSS in `document.write` Sink Using `location.search` Inside a Select Element
-
 **Platform:** PortSwigger Web Security Academy
 **Date completed:** 13 October 2026
 
