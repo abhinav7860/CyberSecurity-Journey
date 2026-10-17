@@ -134,6 +134,3 @@ This example is illustrative. Real validation should match the application's leg
 6. If source search fails, try another inspection method or use the lab's supplied hints.
 7. Verify the lab status and document both the exploit chain and the defensive fix.
 
-## 10. Summary
-
-I solved the PortSwigger Apprentice lab by hosting an iframe exploit on the Exploit Server and delivering it to the victim. The iframe loaded the vulnerable blog page and changed its URL hash on load. That triggered the vulnerable `hashchange` handler, which passed the hash to jQuery's `$()` selector. The crafted markup led to an image error handler calling `print()`, satisfying the lab's requirement. The main defensive lesson is to validate URL hashes and avoid passing untrusted strings into jQuery selector functions that may interpret them as HTML.
