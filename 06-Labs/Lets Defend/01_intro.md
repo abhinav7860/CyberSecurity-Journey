@@ -3,7 +3,7 @@
 
 **Platform:** LetsDefend  
 **Study Date:** 29 October 2026  
-**Topic:** Introduction to Security Operations Center (SOC)
+
 
 ---
 
