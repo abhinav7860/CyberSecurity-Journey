@@ -976,4 +976,4 @@ Finally, the privilege-escalation stage showed me why sudo permissions must be r
 
 The biggest lesson was to verify each stage instead of assuming that one discovery automatically proves the next. I used the lab evidence to move from web enumeration to credential discovery, SSH access, privilege enumeration, and root access.
 
-
+**Learning continuously. Practising responsibly. Building practical cybersecurity skills, one lab at a time.**
