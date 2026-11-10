@@ -943,17 +943,3 @@ From a defensive perspective, I learned why ARP monitoring, switch
 security, encrypted communication, endpoint telemetry, and network
 traffic analysis are all important parts of protecting an environment.
 
-**Room status: Completed.**
-
-------------------------------------------------------------------------
-
-## Documentation accuracy note
-
-The detailed commands, host addresses, packet observations, credentials,
-and flags in this README are based on the lab output recorded during my
-session.
-
-The exact Task 1 and Task 6 instructions and results were not available
-in the conversation notes used to prepare this document. I have
-deliberately left out unverified answers rather than filling those gaps
-with assumptions.
