@@ -972,8 +972,4 @@ I also learned that Hydra must be configured according to the actual authenticat
 
 The SSH stage helped me understand private-key authentication and why an encrypted private key still needs a strong passphrase. `ssh2john` converted the key into a format John could process, and John recovered the passphrase from the wordlist.
 
-Finally, the privilege-escalation stage showed me why sudo permissions must be reviewed carefully. Allowing a user to run a command as root without a password can expose sensitive files if that command has broader capabilities than intended.
 
-The biggest lesson was to verify each stage instead of assuming that one discovery automatically proves the next. I used the lab evidence to move from web enumeration to credential discovery, SSH access, privilege enumeration, and root access.
-
-**Learning continuously. Practising responsibly. Building practical cybersecurity skills, one lab at a time.**
