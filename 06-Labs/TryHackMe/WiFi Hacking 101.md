@@ -570,6 +570,3 @@ usage/troubleshooting. The supplied material includes a heading for Task
 has been inferred. The final recovered password and complete cracking
 output were not supplied and are intentionally not invented.
 
-**Suggested GitHub location:**
-
-`CyberSecurity-Journey/Wireless-Security/WiFi-Hacking-101/README.md`
