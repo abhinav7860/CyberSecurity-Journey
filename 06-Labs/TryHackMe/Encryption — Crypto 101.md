@@ -581,19 +581,3 @@ As a SOC analyst, I should understand:
 - I became familiar with PGP, GPG, and AES.
 - I learned why quantum computing creates a future challenge for RSA and ECC, and why post-quantum cryptography matters.
 
-## Practice Checklist
-
-- [ ] Explain encryption versus encoding versus hashing.
-- [ ] Explain confidentiality, integrity, and authenticity.
-- [ ] Calculate simple modulo expressions by hand and in Python.
-- [ ] Compare symmetric and asymmetric cryptography.
-- [ ] Identify all seven RSA variables.
-- [ ] Explain hybrid encryption using an example.
-- [ ] Explain what a digital signature does and does not prove.
-- [ ] Draw a certificate chain of trust.
-- [ ] Explain SSH public-key authentication and private-key passphrases.
-- [ ] Explain the Diffie–Hellman exchange at a high level.
-- [ ] Compare PGP, GPG, and AES.
-- [ ] Explain why post-quantum cryptography is being developed.
-
-
