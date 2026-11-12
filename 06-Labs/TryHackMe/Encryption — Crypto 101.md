@@ -596,8 +596,4 @@ As a SOC analyst, I should understand:
 - [ ] Compare PGP, GPG, and AES.
 - [ ] Explain why post-quantum cryptography is being developed.
 
-## Source and Scope
 
-Based on the user's supplied TryHackMe **Encryption — Crypto 101** lesson, Tasks **2–12**. The material provided does not include downloadable task files or their outputs, so no file-decryption results, flags, or task-specific answers are invented.
-
-Some explanations in the lesson are simplified for beginners. This guide adds brief clarifications where necessary to avoid treating analogies as literal implementations, especially digital signatures, modern TLS key establishment, and Diffie–Hellman. The quantum-computing timeline in the lesson is presented as an uncertain forecast, not a fixed date.
