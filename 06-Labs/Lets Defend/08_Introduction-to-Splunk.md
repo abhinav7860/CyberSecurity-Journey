@@ -906,22 +906,3 @@ collected, correctly indexed, searchable, and interpreted in context. An
 alert or event is evidence to investigate, not automatic proof of an
 attack.
 
-## 20. Suggested GitHub location and practice
-
-Suggested path:
-
-`CyberSecurity-Journey/LetsDefend/Splunk/01-Introduction-to-Splunk.md`
-
-Suggested practical exercises: 1. Verify Splunk Enterprise is running.
-2. Verify the Universal Forwarder service is running. 3. Confirm that
-the forwarder can reach the receiving port. 4. Confirm that receiving is
-enabled. 5. Ingest Windows Security Event Logs into a dedicated index.
-6. Search for Event IDs 4624 and 4625. 7. Inspect raw events and
-identify the actual field names. 8. Create a saved report for failed
-logons. 9. Schedule the report to run daily. 10. Create an alert with a
-carefully selected threshold. 11. Build a small SOC L1 dashboard with
-authentication panels. 12. Review users, roles, and permissions.
-
-Practice only on systems and logs you own or are authorized to monitor.
-Keep Splunk Web and management interfaces restricted to trusted lab or
-administrative networks.
