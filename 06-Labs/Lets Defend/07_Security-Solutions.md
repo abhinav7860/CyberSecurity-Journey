@@ -1012,23 +1012,3 @@ evidence from multiple security solutions and understanding the role and
 limitations of each one.
 
 ------------------------------------------------------------------------
-
-## Suggested Repository Location
-
-`CyberSecurity-Journey/LetsDefend/Security-Solutions/01-Introduction-to-Security-Solutions.md`
-
-## Further Study
-
--   Review the difference between IDS, IPS, and firewall.
--   Explore how Snort or Suricata generates alerts.
--   Review firewall allow and deny logs.
--   Compare antivirus detections with EDR process telemetry.
--   Inspect a harmless sample in an approved sandbox and identify
-    process, file, and network events.
--   Review Windows Defender Firewall logs.
--   Study how WAF logs record HTTP request detections.
--   Practise correlating a proxy event with DNS, firewall, and endpoint
-    logs.
--   Learn how asset criticality affects SOC alert prioritization.
--   Practise writing a short case summary identifying source,
-    destination, action, outcome, and supporting evidence.
