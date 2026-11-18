@@ -434,3 +434,17 @@ incident handling. Threat Intelligence can enrich indicators such as IP
 addresses and domains, while SOAR can coordinate actions across
 firewalls, proxies, IPS, and email security products.
 
+The playbook section showed why SOC teams need consistent investigation
+procedures. Different alerts require different steps, and playbooks help
+analysts avoid missing important checks while maintaining common
+standards across the team.
+
+Finally, I learned the importance of prioritizing alerts, taking
+ownership, avoiding duplicate work, classifying alerts based on
+evidence, and providing feedback when detection rules generate false
+positives.
+
+My main takeaway is that a SOC analyst does more than read alerts. The
+analyst investigates evidence, follows a consistent process, makes a
+defensible decision, documents the work, and helps improve detection
+quality over time.
