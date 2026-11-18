@@ -448,22 +448,3 @@ My main takeaway is that a SOC analyst does more than read alerts. The
 analyst investigates evidence, follows a consistent process, makes a
 defensible decision, documents the work, and helps improve detection
 quality over time.
-
-## 14. Suggested GitHub location and practice
-
-Suggested repository path:
-
-`CyberSecurity-Journey/LetsDefend/Incident-Management/01-Introduction-to-Incident-Management.md`
-
-Practice: 1. Explain the difference between an event, an alert, and an
-incident. 2. Give one True Positive and one False Positive example. 3.
-Explain why a True Positive alert does not always mean an attack
-succeeded. 4. Describe the purpose of an IMS. 5. Explain the roles of
-SIEM, IMS, Threat Intelligence, and SOAR. 6. Write a case title using
-the lesson's naming convention. 7. Explain why taking ownership prevents
-duplicate work. 8. Describe how a playbook helps a new SOC analyst. 9.
-List evidence to examine before classifying a suspicious SQL injection
-alert. 10. Explain how to give useful feedback when a detection rule
-creates a false positive.
-
-Practice only in environments and with data you are authorized to use.
