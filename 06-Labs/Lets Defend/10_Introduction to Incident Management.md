@@ -411,3 +411,40 @@ A true-positive detection of an attack attempt does not automatically
 prove that the application was compromised. The investigation must
 establish what happened and what impact occurred.
 
+## 13. My learning reflection
+
+In this lesson, I learned how security alerts move from SIEM into an
+Incident Management System and how SOC analysts manage investigations.
+
+I understood the difference between an event, an alert, and an incident.
+An event is an observable activity, an alert is generated when a
+detection condition is met, and an incident is a violation or imminent
+threat to security policies or practices. I also learned the difference
+between True Positive and False Positive alerts. A true positive means
+the detection correctly identified the activity it was designed to
+detect, while a false positive means the alert was triggered by benign
+activity.
+
+I learned that an IMS is where analysts create cases, take ownership,
+record evidence, follow playbooks, and document decisions. TheHive and
+LetsDefend Case Management are examples from the lesson.
+
+I also understood how Threat Intelligence and SOAR integrations support
+incident handling. Threat Intelligence can enrich indicators such as IP
+addresses and domains, while SOAR can coordinate actions across
+firewalls, proxies, IPS, and email security products.
+
+The playbook section showed why SOC teams need consistent investigation
+procedures. Different alerts require different steps, and playbooks help
+analysts avoid missing important checks while maintaining common
+standards across the team.
+
+Finally, I learned the importance of prioritizing alerts, taking
+ownership, avoiding duplicate work, classifying alerts based on
+evidence, and providing feedback when detection rules generate false
+positives.
+
+My main takeaway is that a SOC analyst does more than read alerts. The
+analyst investigates evidence, follows a consistent process, makes a
+defensible decision, documents the work, and helps improve detection
+quality over time.
