@@ -691,21 +691,3 @@ pipeline: collecting the right logs, processing them correctly,
 enriching them with useful context, storing them efficiently, and
 creating alerts that SOC analysts can investigate.
 
-## 14. Suggested GitHub location and practice
-
-Suggested path:
-
-`CyberSecurity-Journey/LetsDefend/SIEM/01-SIEM-Introduction.md`
-
-Practice: 1. Identify five possible log sources in a small organization.
-2. Choose an appropriate collection method for each source. 3. Inspect
-`/var/log/auth.log` on a system you are authorized to access. 4.
-Identify timestamp, source, and message in several events. 5. Take a raw
-log example and list fields a parser should extract. 6. Calculate EPS
-for a sample event rate. 7. Explain how incorrect time-zone handling can
-distort an incident timeline. 8. Compare blacklist, whitelist, and
-long-tail analysis. 9. Design a repeated-failed-login alert and list the
-evidence an analyst needs to validate it.
-
-Practice only with systems and data you own or are authorized to
-monitor.
