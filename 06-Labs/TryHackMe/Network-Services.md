@@ -873,12 +873,4 @@ The supplied lesson text includes questions and indicates some answers were mark
 
 ---
 
-# Source and Scope
 
-Based on the user's supplied TryHackMe **Network Services** lesson text, Tasks **2–10**. This includes SMB, Enum4linux, smbclient, Telnet, Nmap enumeration, reverse-shell concepts, FTP, anonymous FTP, and Hydra.
-
-The supplied content does not include actual Nmap outputs, lab IPs for each task, SMB share listings, FTP filename, final username/password, or `flag.txt` contents. Those are intentionally left as fields for the learner to complete. Reverse-shell and password-auditing sections are documented as concepts and authorized-lab workflows only.
-
-**Suggested GitHub location:**
-
-`CyberSecurity-Journey/Network-Services/README.md`
