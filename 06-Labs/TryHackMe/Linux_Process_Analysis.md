@@ -1,9 +1,7 @@
 # Linux Process Analysis — TryHackMe
 
 **Study date:** 21 November 2026  
-**Platform:** TryHackMe  
-**Scenario:** Live forensic analysis of a suspected compromised Linux workstation at Penguin Corp  
-**Focus:** Investigation setup, processes, cronjobs, services, autostart scripts and application artefacts
+
 
 > **Lab scope:** These notes document the authorised TryHackMe investigation environment. Do not run enumeration, collection or response commands against systems without permission. Preserve evidence before making changes to a suspected compromised host.
 
