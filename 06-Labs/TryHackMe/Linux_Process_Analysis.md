@@ -1123,38 +1123,3 @@ The TryHackMe examples show several related persistence mechanisms:
 
 These findings suggest that the workstation contains multiple persistence and credential-theft mechanisms. A complete incident report should include the evidence source, observed timestamp, affected account, file path, process or service involved, network indicator and confidence level for each conclusion.
 
-## Example investigation record
-
-| Area | Evidence to record | Investigative question |
-|---|---|---|
-| Processes | PID, PPID, user, command line, start time | What launched the suspicious process? |
-| Open files | Files, FIFOs, sockets and network descriptors | What resources is the process using? |
-| Process tree | Parent and child process chain | Did cron, a service or a user session start it? |
-| Cronjobs | Schedule, owner, command, file permissions | Does a scheduled task execute an unexpected script? |
-| Services | Unit file, `ExecStart`, executable, status | Is a service providing persistence? |
-| Autostart | `.desktop` file, `Exec` command, owner | Does it run commands or transmit sensitive data at login? |
-| Application artefacts | Histories, browser profiles, cookies, downloads | What activity may have occurred before discovery? |
-| Logs | Timestamps, user IDs, command records | Can the activity be placed into a timeline? |
-
----
-
-# 9. My Key Takeaways
-
-- I learned that a Linux process has a PID and can be related to other processes through parent-child relationships.
-- I practised using `ps`, `lsof`, `pstree` and `top` to examine processes from different perspectives.
-- I understood why a process's full command line, parent process, open files and network sockets are important during forensic analysis.
-- I identified how a Netcat listener, interactive shell and named pipe can be associated with a bind shell.
-- I learned how process ancestry can reveal that suspicious activity was launched by cron.
-- I understood how cron syntax works and how system-level and user-level cronjobs differ.
-- I learned to inspect cron configuration files, scheduled-task directories, user crontabs and cron execution logs.
-- I learned that Pspy can help identify short-lived processes and executions that may not be visible in a manual process snapshot.
-- I understood how a malicious systemd service can repeatedly recreate an unauthorised account.
-- I learned to examine service status, unit files, `ExecStart`, service processes and journal logs.
-- I learned how `.desktop` autostart entries can be abused to execute commands at user login.
-- I understood why private SSH keys, shell histories, profiles and MOTD-related scripts are useful forensic artefacts.
-- I learned how `.viminfo` and browser profiles can help reconstruct user activity.
-- I practised the purpose of Dumpzilla and the types of browser artefacts it can extract.
-- I understood that no single artefact is enough: process, persistence, filesystem, application and log evidence should be correlated to build a reliable incident timeline.
-
----
-
