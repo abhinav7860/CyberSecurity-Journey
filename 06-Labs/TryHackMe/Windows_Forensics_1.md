@@ -1291,3 +1291,17 @@ Remember these five groups:
 
 ---
 
+## 17. References
+
+- TryHackMe — Windows Forensics 1 (lesson material used for these notes).
+- Microsoft — [Windows Registry for advanced users](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/windows-registry-advanced-users)
+- Microsoft — [Registry Hives](https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry-hives)
+- KAPE — [Kroll Artifact Parser and Extractor](https://www.kroll.com/en/services/cyber-risk/incident-response-litigation-support/kroll-artifact-parser-extractor-kape)
+- Autopsy — [Digital Forensics Platform](https://www.autopsy.com/)
+- FTK Imager — [Exterro FTK Imager](https://www.exterro.com/ftk-imager)
+- Eric Zimmerman — [Forensic tools](https://ericzimmerman.github.io/#!index.md)
+- RegRipper — [GitHub repository](https://github.com/keydet89/RegRipper3.0)
+
+---
+
+**Status:** Study playbook prepared from the supplied Windows Forensics 1 lesson text. Screenshot-dependent lab answers are left as fields to complete from my own Registry Explorer and ShellBag Explorer results.
