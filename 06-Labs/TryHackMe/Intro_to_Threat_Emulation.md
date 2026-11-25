@@ -1,34 +1,10 @@
 # Intro to Threat Emulation — TryHackMe Study Notes
-
+**Study date:** 25 November 2026 
 > **Study focus:** Understand how an organisation can test its security controls by reproducing adversary behaviour in a controlled, authorised exercise.
 >
 > **Primary perspective:** SOC / Blue Team, with enough Red Team context to understand how an emulation is planned and executed.
 
 ---
-
-## Table of Contents
-
-1. [Introduction](#1-introduction)
-2. [Purpose of Threat Emulation](#2-purpose-of-threat-emulation)
-3. [What Is Threat Emulation?](#3-what-is-threat-emulation)
-4. [Emulation vs Simulation](#4-emulation-vs-simulation)
-5. [The Emulation Spectrum](#5-the-emulation-spectrum)
-6. [Key Characteristics](#6-key-characteristics)
-7. [Frameworks, Resources and Methodologies](#7-frameworks-resources-and-methodologies)
-8. [Threat Emulation Process](#8-threat-emulation-process)
-   - [Step 1 — Define Objectives](#step-1--define-objectives)
-   - [Step 2 — Research Adversary TTPs](#step-2--research-adversary-ttps)
-   - [Step 3 — Plan the Engagement](#step-3--plan-the-engagement)
-   - [Step 4 — Conduct the Emulation](#step-4--conduct-the-emulation)
-   - [Step 5 — Observe Results](#step-5--observe-results)
-   - [Step 6 — Document and Report Findings](#step-6--document-and-report-findings)
-9. [VASEPY Corp and FIN7 Case Study](#9-vasepy-corp-and-fin7-case-study)
-10. [Important Terms](#10-important-terms)
-11. [SOC Analyst Perspective](#11-soc-analyst-perspective)
-12. [Revision Checklist](#12-revision-checklist)
-13. [Self-Assessment Questions](#13-self-assessment-questions)
-14. [Key Takeaways](#14-key-takeaways)
-15. [Source and Coverage Notes](#15-source-and-coverage-notes)
 
 ---
 
@@ -626,14 +602,3 @@ Try to answer these without looking at the notes.
 
 ---
 
-## 15. Source and Coverage Notes
-
-- These notes are based on the **Intro to Threat Emulation** room material supplied for this study session.
-- The supplied material included Task 1 and Tasks 3–6. **Task 2 was not included** in the pasted material, so no Task 2 content or answers have been added.
-- The source described a five-step process and then covered observation and reporting as later numbered activities. This README keeps the original five-step summary visible and separately labels observation and reporting as Steps 5 and 6 for easier study.
-- The SMB/RDP command fragment in the supplied material contained missing connection and account values. The placeholders in this README are intentionally not filled in.
-- The room material did not include specific quiz questions or completed room answers. The self-assessment questions are revision prompts, not claimed TryHackMe answer-key responses.
-
----
-
-**Suggested repository location:** `06-Labs/TryHackMe/Intro_to_Threat_Emulation.md`
