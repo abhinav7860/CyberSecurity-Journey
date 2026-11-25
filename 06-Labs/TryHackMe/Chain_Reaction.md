@@ -1,11 +1,7 @@
 # Chain Reaction — TryHackMe Study README
 
 **Study date:** 25 November 2026  
-**Platform:** TryHackMe  
-**Category:** SOC / Threat Hunting / Malware Analysis / Incident Response  
-**Challenge host:** Ubuntu laptop `lpt-18092`  
-**User in the scenario:** Richard Lee  
-**Scenario:** Suspected Axios npm supply-chain compromise
+
 
 > **Lab safety:** These notes document an authorised TryHackMe investigation. Do not install suspicious packages, run unknown payloads or reproduce malware activity on a normal workstation or production network. The JavaScript and Python analysis described here is static analysis; suspicious payloads should not be executed just to inspect them.
 
@@ -1145,16 +1141,3 @@ Try answering these without looking back at the notes.
 
 ---
 
-## 23. References
-
-- TryHackMe — Chain Reaction (lesson material and challenge).
-- Axios — [GitHub repository](https://github.com/axios/axios)
-- npm — [Lifecycle scripts documentation](https://docs.npmjs.com/cli/using-npm/scripts)
-- npm — [Documentation](https://docs.npmjs.com/)
-- VirusTotal — [File analysis platform](https://www.virustotal.com/gui/)
-- Wireshark — [Official website](https://www.wireshark.org/)
-- MITRE ATT&CK — [T1546.004: Unix Shell Configuration Modification](https://attack.mitre.org/techniques/T1546/004/)
-
----
-
-**Status:** Study README prepared from the supplied Chain Reaction lesson and uploaded investigation notes. The incident-overview indicators and challenge-specific indicators are kept separate to avoid mixing the real-world scenario with the simulated Ubuntu challenge.
