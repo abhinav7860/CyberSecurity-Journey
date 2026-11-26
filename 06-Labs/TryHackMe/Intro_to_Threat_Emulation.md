@@ -589,16 +589,4 @@ Try to answer these without looking at the notes.
 
 ---
 
-## 14. Key Takeaways
-
-1. **Threat emulation tests security controls with evidence.** It challenges assumptions about whether controls can stop, detect and respond to adversary behaviour.
-2. **Threat intelligence guides the exercise.** The team researches an adversary and selects relevant TTPs rather than choosing random activity.
-3. **ATT&CK provides a common language.** It helps teams describe techniques and connect them to detections and mitigations.
-4. **Planning is a safety requirement.** Scope, schedule, written approval, rules of engagement and communication must be clear before testing.
-5. **The Blue Team must observe the activity.** Logs, Windows events, Sysmon and network traffic help establish what happened.
-6. **Detection and prevention are different outcomes.** An activity may be detected without being blocked.
-7. **Reporting must lead to improvement.** Findings should be supported by evidence and include actionable recommendations.
-8. **Re-validation closes the loop.** Re-running the relevant TTP confirms whether the organisation actually fixed the gap.
-
----
 
